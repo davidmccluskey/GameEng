@@ -11,13 +11,13 @@ void PlayerMovementComponent::update(double dt)
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
         float x;
-        x = dt * -2;
+        x = dt * -20;
         rotate( x );
     }
     if (Keyboard::isKeyPressed(Keyboard::D))
     {
         float x;
-        x = dt * 2;
+        x = dt * 20;
         rotate(x);
     }
 }

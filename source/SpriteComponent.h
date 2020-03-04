@@ -8,7 +8,7 @@ protected:
 public:
     SpriteComponent() = delete;
     explicit SpriteComponent(Entity* p);
-
+    void rotateSprite(double dt);
     void update(double dt) override;
     void render() override;
 

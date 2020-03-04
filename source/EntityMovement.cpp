@@ -2,6 +2,7 @@
 #include "EntityMovement.h"
 #include "PlayerMovementComponent.h"
 #include <iostream>
+#include "SpriteComponent.h"
 using namespace sf;
 
 void ActorMovementComponent::update(double dt) {}
@@ -15,8 +16,7 @@ bool ActorMovementComponent::validMove(const sf::Vector2f& pos) {
 
 void ActorMovementComponent::rotate(float x) {
     auto pp = _parent->getRotation();
-	_parent->setRotation(x);
-	_parent->get_components<PlayerMovementComponent>();
+	//_parent->setRotation(x);
 	std::cerr << _parent->getRotation() << std::endl;
 }
 
