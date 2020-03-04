@@ -2,31 +2,48 @@
 #include <iostream>
 #include <windows.h>
 #include "game.h"
-
+#include "GunThruster.h"
+#include "Renderer.h"
 using namespace sf;
 using namespace std;
 
 sf::Texture backgroundTexture;
 sf::Sprite background;
-sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), "Space Game!");
 sf::CircleShape shape(100.f);
 
-void Load() 
+void Load() {
+    // Load Scene-Local Assets
+    menuScene.reset(new MenuScene());
+    gameScene.reset(new GameScene());
+
+    menuScene->load();
+    gameScene->load();
+    // Start at main menu
+    activeScene = menuScene;
+}
+
+void Render(RenderWindow& window)
 {
+    Renderer::initialise(window);
+    activeScene->render();
+    Renderer::render();
+    //cout << "Render called" << endl;
 
 }
 
-void Render() 
+void Update(RenderWindow& window)
 {
-    window.draw(background);
+    static Clock clock;
+    float dt = clock.restart().asSeconds();
+    activeScene->update(dt);
+    //cout << "Update called" << endl;
 }
 
-void Update(float dt)
-{
-}
 int main() {
-
+    sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), "Space Game!");
+    Load();
     while (window.isOpen()) {
+
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -34,12 +51,12 @@ int main() {
             }
             if (event.type == Event::MouseButtonPressed)
             {
-        
+            
             }
         }
         window.clear();
-        Load();
-        Render();
+        Update(window);
+        Render(window);
         window.display();
     }
     return 0;
