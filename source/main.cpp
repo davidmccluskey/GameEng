@@ -24,7 +24,6 @@ void Load() {
 
 void Render(RenderWindow& window)
 {
-    Renderer::initialise(window);
     activeScene->render();
     Renderer::render();
     //cout << "Render called" << endl;
@@ -41,6 +40,7 @@ void Update(RenderWindow& window)
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), "Space Game!");
+    Renderer::initialise(window);
     Load();
     while (window.isOpen()) {
 

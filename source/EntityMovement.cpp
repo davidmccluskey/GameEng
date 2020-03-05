@@ -16,7 +16,10 @@ bool ActorMovementComponent::validMove(const sf::Vector2f& pos) {
 
 void ActorMovementComponent::rotate(float x) {
     auto pp = _parent->getRotation();
-	//_parent->setRotation(x);
+	auto sprite = _parent->get_components<SpriteComponent>()[0];
+	sprite->getSprite().rotate(x);	
+	sprite->getSprite().setTextureRect(IntRect(1600, 0, 1600, 1600));
+	_parent->setRotation(x);
 	std::cerr << _parent->getRotation() << std::endl;
 }
 

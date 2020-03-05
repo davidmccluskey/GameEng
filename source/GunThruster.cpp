@@ -6,6 +6,8 @@
 #include "Renderer.h"
 #include <iostream>
 #include "PlayerMovementComponent.h"
+#include "game.h"
+
 using namespace sf;
 using namespace std;
 
@@ -17,6 +19,10 @@ sf::Texture spritesheet;
 sf::Sprite playerSprite;
 
 Font font;
+
+Texture backgroundtexture;
+Sprite backgroundSprite;
+
 
 void Scene::update(double dt)
 {
@@ -46,9 +52,21 @@ void MenuScene::render() {
 
 void MenuScene::load() {
     font.loadFromFile("res/fonts/RobotoMono.ttf");
-    if (!spritesheet.loadFromFile("res/player_1.jpeg")) {
+    if (!spritesheet.loadFromFile("res/SpriteSheet.png")) {
         cerr << "Failed to load spritesheet!" << std::endl;
     }
+    if (!backgroundtexture.loadFromFile("res/background.jpeg")) {
+        cerr << "Failed to load spritesheet!" << std::endl;
+    }
+    Vector2u size = backgroundtexture.getSize();
+    backgroundSprite.setTexture(backgroundtexture);
+
+
+    sf::Vector2u targetSize = Renderer::getWindow().getSize();
+
+    backgroundSprite.setScale(
+        targetSize.x / backgroundSprite.getLocalBounds().width,
+        targetSize.y / backgroundSprite.getLocalBounds().height);
     // Set text element to use font
     text.setFont(font);
     // set the character size to 24 pixels
@@ -65,7 +83,11 @@ void GameScene::load() {
         playerSprite.setTexture(spritesheet);
         p->setSpeed(100.f);
         s->setSprite<Sprite>(playerSprite);
-        //s->getSprite().rotate(40.f);
+
+        auto rect = IntRect(0, 0, 1600, 1600);
+
+        s->getSprite().setTextureRect(rect);
+        s->getSprite().setOrigin(800, 800);
         s->getSprite().setScale({ 0.1, 0.1 });
         player->setPosition({ 400,400 });
         _ents.list.push_back(player);
@@ -84,7 +106,7 @@ void GameScene::update(double dt) {
 
 void GameScene::render()
 {
-
+    Renderer::queue(&backgroundSprite);
     Scene::render();
 }
 
