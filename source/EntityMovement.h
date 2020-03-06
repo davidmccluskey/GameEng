@@ -16,6 +16,7 @@ public:
 
     void rotate(float x);
 
+    void move(double dt);
     void render() override {}
     void update(double dt) override;
 };

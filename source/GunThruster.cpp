@@ -75,6 +75,7 @@ void MenuScene::load() {
 }
 std::shared_ptr<Entity> player;
 std::vector<std::shared_ptr<Entity>> ghosts;
+sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
 void GameScene::load() {
     {
         player = make_shared<Entity>();
@@ -88,9 +89,14 @@ void GameScene::load() {
 
         s->getSprite().setTextureRect(rect);
         s->getSprite().setOrigin(800, 800);
-        s->getSprite().setScale({ 0.1, 0.1 });
+        s->getSprite().setScale({ 0.05, 0.05 });
         player->setPosition({ 400,400 });
         _ents.list.push_back(player);
+
+        view.setSize(1200.f, 800.f);
+        view.zoom(0.5f);
+        view.setCenter(400, 400);
+        Renderer::getWindow().setView(view);
     }
 
     GameScene::respawn();
