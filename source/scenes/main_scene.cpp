@@ -28,12 +28,11 @@ void MainScene::Load() {
     Vector2u size = backgroundtexture.getSize();
     backgroundSprite.setTexture(backgroundtexture);
 
-
     sf::Vector2u targetSize = Engine::getWindowSize();
 
     backgroundSprite.setScale(
-        targetSize.x / backgroundSprite.getLocalBounds().width,
-        targetSize.y / backgroundSprite.getLocalBounds().height);
+        (targetSize.x / backgroundSprite.getLocalBounds().width) * 3,
+        (targetSize.y / backgroundSprite.getLocalBounds().height) * 3);
     player = makeEntity();
     player->setPosition({ 400, 400 });
     auto s = player->addComponent<SpriteComponent>();
