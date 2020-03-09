@@ -22,8 +22,8 @@ void ActorMovementComponent::rotate(float x) {
 	auto sprite = _parent->get_components<SpriteComponent>()[0];
 	sprite->getSprite().rotate(x);	
 	_parent->setRotation(x);
-	//std::cerr << _parent->getRotation() << std::endl;
-
+	//std::cerr << "parent " << _parent->getRotation() << std::endl;
+	//std::cerr << "sprite " << sprite->getSprite().getRotation() << std::endl;
 }
 void ActorMovementComponent::move(double dt, float impulse){
 	float floatDT = (float)dt;
