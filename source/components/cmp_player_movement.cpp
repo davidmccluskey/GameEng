@@ -45,13 +45,14 @@ void PlayerMovementComponent::update(double dt)
             bulletSprite.setScale({ 0.1f, 0.1f });
             bulletSprite.setOrigin({200, 200});
             s->setSprite<Sprite>(bulletSprite);
-            auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(1.f, 1.f));
+            auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(10.f, 10.f));
             p->setRestitution(.4f);
             p->setFriction(.005f);
             p->impulse(sf::rotate(Vector2f(0, 15.f), playerSprite->getSprite().getRotation()));
-            _firetime = 0.5f;
+			_firetime = 0.5;
         }
-        move(dt, 800.f);\
+		move(dt, 400.f);
+		
 
     }
 }

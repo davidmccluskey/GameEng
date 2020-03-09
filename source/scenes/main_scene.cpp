@@ -54,7 +54,7 @@ void MainScene::Load() {
   //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   //cout << " Main scene Load Done" << endl;
   view.setSize(1200.f, 800.f);
-  view.zoom(0.5f);
+  view.zoom(1.0f);
   view.setCenter(400, 400);
   Engine::GetWindow().setView(view);
   setLoaded(true);
