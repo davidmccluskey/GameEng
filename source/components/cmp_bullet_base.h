@@ -12,7 +12,7 @@ protected:
 public:
     void update(double dt) override;
     void render() override {}
-    explicit BaseBulletComponent(Entity* p, float lifetime = 3.f, float impulse = 1.f, float speed = 800, float damage = 1.f, float size = 1.f, float frate = 0.2f);
+    explicit BaseBulletComponent(Entity* p, float lifetime = 1.f, float impulse = 1.f, float speed = 500, float damage = 1.f, float size = 1.f, float frate = 0.2f);
     BaseBulletComponent() = delete;
 
     float getSpeed();
