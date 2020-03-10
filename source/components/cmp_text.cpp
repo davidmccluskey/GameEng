@@ -5,7 +5,7 @@
 void TextComponent::update(double dt) {}
 
 void TextComponent::render() { Renderer::queue(&_text); }
-
+//TEXT COMPONENT PROVIDED BY GAMES ENGINEERING PRACTICALS
 TextComponent::TextComponent(Entity* const p, const std::string& str)
     : Component(p), _string(str) {
   _text.setString(_string);

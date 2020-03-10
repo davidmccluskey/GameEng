@@ -1,6 +1,7 @@
 #include "engine.h"
 #include "maths.h"
 #include "system_physics.h"
+#include "../../GamesCW/source/components/cmp_sprite.h"
 #include "system_renderer.h"
 #include "system_resources.h"
 #include <SFML/Graphics.hpp>
@@ -12,7 +13,8 @@ using namespace sf;
 using namespace std;
 Scene* Engine::_activeScene = nullptr;
 std::string Engine::_gameName;
-
+sf::Texture asteroidSpritesheet;
+sf::Sprite loadingSprite;
 static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
@@ -29,17 +31,20 @@ void Loading_update(float dt, const Scene* const scn) {
   }
 }
 void Loading_render() {
-  // cout << "Eng: Loading Screen Render\n";
-  static CircleShape octagon(80, 8);
-  octagon.setOrigin(80, 80);
-  octagon.setRotation(loadingspinner);
-  octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .8f);
-  octagon.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
+    if (!asteroidSpritesheet.loadFromFile("res/asteroid.png")) {
+        cerr << "Failed to load spritesheet!" << std::endl;
+    }
+    loadingSprite.setTexture(asteroidSpritesheet);
+    loadingSprite.setScale({ 0.15, 0.15 });
+    loadingSprite.setOrigin(425, 350);
+    loadingSprite.setRotation(loadingspinner);
+    loadingSprite.setPosition(Vcast<float>(Engine::getWindowSize()) * .85f);
+
   static Text t("Loading", *Resources::get<sf::Font>("RobotoMono.ttf"));
   t.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
-  t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.6f,0.8f));
+  t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.65f,0.8f));
   Renderer::queue(&t);
-  Renderer::queue(&octagon);
+  Renderer::queue(&loadingSprite);
 }
 
 float frametimes[256] = {};

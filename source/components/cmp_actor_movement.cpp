@@ -22,29 +22,11 @@ void ActorMovementComponent::rotate(float x) {
 	auto sprite = _parent->get_components<SpriteComponent>()[0];
 	sprite->getSprite().rotate(x);	
 	_parent->setRotation(x);
-	//std::cerr << _parent->getRotation() << std::endl;
-
+	//std::cerr << "parent " << _parent->getRotation() << std::endl;
+	//std::cerr << "sprite " << sprite->getSprite().getRotation() << std::endl;
 }
 void ActorMovementComponent::move(double dt, float impulse){
-	float floatDT = (float)dt;
-
-	auto sprite = _parent->get_components<SpriteComponent>()[0];
-	float rotation = sprite->getSprite().getRotation();
-	float angleRADS = (3.1415926536 / -180) * ((rotation - 90));
-
-	float forx = (floatDT * impulse) * cos(angleRADS);
-	float fory = (floatDT * impulse) * -sin(angleRADS);
-	Vector2f spritePosition = sprite->getSprite().getPosition();
-
-	float moveX = (spritePosition.x + forx);
-	float moveY = (spritePosition.y + fory);
-	sprite->getSprite().setPosition({moveX, moveY});
-	_parent->setPosition({(moveX), (moveY)});
-	sf::View currentView = Engine::GetWindow().getView();
-	currentView.setCenter(sprite->getSprite().getPosition().x, sprite->getSprite().getPosition().y);
-	Engine::GetWindow().setView(currentView);
-
-
+	//BASE MOVEMENT FOR ENEMIES
 }
 float ActorMovementComponent::getSpeed() const { return _speed; }
 void ActorMovementComponent::setSpeed(float speed) { _speed = speed;}

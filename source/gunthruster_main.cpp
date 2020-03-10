@@ -7,10 +7,10 @@
 using namespace std;
 
 MenuScene menu;
-MainScene scene_main;
-HighScoreScene scene_highscores;
-SettingsScreen scene_settings;
+MainScene scene_main;   //Main scene reference
+HighScoreScene scene_highscores;    //High score scene reference
+SettingsScreen scene_settings; //Settings scene reference
 
 int main() {
-  Engine::Start(1280, 720, "GUN THRUSTERS",&menu);
+  Engine::Start(1280, 720, "GUN THRUSTERS",&menu);  //Starts engine in user specified resolution
 }
