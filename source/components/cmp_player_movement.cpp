@@ -12,6 +12,9 @@ using namespace sf;
 // Update
 void PlayerMovementComponent::update(double dt)
 {
+	/*auto b = _parent->get_components<PhysicsComponent>()[0];
+	b->setV;
+*/
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
         rotate(dt * -300); //Rotates ship left at speed of 300
