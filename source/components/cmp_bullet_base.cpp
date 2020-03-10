@@ -12,15 +12,22 @@ void BaseBulletComponent::update(double dt) {
     auto sprite = _parent->get_components<SpriteComponent>()[0];
     float rotation = _parent->getRotation();
     float angleRADS = (3.1415926536 / -180) * ((rotation - 90));
-    float forx = (floatDT * 300) * cos(angleRADS);
-    float fory = (floatDT * 300) * -sin(angleRADS);
+    float forx = (floatDT * _speed) * cos(angleRADS);
+    float fory = (floatDT * _speed) * -sin(angleRADS);
     Vector2f spritePosition = sprite->getSprite().getPosition();
-    cout << rotation << endl;
     float moveX = (spritePosition.x + forx);
     float moveY = (spritePosition.y + fory);
     sprite->getSprite().setPosition({ moveX, moveY });
     _parent->setPosition({ (moveX), (moveY) });
 }
 
-BaseBulletComponent::BaseBulletComponent(Entity* p, float lifetime, float impulse, float speed, float damage, float size)
-    : Component(p), _lifetime(lifetime), _impulse(impulse), _speed(speed) {}
+BaseBulletComponent::BaseBulletComponent(Entity* p, float lifetime, float impulse, float speed, float damage, float size, float frate)
+    : Component(p), _lifetime(lifetime), _impulse(impulse), _speed(speed), _fireRate(frate) {}
+
+float BaseBulletComponent::getSpeed() {
+    return _speed;
+}
+
+float BaseBulletComponent::getFRate() {
+    return _fireRate;
+}

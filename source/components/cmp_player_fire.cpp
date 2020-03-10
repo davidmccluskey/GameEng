@@ -30,7 +30,7 @@ void PlayerFireComponent::update(double dt)
             float rotation = playerSprite->getSprite().getRotation();
             auto bullet = _parent->scene->makeEntity();
             bullet->setPosition(_parent->getPosition());
-            bullet->addComponent<BaseBulletComponent>();
+            auto b = bullet->addComponent<BaseBulletComponent>();
             auto s = bullet->addComponent<SpriteComponent>();
 
             bulletSprite.setTexture(sprite);
@@ -39,11 +39,10 @@ void PlayerFireComponent::update(double dt)
             bulletSprite.setPosition(_parent->getPosition());
             s->setSprite<Sprite>(bulletSprite);
             float inverse = fmod((rotation + 180.f), 360);
-            bulletSprite.setRotation(inverse);
             bullet->setRotation(inverse);
 
-            _firetime = 0.5f;
-            cout << rotation << endl;
+            float frate = b->getFRate();
+            _firetime = frate;
         }
         move(dt, (300.f));
     }
