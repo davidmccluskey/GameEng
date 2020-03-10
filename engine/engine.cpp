@@ -31,12 +31,6 @@ void Loading_update(float dt, const Scene* const scn) {
   }
 }
 void Loading_render() {
-  // cout << "Eng: Loading Screen Render\n";
-  //static CircleShape octagon(80, 8);
-  //octagon.setOrigin(80, 80);
-  //octagon.setRotation(loadingspinner);
-  //octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .8f);
-  //octagon.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
     if (!asteroidSpritesheet.loadFromFile("res/asteroid.png")) {
         cerr << "Failed to load spritesheet!" << std::endl;
     }

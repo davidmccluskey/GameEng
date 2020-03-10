@@ -43,8 +43,6 @@ void ActorMovementComponent::move(double dt, float impulse){
 	sf::View currentView = Engine::GetWindow().getView();
 	currentView.setCenter(sprite->getSprite().getPosition().x, sprite->getSprite().getPosition().y);
 	Engine::GetWindow().setView(currentView);
-
-
 }
 float ActorMovementComponent::getSpeed() const { return _speed; }
 void ActorMovementComponent::setSpeed(float speed) { _speed = speed;}

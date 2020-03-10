@@ -9,5 +9,5 @@ void BulletComponent::update(double dt) {
   }
 }
 
-BulletComponent::BulletComponent(Entity* p, float lifetime)
-    : Component(p), _lifetime(lifetime) {}
+BulletComponent::BulletComponent(Entity* p, float lifetime, float size, float impulse, float speed, float damage)
+    : Component(p), _lifetime(lifetime), _size(size), _impulse(impulse), _speed(speed), _damage(damage) {}
