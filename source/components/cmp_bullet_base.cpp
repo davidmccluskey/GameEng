@@ -6,7 +6,7 @@ using namespace sf;
 void BaseBulletComponent::update(double dt) {
     _lifetime -= dt;
     if (_lifetime <= 0.f) {
-        _parent->setForDelete();
+        _parent->setForDelete(); //If bullet is on screen too long it should be deleted
     }
     float floatDT = (float)dt;
     auto sprite = _parent->get_components<SpriteComponent>()[0];
@@ -18,7 +18,7 @@ void BaseBulletComponent::update(double dt) {
     float moveX = (spritePosition.x + forx);
     float moveY = (spritePosition.y + fory);
     sprite->getSprite().setPosition({ moveX, moveY });
-    _parent->setPosition({ (moveX), (moveY) });
+    _parent->setPosition({ (moveX), (moveY) }); //Similar to player movement code but for bullet, maths and logic is the same 
 }
 
 BaseBulletComponent::BaseBulletComponent(Entity* p, float lifetime, float impulse, float speed, float damage, float size, float frate)

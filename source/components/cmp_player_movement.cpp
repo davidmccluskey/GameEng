@@ -12,18 +12,12 @@ using namespace sf;
 // Update
 void PlayerMovementComponent::update(double dt)
 {
-    _firetime -= dt;
-    float direction = 0.0f;
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
-        float x;
-        x = dt * -300;
-        rotate( x );
+        rotate(dt * -300); //Rotates ship left at speed of 300
     }
     if (Keyboard::isKeyPressed(Keyboard::D))
     {
-        float x;
-        x = dt * 300;
-        rotate(x);
+        rotate(dt * 300); //Rotates ship right at speed of 300
     }
 }
