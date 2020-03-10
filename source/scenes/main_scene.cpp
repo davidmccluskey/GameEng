@@ -3,6 +3,7 @@
 #include "../game.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_player_movement.h"
+#include "../components/cmp_physics.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -40,6 +41,9 @@ void MainScene::Load() {
     playerSprite.setTexture(spritesheet);
     p->setSpeed(100.f);
     s->setSprite<Sprite>(playerSprite);
+
+	auto i = player->addComponent<PhysicsComponent>(true, Vector2f(0.0f, 0.0f));
+
 
     auto rect = IntRect(0, 0, 1600, 1600);
 

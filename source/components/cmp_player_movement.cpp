@@ -16,6 +16,10 @@ void PlayerMovementComponent::update(double dt)
 {
     _firetime -= dt;
     float direction = 0.0f;
+	auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+	sf::View currentView = Engine::GetWindow().getView();
+	currentView.setCenter(playerSprite->getSprite().getPosition().x, playerSprite->getSprite().getPosition().y);
+	Engine::GetWindow().setView(currentView);
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
         float x;
@@ -34,7 +38,13 @@ void PlayerMovementComponent::update(double dt)
         }
 
         if (_firetime <= 0.f) {
-            auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+
+
+			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
+			playerPhysics->setFriction(0.5f);
+			playerPhysics->setMass(5.0f);
+			//playerPhysics->setVelocity(Vector2f(1.0f, 0.0f));
+			playerPhysics->impulse(sf::rotate(-Vector2f(0, 2.0f), playerSprite->getSprite().getRotation()));
 
             auto bullet = _parent->scene->makeEntity();
             bullet->setPosition(_parent->getPosition());
@@ -50,9 +60,10 @@ void PlayerMovementComponent::update(double dt)
             p->setFriction(.005f);
             p->impulse(sf::rotate(Vector2f(0, 15.f), playerSprite->getSprite().getRotation()));
 			_firetime = 0.5;
+
         }
-		move(dt, 400.f);
-		
+		//move(dt, 400.f);
+
 
     }
 }
