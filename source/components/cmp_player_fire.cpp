@@ -6,7 +6,7 @@
 #include "cmp_bullet_base.h"
 #include "cmp_actor_movement.h"
 #include "system_physics.h"
-
+#include "cmp_physics.h"
 sf::Texture sprite;
 sf::Sprite bulletSprite;
 
@@ -20,7 +20,12 @@ PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 void PlayerFireComponent::update(double dt)
 {
     _firetime -= dt; //Firetime set later, allows us to control weapon cooldown 
-
+    float direction = 0.0f;
+	auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+	sf::View currentView = Engine::GetWindow().getView();
+	currentView.setCenter(playerSprite->getSprite().getPosition().x, playerSprite->getSprite().getPosition().y);
+    
+	Engine::GetWindow().setView(currentView);
     if (Keyboard::isKeyPressed(Keyboard::W)) {
         if (!sprite.loadFromFile("res/bullet.png")) {
             std::cerr << "Failed to load bullet!" << std::endl; //CHANGE LATER SHOULD NOT LOAD EVERY FRAME
@@ -28,7 +33,10 @@ void PlayerFireComponent::update(double dt)
 
         if (_firetime <= 0.f) {
             //Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
-
+			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
+			playerPhysics->setFriction(0.5f);
+			playerPhysics->setMass(5.0f);
+			playerPhysics->impulse(sf::rotate(-Vector2f(0, 2.0f), playerSprite->getSprite().getRotation()));
             auto playerSprite = _parent->get_components<SpriteComponent>()[0];
             float rotation = playerSprite->getSprite().getRotation(); //Gets current rotation of player sprite
             auto bullet = _parent->scene->makeEntity();
@@ -47,7 +55,7 @@ void PlayerFireComponent::update(double dt)
             float frate = b->getFRate(); //Firerate set by bullet component, allows reduction in firetime when necessary
             _firetime = frate;
         }
-        move(dt, (300.f)); 
+        //move(dt, (300.f)); 
     }
 }
 
