@@ -31,8 +31,6 @@ void PlayerFireComponent::update(double dt)
 
     float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
     
-    cout << bottomCheck << endl;
-
     if (leftCheck >= 0 && rightCheck <= (gameWidth * scale) ) {
         currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
     }
