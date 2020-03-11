@@ -81,6 +81,7 @@ void MainScene::Load() {
 			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
 			auto e = enemy->addComponent<SpriteComponent>();
 			e->setSprite<Sprite>(enemySprite);
+			e->getSprite().setOrigin(800, 800);
 			e->getSprite().setScale({ 0.05, 0.05 });
 			enemy->addComponent<SteeringComponent>(player.get());
 		}
