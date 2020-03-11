@@ -7,8 +7,20 @@ using namespace sf;
 using namespace Physics;
 
 void PhysicsComponent::update(double dt) {
-	_parent->setPosition(bv2_to_sv2(_body->GetPosition()));
-	_parent->setRotation((180 / b2_pi) * _body->GetAngle());
+	
+	_timer -= dt;
+	
+	if (_timer < 0) {
+		_timer = 0.1;
+		Vector2f vel = getVelocity();
+		setVelocity(Vector2f(vel.x * 0.85, vel.y * 0.85));
+	}
+	
+		_parent->setPosition(bv2_to_sv2(_body->GetPosition()));
+	
+
+	//_parent->setRotation((180 / b2_pi) * _body->GetAngle());
+	//cout << getVelocity() << endl;
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
@@ -39,6 +51,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     //_fixture->SetRestitution(.9)
     FixtureDef.restitution = .2;
   }
+
 
   // An ideal Pod/capusle shape should be used for hte player,
   // this isn't built into B2d, but we can combine two shapes to do so.
@@ -147,4 +160,8 @@ std::vector<const b2Contact const*> PhysicsComponent::getTouching() const {
 
 void PhysicsComponent::setRestitution(float r) {
   _fixture->SetRestitution(r);
+}
+
+void PhysicsComponent::setTimer() {
+	_timer = 0.5;
 }

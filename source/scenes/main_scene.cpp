@@ -55,7 +55,6 @@ void MainScene::Load() {
 	p->setSpeed(100.f);	
 	s->setSprite<Sprite>(playerSprite);
 	auto i = player->addComponent<PhysicsComponent>(true, Vector2f(0.0f, 0.0f));
-	cout << player->getPosition() << endl;
 	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 
 	s->getSprite().setTextureRect(rect);

@@ -48,9 +48,13 @@ void PlayerFireComponent::update(double dt)
         if (_firetime <= 0.f) {
             //Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
-			playerPhysics->setFriction(0.5f);
-			playerPhysics->setMass(5.0f);
-			playerPhysics->impulse(sf::rotate(-Vector2f(0, 2.0f), playerSprite->getSprite().getRotation()));
+			//playerPhysics->setFriction(0.1f);
+			playerPhysics->setMass(50.0f);
+			playerPhysics->setTimer();
+			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(-impulse.x, impulse.y);
+			playerPhysics->impulse(impulse);
+
             auto playerSprite = _parent->get_components<SpriteComponent>()[0];
             float rotation = playerSprite->getSprite().getRotation(); //Gets current rotation of player sprite
             auto bullet = _parent->scene->makeEntity();

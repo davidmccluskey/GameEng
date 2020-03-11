@@ -1,7 +1,7 @@
 #include "engine.h"
 #include "maths.h"
 #include "system_physics.h"
-#include "../../GamesCW/source/components/cmp_sprite.h"
+
 #include "system_renderer.h"
 #include "system_resources.h"
 #include <SFML/Graphics.hpp>
