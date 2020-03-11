@@ -76,7 +76,7 @@ void MainScene::Load() {
 			Engine::GetWindow().getSize().x);
 		uniform_real_distribution<float> y_dist(0.0f,
 			Engine::GetWindow().getSize().y);
-		for (size_t n = 0; n < 100; ++n) {
+		for (size_t n = 0; n < 2; ++n) {
 			auto enemy = makeEntity();
 			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
 			auto e = enemy->addComponent<SpriteComponent>();
