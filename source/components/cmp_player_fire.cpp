@@ -8,6 +8,7 @@
 #include "system_physics.h"
 #include "cmp_physics.h"
 #include "../game.h"
+
 sf::Texture sprite;
 sf::Sprite bulletSprite;
 
