@@ -7,6 +7,7 @@
 #include "cmp_actor_movement.h"
 #include "system_physics.h"
 #include "cmp_physics.h"
+#include "../game.h"
 sf::Texture sprite;
 sf::Sprite bulletSprite;
 
@@ -20,10 +21,25 @@ PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 void PlayerFireComponent::update(double dt)
 {
     _firetime -= dt; //Firetime set later, allows us to control weapon cooldown 
-    float direction = 0.0f;
-	auto playerSprite = _parent->get_components<SpriteComponent>()[0];
-	sf::View currentView = Engine::GetWindow().getView();
-	currentView.setCenter(playerSprite->getSprite().getPosition().x, playerSprite->getSprite().getPosition().y);
+    auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+
+    sf::View currentView = Engine::GetWindow().getView();
+    float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
+    float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
+
+    float topCheck = playerSprite->getSprite().getPosition().y - ((currentView.getSize().y / 2));
+
+    float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
+    
+    cout << bottomCheck << endl;
+
+    if (leftCheck >= 0 && rightCheck <= (gameWidth * scale) ) {
+        currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+    }
+    if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
+        currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+    }
+
     
 	Engine::GetWindow().setView(currentView);
     if (Keyboard::isKeyPressed(Keyboard::W)) {
@@ -60,25 +76,3 @@ void PlayerFireComponent::update(double dt)
 }
 
 void PlayerFireComponent::render() {} //empty required method
-
-void PlayerFireComponent::move(double dt, float impulse)
-{
-    float floatDT = (float)dt;
-
-    auto sprite = _parent->get_components<SpriteComponent>()[0];
-    float rotation = sprite->getSprite().getRotation();
-    float angleRADS = (3.1415926536 / -180) * ((rotation - 90)); //Gets sprite rotation in radians
-
-    float forx = (floatDT * impulse) * cos(angleRADS); //Impulse allows us to change speed of player movement but keep rotation
-    float fory = (floatDT * impulse) * -sin(angleRADS); //Gets X and Y vector value using weird trig
-    Vector2f spritePosition = sprite->getSprite().getPosition();
-
-    float moveX = (spritePosition.x + forx); 
-    float moveY = (spritePosition.y + fory);
-    sprite->getSprite().setPosition({ moveX, moveY }); //sets new sprite position to current sprite position + movement vector
-    _parent->setPosition({ (moveX), (moveY) }); //Sets new parent position to current sprite position + movement vector
-
-    sf::View currentView = Engine::GetWindow().getView();   
-    currentView.setCenter(sprite->getSprite().getPosition().x, sprite->getSprite().getPosition().y); //updates view to always follow playership
-    Engine::GetWindow().setView(currentView);
-}

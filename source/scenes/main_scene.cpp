@@ -18,10 +18,19 @@ sf::Sprite playerSprite; //Player sprite
 
 Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
-
+RectangleShape walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
 
 void MainScene::Load() {
+	walls[0].setSize({ 20, gameHeight * scale});
+	walls[1].setSize({ 20, gameHeight * scale});
+	walls[2].setSize({ gameWidth * scale, 20 });
+	walls[3].setSize({ gameWidth * scale, 20 });
+
+	walls[0].setOrigin({ 10, gameHeight * scale});
+	walls[0].setPosition({ gameWidth * scale, gameHeight * scale});
+	walls[2].setOrigin({ gameWidth * scale, 10 });
+	walls[2].setPosition({ gameWidth * scale, gameHeight * scale });
 	//Loads in player spritesheet and background sprite
 	if (!spritesheet.loadFromFile("res/SpriteSheet.png")) {
 		cerr << "Failed to load spritesheet!" << std::endl;
@@ -29,16 +38,16 @@ void MainScene::Load() {
 	if (!backgroundtexture.loadFromFile("res/background.jpeg")) {
 		cerr << "Failed to load spritesheet!" << std::endl;
 	}
-	Vector2u size = backgroundtexture.getSize(); //Gets size of background texture
-	backgroundSprite.setTexture(backgroundtexture); //Sets  background sprite to background texture
 
-	sf::Vector2u targetSize = Engine::getWindowSize();	//Gets window size to set background sprite (view zooms this in)
+	backgroundSprite.setTexture(backgroundtexture);
+	backgroundSprite.setOrigin(800, 450);
+	backgroundSprite.setPosition((gameWidth*scale) / 2, (gameHeight*scale) / 2);
 
-	backgroundSprite.setScale(
-		(targetSize.x / backgroundSprite.getLocalBounds().width) * 3,
-		(targetSize.y / backgroundSprite.getLocalBounds().height) * 3); //Sets background sprite to 3x window size, this allows for a large map and camera
 	player = makeEntity();				//create player entity
-	player->setPosition({ 400, 400 });	//sets player position to roughly centre screen
+	player->setPosition({ (gameWidth*scale)/2, (gameHeight*scale)/2 });
+
+
+	//sets player position to roughly centre screen
 	auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 	auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 	auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement 
@@ -46,25 +55,28 @@ void MainScene::Load() {
 	p->setSpeed(100.f);	
 	s->setSprite<Sprite>(playerSprite);
 	auto i = player->addComponent<PhysicsComponent>(true, Vector2f(0.0f, 0.0f));
-
+	cout << player->getPosition() << endl;
 	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 
 	s->getSprite().setTextureRect(rect);
 	s->getSprite().setOrigin(800, 800);
 	s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
+	s->getSprite().setPosition({ 400 * scale,400 * scale });
 
+	cout << player->getPosition() << endl;
 
-
+	backgroundSprite.setScale(scale, scale);
 	//Simulate long loading times UNCOMMENT FOR RELEASE
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << " Main scene Load Done" << endl;
 
 
-	view.setSize(1200.f, 800.f); //sets size of camera
-	view.zoom(1.0f); //sets zoom for camera allowing animation
-	view.setCenter(400, 400);
+	view.setSize(gameWidth/2, gameHeight/2); //sets size of camera
+	view.zoom(1.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
+
+	cout << player->getPosition() << endl;
 }
 
 void MainScene::UnLoad() {
@@ -79,5 +91,11 @@ void MainScene::Update(const double& dt) {
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
+
+	for (auto& p : walls) {
+		Renderer::queue(&p);
+	}
+
+
 	Scene::Render();
 }

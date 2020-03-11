@@ -12,5 +12,5 @@ HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
 
 int main() {
-  Engine::Start(1280, 720, "GUN THRUSTERS",&menu);  //Starts engine in user specified resolution
+  Engine::Start(gameWidth, gameHeight, "GUN THRUSTERS",&menu);  //Starts engine in user specified resolution
 }
