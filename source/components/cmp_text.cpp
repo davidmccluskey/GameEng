@@ -1,7 +1,7 @@
 #include "cmp_text.h"
 #include <system_renderer.h>
 #include <system_resources.h>
-
+#include "engine.h"
 void TextComponent::update(double dt) {}
 
 void TextComponent::render() { Renderer::queue(&_text); }

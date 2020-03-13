@@ -4,6 +4,7 @@
 #include "../components/cmp_text.h"
 #include "../components/cmp_player_movement.h"
 #include "../components/cmp_player_fire.h"
+#include "system_resources.h"
 #include "../components/cmp_physics.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -25,10 +26,18 @@ sf::Sprite enemySprite; //Player sprite
 Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
 RectangleShape walls[4];
-sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
-
+sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference]
 
 void MainScene::Load() {
+
+	cout << "Controls: 1 for normal" << endl;
+	cout << "Controls: 2 for heavy" << endl;
+	cout << "Controls: 3 for beam (TODO)" << endl;
+	cout << "Controls: 4 for triple shot" << endl;
+	cout << "Controls: 5 for burst fire" << endl;
+	cout << "Controls: 6 for shotgun" << endl;
+	cout << "Controls: 7 for quick" << endl;
+
 	walls[0].setSize({ 20, gameHeight * scale});
 	walls[1].setSize({ 20, gameHeight * scale});
 	walls[2].setSize({ gameWidth * scale, 20 });
@@ -38,7 +47,6 @@ void MainScene::Load() {
 	walls[0].setPosition({ gameWidth * scale, gameHeight * scale});
 	walls[2].setOrigin({ gameWidth * scale, 10 });
 	walls[2].setPosition({ gameWidth * scale, gameHeight * scale });
-
 
 
 	//Loads in player spritesheet and background sprite
@@ -90,12 +98,6 @@ void MainScene::Load() {
 		}
 	}
 
-
-
-
-
-
-
 	cout << player->getPosition() << endl;
 
 	//Simulate long loading times UNCOMMENT FOR RELEASE
@@ -119,34 +121,34 @@ void MainScene::UnLoad() {
 
 void MainScene::Update(const double& dt) {
 	Scene::Update(dt);
-	_wavetimer -= dt;
-	if (_wavetimer < 0)
-	{
-		_wavetimer = 5;
-		_wavenumber++;
+	//_wavetimer -= dt;
 
-		cout << "wave spawned" << endl;
-		cout << _wavenumber << endl;
+	//if (_wavetimer < 0)//SPAWNING WAVES
+	//{
+	//	_wavetimer = 5;
+	//	_wavenumber++;
 
-		random_device dev;
-		default_random_engine engine(dev());
-		uniform_real_distribution<float> x_dist(0.0f,
-			Engine::GetWindow().getSize().x);
-		uniform_real_distribution<float> y_dist(0.0f,
-			Engine::GetWindow().getSize().y);
-		auto enemy = makeEntity();
-		enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-		auto e = enemy->addComponent<SpriteComponent>();
-		e->setSprite<Sprite>(enemySprite);
-		e->getSprite().setOrigin(800, 800);
-		e->getSprite().setScale({ 0.05, 0.05 });
-		enemy->addComponent<SteeringComponent>(player.get());
-	}
+	//	cout << "wave spawned" << endl;
+	//	cout << _wavenumber << endl;
+
+	//	random_device dev;
+	//	default_random_engine engine(dev());
+	//	uniform_real_distribution<float> x_dist(0.0f,
+	//		Engine::GetWindow().getSize().x);
+	//	uniform_real_distribution<float> y_dist(0.0f,
+	//		Engine::GetWindow().getSize().y);
+	//	auto enemy = makeEntity();
+	//	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	//	auto e = enemy->addComponent<SpriteComponent>();
+	//	e->setSprite<Sprite>(enemySprite);
+	//	e->getSprite().setOrigin(800, 800);
+	//	e->getSprite().setScale({ 0.05, 0.05 });
+	//	enemy->addComponent<SteeringComponent>(player.get());
+	//}
 }
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
-
 	for (auto& p : walls) {
 		Renderer::queue(&p);
 	}

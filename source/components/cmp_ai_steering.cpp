@@ -22,7 +22,7 @@ void SteeringComponent::update(double dt) {
   }
   // If target (player) is less than 50 pixels away flee
   else if (length(_parent->getPosition() - _player->getPosition()) <
-           50.0f) {
+           100.0f) {
     auto output = _flee.getSteering();
     move(output.direction * (float)dt);
   }
