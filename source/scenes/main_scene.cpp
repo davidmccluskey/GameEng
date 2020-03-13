@@ -122,8 +122,11 @@ void MainScene::Update(const double& dt) {
 	_wavetimer -= dt;
 	if (_wavetimer < 0)
 	{
-		cout << "wave spawned" << endl;
 		_wavetimer = 5;
+		_wavenumber++;
+
+		cout << "wave spawned" << endl;
+		cout << _wavenumber << endl;
 
 		random_device dev;
 		default_random_engine engine(dev());

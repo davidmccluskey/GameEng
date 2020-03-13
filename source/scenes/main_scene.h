@@ -5,6 +5,7 @@
 class MainScene : public Scene {
 private:
     float _wavetimer;
+    float _wavenumber;
 public:
   void Load() override;
 
