@@ -27,6 +27,7 @@ Sprite backgroundSprite;	//Background sprite
 RectangleShape walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
 
+
 void MainScene::Load() {
 	walls[0].setSize({ 20, gameHeight * scale});
 	walls[1].setSize({ 20, gameHeight * scale});
@@ -70,13 +71,15 @@ void MainScene::Load() {
 	}
 	if (enemySheet.loadFromFile("res/enemy_orb.png")) {
 		enemySprite.setTexture(enemySheet);
-		random_device dev;
-		default_random_engine engine(dev());
-		uniform_real_distribution<float> x_dist(0.0f,
-			Engine::GetWindow().getSize().x);
-		uniform_real_distribution<float> y_dist(0.0f,
-			Engine::GetWindow().getSize().y);
+
 		for (size_t n = 0; n < 2; ++n) {
+			random_device dev;
+			default_random_engine engine(dev());
+			uniform_real_distribution<float> x_dist(0.0f,
+				Engine::GetWindow().getSize().x);
+			uniform_real_distribution<float> y_dist(0.0f,
+				Engine::GetWindow().getSize().y);
+
 			auto enemy = makeEntity();
 			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
 			auto e = enemy->addComponent<SpriteComponent>();
@@ -116,6 +119,26 @@ void MainScene::UnLoad() {
 
 void MainScene::Update(const double& dt) {
 	Scene::Update(dt);
+	_wavetimer -= dt;
+	if (_wavetimer < 0)
+	{
+		cout << "wave spawned" << endl;
+		_wavetimer = 5;
+
+		random_device dev;
+		default_random_engine engine(dev());
+		uniform_real_distribution<float> x_dist(0.0f,
+			Engine::GetWindow().getSize().x);
+		uniform_real_distribution<float> y_dist(0.0f,
+			Engine::GetWindow().getSize().y);
+		auto enemy = makeEntity();
+		enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+		auto e = enemy->addComponent<SpriteComponent>();
+		e->setSprite<Sprite>(enemySprite);
+		e->getSprite().setOrigin(800, 800);
+		e->getSprite().setScale({ 0.05, 0.05 });
+		enemy->addComponent<SteeringComponent>(player.get());
+	}
 }
 
 void MainScene::Render() {

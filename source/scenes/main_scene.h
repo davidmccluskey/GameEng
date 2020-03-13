@@ -3,6 +3,8 @@
 #include "engine.h"
 
 class MainScene : public Scene {
+private:
+    float _wavetimer;
 public:
   void Load() override;
 
