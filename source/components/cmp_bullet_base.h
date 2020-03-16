@@ -6,6 +6,7 @@ protected:
     float _lifetime;
     float _speed;
     char _type;
+
 public:
     void update(double dt) override;
     void render() override {}

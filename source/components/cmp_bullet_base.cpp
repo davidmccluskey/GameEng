@@ -1,5 +1,6 @@
 #include "cmp_bullet_base.h"
 #include "cmp_sprite.h"
+#include "engine.h"
 using namespace std;
 using namespace sf;
 
@@ -27,7 +28,7 @@ void BaseBulletComponent::update(double dt) {
 
 }
 
-BaseBulletComponent::BaseBulletComponent(Entity* p, float lifetime,float speed)
+BaseBulletComponent::BaseBulletComponent(Entity* p, float lifetime, float speed)
     : Component(p), _lifetime(lifetime), _speed(speed){}
 
 float BaseBulletComponent::getSpeed() {
