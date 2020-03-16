@@ -6,16 +6,26 @@
 #include <random>
 #include "cmp_player_fire.h"
 #include "cmp_bullet_base.h"
+#include <SFML/Window/Joystick.hpp>
+
+
 // Constructor
 PlayerMovementComponent::PlayerMovementComponent(Entity* p)
     : ActorMovementComponent(p) {}
 using namespace sf;
+using namespace std;
+
 // Update
 void PlayerMovementComponent::update(double dt)
 {
-	/*auto b = _parent->get_components<PhysicsComponent>()[0];
-	b->setV;
-*/
+    float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+    if (x < -20) {
+        rotate(dt * (x * 3));
+    }
+    else if (x > 20) {
+        rotate(dt * (x * 3));
+    }
 
     if (Keyboard::isKeyPressed(Keyboard::A))
     {

@@ -67,7 +67,7 @@ void PlayerFireComponent::update(double dt)
 	}
 
 	Engine::GetWindow().setView(currentView);
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
+	if (Keyboard::isKeyPressed(Keyboard::W) || sf::Joystick::isButtonPressed(0, 1)) {
 		if (_firetime <= 0.f) {
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];

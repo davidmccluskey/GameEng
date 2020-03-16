@@ -48,7 +48,13 @@ void MainScene::Load() {
 	walls[2].setOrigin({ gameWidth * scale, 10 });
 	walls[2].setPosition({ gameWidth * scale, gameHeight * scale });
 
+	if (sf::Joystick::isConnected(0)) {
+		cout << "Controller connected" << endl;
+	}
+	else if (!sf::Joystick::isConnected(0)) {
+		cout << "No controller connected" << endl;
 
+	}
 	//Loads in player spritesheet and background sprite
 	if (spritesheet.loadFromFile("res/SpriteSheet.png")) {
 		player = makeEntity();				//create player entity
