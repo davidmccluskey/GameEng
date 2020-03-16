@@ -13,7 +13,7 @@ void PhysicsComponent::update(double dt) {
 	if (_timer < 0) {
 		_timer = 0.1;
 		Vector2f vel = getVelocity();
-		setVelocity(Vector2f(vel.x * 0.85, vel.y * 0.85));
+		setVelocity(Vector2f(vel.x * 0.7, vel.y * 0.7));
 	}
 	
 		_parent->setPosition(bv2_to_sv2(_body->GetPosition()));

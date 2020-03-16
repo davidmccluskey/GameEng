@@ -162,7 +162,6 @@ void PlayerFireComponent::fireBeam(float rotation) {
 	bullet->setRotation(inverse);
 	beam.setRotation(inverse);
 	s->setSprite<Sprite>(beam);
-	cout << "beam" << endl;
 }
 void PlayerFireComponent::fireTriple(float rotation) {
 	int angle = -10;
@@ -196,7 +195,6 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	s->setSprite<Sprite>(bulletSprite);
 	float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
 	bullet->setRotation(inverse);
-	cout << "normal" << endl;
 }
 
 void PlayerFireComponent::render() {} //empty required method
