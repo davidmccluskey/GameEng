@@ -20,6 +20,8 @@ Sprite beam;
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
+	srand(time(0));
+
 	sprite.loadFromFile("res/bullet.png");
 	beamSprite.loadFromFile("res/brimstone.png");
 }
@@ -128,22 +130,21 @@ void PlayerFireComponent::fireBurst(float rotation) {
 void PlayerFireComponent::fireShotgun(float rotation) {
 
 	for (int i = 0; i < 5; i++) {
-		srand(time(0) + i * 10);
 
-		float distro = rand() % 100 + 1;
 		auto bullet = _parent->scene->makeEntity();
-		cout << distro << endl;
-		bullet->setPosition({ _parent->getPosition().x + distro, _parent->getPosition().y + distro});    //Sets bullet position to player position
+		float spacing = rand() % 20 + (-10);
+		float speed =  rand() % (1500 - 500 + 1) + 500;
+		bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
 		auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
 		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		b->setSpeed(1000 * _speed);
+		b->setSpeed(speed);
 		bulletSprite.setTexture(sprite);
-		bulletSprite.setScale({ 0.1f * distro/20, 0.1f * distro/20 });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		bulletSprite.setScale({ 0.1f, 0.1f});  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 		bulletSprite.setPosition(bullet->getPosition());   //sets position of sprite to be same as object
 		s->setSprite<Sprite>(bulletSprite);
 		float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-		bullet->setRotation(inverse);
+		bullet->setRotation(inverse + spacing);
 	}
 }
 
