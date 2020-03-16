@@ -24,6 +24,16 @@ void BaseBulletComponent::update(double dt) {
         _parent->setPosition({ (moveX), (moveY) }); //Similar to player movement code but for bullet, maths and logic is the same 
     }
     else {
+        auto parent = _parent->scene->ents.list[0];
+        auto s = parent->get_components<SpriteComponent>()[0];
+        auto b = _parent->get_components<SpriteComponent>()[0];
+
+        float rotation = s->getSprite().getRotation();
+        float inverse = fmod((rotation + 180.f), 360);
+        cout << inverse << endl;
+        _parent->setPosition(s->getSprite().getPosition());
+        b->getSprite().setRotation(inverse);
+        _parent->setRotation(inverse);
     }
 
 }

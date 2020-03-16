@@ -76,7 +76,7 @@ Entity::~Entity() {
     throw std::runtime_error(
         "Can't delete entity, someone is grabbing a component!");
   }
-
+ 
   _components.clear();
 }
 

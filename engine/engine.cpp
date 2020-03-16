@@ -100,7 +100,7 @@ void Engine::Start(unsigned int width, unsigned int height,
       }
     }
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-      window.close();
+      //window.close();
     }
 
     window.clear();
