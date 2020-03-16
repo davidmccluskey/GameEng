@@ -254,7 +254,7 @@ void PlayerFireComponent::setAsShotgun()
 {
 	_bulletType = 'S';
 	_fireRate = 0.3;
-	_impulse = 1;
+	_impulse = 4;
 	_speed = 1;
 	_damage = 1;
 	_size = 1;

@@ -112,7 +112,7 @@ void MainScene::Load() {
 
 
 	view.setSize(gameWidth/2, gameHeight/2); //sets size of camera
-	view.zoom(1.5f); //sets zoom for camera allowing animation
+	view.zoom(2.0f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
 
