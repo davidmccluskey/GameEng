@@ -53,22 +53,6 @@ void PlayerFireComponent::update(double dt)
 		_burst = false;
 		_burstNum = 3;
 	}
-	sf::View currentView = Engine::GetWindow().getView();
-	float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
-	float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
-
-	float topCheck = playerSprite->getSprite().getPosition().y - ((currentView.getSize().y / 2));
-
-	float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
-
-	if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
-		currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
-	}
-	if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
-		currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
-	}
-
-	Engine::GetWindow().setView(currentView);
 	if (Keyboard::isKeyPressed(Keyboard::W) || sf::Joystick::isButtonPressed(0, 1)) {
 		if (_firetime <= 0.f) {
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
@@ -162,7 +146,7 @@ void PlayerFireComponent::fireBeam(float rotation) {
 	float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
 	bullet->setRotation(inverse);
 	beam.setRotation(inverse);
-	s->setSprite<Sprite>(beam);
+	s->setSprite<Sprite>(beam); 
 }
 void PlayerFireComponent::fireTriple(float rotation) {
 	int angle = -10;
@@ -223,7 +207,7 @@ void PlayerFireComponent::setAsHeavy()
 void PlayerFireComponent::setAsBeam()
 {
 	_bulletType = 'B';
-	_fireRate = 0.5;
+	_fireRate = 3.5;
 	_impulse = 1;
 	_speed = 1;
 	_damage = 1;

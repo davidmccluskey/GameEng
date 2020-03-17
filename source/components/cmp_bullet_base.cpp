@@ -1,18 +1,19 @@
 #include "cmp_bullet_base.h"
 #include "cmp_sprite.h"
 #include "engine.h"
+#include "cmp_physics.h"
 using namespace std;
 using namespace sf;
 
 void BaseBulletComponent::update(double dt) {
     std::set<string>::iterator it;
     auto sprite = _parent->get_components<SpriteComponent>()[0];
+    float floatDT = (float)dt;
     _lifetime -= dt;
     if (_lifetime <= 0.f) {
         _parent->setForDelete(); //If bullet is on screen too long it should be deleted
     }
     if (_type != 'B') {
-        float floatDT = (float)dt;
         float rotation = _parent->getRotation();
         float angleRADS = (3.1415926536 / -180) * ((rotation - 90));
         float forx = (floatDT * _speed) * cos(angleRADS);
@@ -23,17 +24,33 @@ void BaseBulletComponent::update(double dt) {
         sprite->getSprite().setPosition({ moveX, moveY });
         _parent->setPosition({ (moveX), (moveY) }); //Similar to player movement code but for bullet, maths and logic is the same 
     }
-    else {
-        auto parent = _parent->scene->ents.list[0];
-        auto s = parent->get_components<SpriteComponent>()[0];
-        auto b = _parent->get_components<SpriteComponent>()[0];
+    else if (_type == 'B') {
+        auto player = _parent->scene->ents.list[0];
+        auto playerPhysics = player->get_components<PhysicsComponent>()[0];
 
-        float rotation = s->getSprite().getRotation();
+        auto playerSprite = player->get_components<SpriteComponent>()[0];
+
+        float rotation = playerSprite->getSprite().getRotation();
+        Vector2f impulse = sf::rotate(Vector2f(0, 0.05f), playerSprite->getSprite().getRotation());
+        impulse = Vector2f(-impulse.x, impulse.y);
+
+        playerPhysics->impulse(impulse);
+
         float inverse = fmod((rotation + 180.f), 360);
-        cout << inverse << endl;
-        _parent->setPosition(s->getSprite().getPosition());
-        b->getSprite().setRotation(inverse);
+        sprite->getSprite().setRotation(inverse);
         _parent->setRotation(inverse);
+        //
+        //float angleRADS = (3.1415926536 / -180) * ((rotation - 90));
+        //float forx = (floatDT * 1000) * cos(angleRADS);
+        //float fory = (floatDT * 1000) * -sin(angleRADS);
+        //Vector2f spritePosition = playerSprite->getSprite().getPosition();
+        //float moveX = (spritePosition.x + forx);
+        //float moveY = (spritePosition.y + fory);
+
+        //playerSprite->getSprite().setPosition({ moveX, moveY });
+        //player->setPosition({moveX, moveY});
+        _parent->setPosition(playerSprite->getSprite().getPosition());
+
     }
 
 }

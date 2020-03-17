@@ -29,7 +29,7 @@ RectangleShape walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference]
 
 void MainScene::Load() {
-
+	cout << "" << endl;
 	cout << "Controls: 1 for normal" << endl;
 	cout << "Controls: 2 for heavy" << endl;
 	cout << "Controls: 3 for beam (TODO)" << endl;
@@ -37,6 +37,7 @@ void MainScene::Load() {
 	cout << "Controls: 5 for burst fire" << endl;
 	cout << "Controls: 6 for shotgun" << endl;
 	cout << "Controls: 7 for quick" << endl;
+	cout << "" << endl;
 
 	walls[0].setSize({ 20, gameHeight * scale});
 	walls[1].setSize({ 20, gameHeight * scale});
@@ -103,9 +104,6 @@ void MainScene::Load() {
 			enemy->addComponent<SteeringComponent>(player.get());
 		}
 	}
-
-	cout << player->getPosition() << endl;
-
 	//Simulate long loading times UNCOMMENT FOR RELEASE
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << " Main scene Load Done" << endl;
@@ -115,8 +113,6 @@ void MainScene::Load() {
 	view.zoom(2.0f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
-
-	cout << player->getPosition() << endl;
 }
 
 void MainScene::UnLoad() {
@@ -127,6 +123,23 @@ void MainScene::UnLoad() {
 
 void MainScene::Update(const double& dt) {
 	Scene::Update(dt);
+	sf::View currentView = Engine::GetWindow().getView();
+	auto playerSprite = player->get_components<SpriteComponent>()[0];
+	float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
+	float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
+
+	float topCheck = playerSprite->getSprite().getPosition().y - ((currentView.getSize().y / 2));
+
+	float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
+
+	if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
+		currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+	}
+	if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
+		currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+	}
+
+	Engine::GetWindow().setView(currentView);
 	//_wavetimer -= dt;
 
 	//if (_wavetimer < 0)//SPAWNING WAVES
