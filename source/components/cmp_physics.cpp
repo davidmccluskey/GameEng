@@ -39,7 +39,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     // Create the fixture shape
     b2PolygonShape Shape;
     // SetAsBox box takes HALF-Widths!
-    Shape.SetAsBox(sv2_to_bv2(size).x * 0.5f, sv2_to_bv2(size).y * 0.5f);
+    Shape.SetAsBox(sv2_to_bv2(size).x, sv2_to_bv2(size).y);
     b2FixtureDef FixtureDef;
     // Fixture properties
     // FixtureDef.density = _dynamic ? 10.f : 0.f;

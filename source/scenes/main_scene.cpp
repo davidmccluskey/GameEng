@@ -25,7 +25,7 @@ sf::Sprite enemySprite; //Player sprite
 
 Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
-RectangleShape walls[4];
+static shared_ptr<Entity> walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference]
 
 void MainScene::Load() {
@@ -39,15 +39,51 @@ void MainScene::Load() {
 	cout << "Controls: 7 for quick" << endl;
 	cout << "" << endl;
 
-	walls[0].setSize({ 20, gameHeight * scale});
-	walls[1].setSize({ 20, gameHeight * scale});
-	walls[2].setSize({ gameWidth * scale, 20 });
-	walls[3].setSize({ gameWidth * scale, 20 });
+	Vector2f walls[] = {
+		// Top
+		Vector2f((gameWidth * scale) * .5f, 5.f), Vector2f((gameWidth * scale), 10.f),
+		// Bottom
+		Vector2f((gameWidth * scale) * .5f, (gameHeight * scale) - 5.f), Vector2f((gameWidth * scale), 10.f),
+		// left
+		Vector2f(5.f, (gameHeight * scale) * .5f), Vector2f(10.f, (gameHeight * scale)),
+		// right
+		Vector2f((gameWidth * scale) - 5.f, (gameHeight * scale) * .5f), Vector2f(10.f, (gameHeight * scale))
+	};
+	for (int i = 0; i < 7; i += 2) {
+		auto e = makeEntity();
+		e->setPosition(walls[i]);
+		auto s = e->addComponent<ShapeComponent>();
+		switch (i) {
+		case 0:
+			s->setShape<sf::RectangleShape>(walls[i + 1]);
+			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
+			s->getShape().setPosition({ gameWidth * scale, 0});
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10));
+			break;
+		case 2:
+			s->setShape<sf::RectangleShape>(walls[i + 1]);
+			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
+			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10));
+			break;
+		case 4:
+			s->setShape<sf::RectangleShape>(walls[i + 1]);
+			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
+			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale));
+			break;
+		case 6:
+			s->setShape<sf::RectangleShape>(walls[i + 1]);
+			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
+			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale));
+			break;
+		}
+		s->getShape().setFillColor(Color::Magenta);
+		//e->addComponent<PhysicsComponent>(true, Vector2f(20, gameHeight * scale));
+		//auto body = CreatePhysicsBox(*world, false, *s);
+	}
 
-	walls[0].setOrigin({ 10, gameHeight * scale});
-	walls[0].setPosition({ gameWidth * scale, gameHeight * scale});
-	walls[2].setOrigin({ gameWidth * scale, 10 });
-	walls[2].setPosition({ gameWidth * scale, gameHeight * scale });
 
 	if (sf::Joystick::isConnected(0)) {
 		cout << "Controller connected" << endl;
@@ -69,7 +105,7 @@ void MainScene::Load() {
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto i = player->addComponent<PhysicsComponent>(true, Vector2f(0.0f, 0.0f));
+		auto i = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f));
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 
 		s->getSprite().setTextureRect(rect);
@@ -101,7 +137,8 @@ void MainScene::Load() {
 			e->setSprite<Sprite>(enemySprite);
 			e->getSprite().setOrigin(800, 800);
 			e->getSprite().setScale({ 0.05, 0.05 });
-			enemy->addComponent<SteeringComponent>(player.get());
+			auto i = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f));
+			//enemy->addComponent<SteeringComponent>(player.get());
 		}
 	}
 	//Simulate long loading times UNCOMMENT FOR RELEASE
@@ -109,8 +146,8 @@ void MainScene::Load() {
 	//cout << " Main scene Load Done" << endl;
 
 
-	view.setSize(gameWidth/2, gameHeight/2); //sets size of camera
-	view.zoom(2.0f); //sets zoom for camera allowing animation
+	view.setSize(gameWidth / 2, gameHeight / 2); //sets size of camera
+	view.zoom(5.0f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
 }
@@ -168,9 +205,9 @@ void MainScene::Update(const double& dt) {
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
-	for (auto& p : walls) {
-		Renderer::queue(&p);
-	}
+	//for (auto& p : walls) {
+	//	Renderer::queue(&p);
+	//}
 
 
 	Scene::Render();

@@ -9,7 +9,7 @@
 #include "cmp_physics.h"
 #include "../game.h"
 #include <random>
-
+#include "cmp_physics.h"
 using namespace sf;
 using namespace std;
 sf::Texture sprite;
@@ -116,6 +116,7 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 	for (int i = 0; i < 5; i++) {
 
 		auto bullet = _parent->scene->makeEntity();
+
 		float spacing = rand() % 20 + (-10);
 		float speed =  rand() % (1500 - 500 + 1) + 500;
 		bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
