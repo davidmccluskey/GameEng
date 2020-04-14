@@ -168,34 +168,34 @@ void PlayerFireComponent::fireTriple(float rotation) {
 
 }
 void PlayerFireComponent::fireNormal(float rotation) {
-	//auto bullet = _parent->scene->makeEntity();
-	//auto phys = bullet->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
-
-	//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-	//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-	//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	//b->setSpeed(1000 * _speed);
-	//bulletSprite.setTexture(sprite);
-	//bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-	//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-	//bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
-	//s->setSprite<Sprite>(bulletSprite);
-	//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-	//bullet->setRotation(inverse);
-
 	auto bullet = _parent->scene->makeEntity();
-	bullet->setPosition(_parent->getPosition());
-	//bullet->addComponent<HurtComponent>();
-	bullet->addComponent<BaseBulletComponent>();
-	auto s = bullet->addComponent<ShapeComponent>();
+	auto phys = bullet->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
 
-	s->setShape<sf::CircleShape>(8.f);
-	s->getShape().setFillColor(Color::Red);
-	s->getShape().setOrigin(8.f, 8.f);
-	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
-	p->setRestitution(.4f);
-	p->setFriction(.005f);
-	p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
+	bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
+	auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
+	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+	b->setSpeed(1000 * _speed);
+	bulletSprite.setTexture(sprite);
+	bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
+	s->setSprite<Sprite>(bulletSprite);
+	float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+	bullet->setRotation(inverse);
+
+	//auto bullet = _parent->scene->makeEntity();
+	//bullet->setPosition(_parent->getPosition());
+	////bullet->addComponent<HurtComponent>();
+	//bullet->addComponent<BaseBulletComponent>();
+	//auto s = bullet->addComponent<ShapeComponent>();
+
+	//s->setShape<sf::CircleShape>(8.f);
+	//s->getShape().setFillColor(Color::Red);
+	//s->getShape().setOrigin(8.f, 8.f);
+	//auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+	//p->setRestitution(.4f);
+	//p->setFriction(.005f);
+	//p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
 
 }
 
