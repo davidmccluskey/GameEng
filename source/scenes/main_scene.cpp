@@ -20,8 +20,11 @@ static shared_ptr<Entity> player; //Player Entity
 sf::Texture spritesheet; //Player spritesheet
 sf::Sprite playerSprite; //Player sprite
 
-sf::Texture enemySheet; //Player spritesheet
-sf::Sprite enemySprite; //Player sprite
+sf::Texture enemySheet; 
+sf::Sprite enemySprite; 
+
+sf::Texture asteroidSheet;
+sf::Sprite asteroidSprite;
 
 Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
@@ -111,8 +114,6 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
 		s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
-		s->getSprite().setPosition({ 400 * scale,400 * scale });
-
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
@@ -137,9 +138,29 @@ void MainScene::Load() {
 			e->setSprite<Sprite>(enemySprite);
 			e->getSprite().setOrigin(800, 800);
 			e->getSprite().setScale({ 0.05, 0.05 });
+			enemy->addComponent<SteeringComponent>(player.get());
+
 			auto i = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f));
-			//enemy->addComponent<SteeringComponent>(player.get());
 		}
+	}
+
+	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
+	{
+		asteroidSprite.setTexture(asteroidSheet);
+		auto asteroid = makeEntity();
+		asteroid->setPosition({ 800,800 });
+
+		auto s = asteroid->addComponent<SpriteComponent>();
+		s->setSprite<Sprite>(asteroidSprite);
+		auto rect = IntRect(0, 0, 850, 700);
+		s->getSprite().setOrigin(400, 350);
+		s->getSprite().setTextureRect(rect);
+		s->getSprite().setScale({ 0.5, 0.5 });
+
+		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f));
+		i->impulse({ 10,10 });
+		i->setRestitution(1);
+
 	}
 	//Simulate long loading times UNCOMMENT FOR RELEASE
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));

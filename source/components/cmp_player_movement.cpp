@@ -8,16 +8,24 @@
 #include "cmp_bullet_base.h"
 #include <SFML/Window/Joystick.hpp>
 
-
 // Constructor
 PlayerMovementComponent::PlayerMovementComponent(Entity* p)
-    : ActorMovementComponent(p) {}
+    : ActorMovementComponent(p) {
+}
 using namespace sf;
 using namespace std;
 
 // Update
 void PlayerMovementComponent::update(double dt)
 {
+    _timer -= dt;
+
+    if (_timer < 0) {
+    	_timer = 0.1;
+        auto p = _parent->get_components<PhysicsComponent>()[0];
+    	Vector2f vel = p->getVelocity();
+    	p->setVelocity(Vector2f(vel.x * 0.7, vel.y * 0.7));
+    }
     float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 
     if (x < -20) {

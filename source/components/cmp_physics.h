@@ -9,7 +9,6 @@ protected:
   b2Body* _body;
   const bool _dynamic;
   b2Fixture* _fixture;
-  float _timer = 0;
 
 public:
   PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size);
@@ -28,6 +27,5 @@ public:
   void dampen(const sf::Vector2f& s);
   void setVelocity(const sf::Vector2f& v);
   void teleport(const sf::Vector2f& v);
-  void setTimer();
   ~PhysicsComponent() override;
 };
