@@ -3,7 +3,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "engine.h"
 #include "cmp_sprite.h"
-#include "cmp_bullet_base.h"
+#include "cmp_bullet.h"
 #include "cmp_actor_movement.h"
 #include "system_physics.h"
 #include "cmp_physics.h"
@@ -115,87 +115,98 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 
 	for (int i = 0; i < 5; i++) {
 
-		auto bullet = _parent->scene->makeEntity();
-		float spacing = rand() % 20 + (-10);
-		float speed =  rand() % (1500 - 500 + 1) + 500;
-		bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
-		auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		b->setSpeed(speed);
-		bulletSprite.setTexture(sprite);
-		bulletSprite.setScale({ 0.1f, 0.1f});  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-		bulletSprite.setPosition(bullet->getPosition());   //sets position of sprite to be same as object
-		s->setSprite<Sprite>(bulletSprite);
-		float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-		bullet->setRotation(inverse + spacing);
+		//auto bullet = _parent->scene->makeEntity();
+		//float spacing = rand() % 20 + (-10);
+		//float speed =  rand() % (1500 - 500 + 1) + 500;
+		//bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
+		//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
+		//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+		//b->setSpeed(speed);
+		//bulletSprite.setTexture(sprite);
+		//bulletSprite.setScale({ 0.1f, 0.1f});  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+		//bulletSprite.setPosition(bullet->getPosition());   //sets position of sprite to be same as object
+		//s->setSprite<Sprite>(bulletSprite);
+		//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+		//bullet->setRotation(inverse + spacing);
 	}
 }
 
 void PlayerFireComponent::fireBeam(float rotation) {
-	auto bullet = _parent->scene->makeEntity();
-	bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-	auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	b->setSpeed(1000 * _speed);
-	b->setType('B');
-	beam.setTexture(beamSprite);
-	beam.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-	beam.setOrigin({ 200, 880 });   //sets center of bullet
-	beam.setPosition(_parent->getPosition());
-	float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-	bullet->setRotation(inverse);
-	beam.setRotation(inverse);
-	s->setSprite<Sprite>(beam); 
+	//auto bullet = _parent->scene->makeEntity();
+	//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
+	//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
+	//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+	//b->setSpeed(1000 * _speed);
+	//b->setType('B');
+	//beam.setTexture(beamSprite);
+	//beam.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+	//beam.setOrigin({ 200, 880 });   //sets center of bullet
+	//beam.setPosition(_parent->getPosition());
+	//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+	//bullet->setRotation(inverse);
+	//beam.setRotation(inverse);
+	//s->setSprite<Sprite>(beam); 
 }
 void PlayerFireComponent::fireTriple(float rotation) {
 	int angle = -10;
 	for (int i = 0; i < 3; i++) {
-		auto bullet = _parent->scene->makeEntity();
-		bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-		auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		b->setSpeed(1000 * _speed);
-		bulletSprite.setTexture(sprite);
-		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
-		s->setSprite<Sprite>(bulletSprite);
-		float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-		bullet->setRotation(inverse + (angle));
-		angle += 10;
+		//auto bullet = _parent->scene->makeEntity();
+		//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
+		//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
+		//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+		//b->setSpeed(1000 * _speed);
+		//bulletSprite.setTexture(sprite);
+		//bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+		//bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
+		//s->setSprite<Sprite>(bulletSprite);
+		//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+		//bullet->setRotation(inverse + (angle));
+		//angle += 10;
 	}
 
 }
 void PlayerFireComponent::fireNormal(float rotation) {
-	auto bullet = _parent->scene->makeEntity();
-	auto phys = bullet->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+	auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+	//auto bullet = _parent->scene->makeEntity();
+	//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
+	//auto b = bullet->addComponent<BulletComponent>(); //Adds bullet component which determines bullet pickup
+	//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+	//auto p = bullet->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+	//Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+	//impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
+	//p->impulse(impulse);
+	////b->setSpeed(1000 * _speed);
+	//bulletSprite.setTexture(sprite);
+	//bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+	//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+	//bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
+	//s->setSprite<Sprite>(bulletSprite);
+	//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+	//bullet->setRotation(inverse);
 
-	bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-	auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
+	auto bullet = _parent->scene->makeEntity();
+	bullet->setPosition(_parent->getPosition());
+	bullet->addComponent<BulletComponent>();
+	//auto s = bullet->addComponent<ShapeComponent>();
+
+	/*s->setShape<sf::CircleShape>(8.f);
+	s->getShape().setFillColor(Color::Red);
+	s->getShape().setOrigin(8.f, 8.f);*/
+
 	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	b->setSpeed(1000 * _speed);
 	bulletSprite.setTexture(sprite);
 	bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 	s->setSprite<Sprite>(bulletSprite);
-	float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-	bullet->setRotation(inverse);
-
-	//auto bullet = _parent->scene->makeEntity();
-	//bullet->setPosition(_parent->getPosition());
-	////bullet->addComponent<HurtComponent>();
-	//bullet->addComponent<BaseBulletComponent>();
-	//auto s = bullet->addComponent<ShapeComponent>();
-
-	//s->setShape<sf::CircleShape>(8.f);
-	//s->getShape().setFillColor(Color::Red);
-	//s->getShape().setOrigin(8.f, 8.f);
-	//auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
-	//p->setRestitution(.4f);
-	//p->setFriction(.005f);
-	//p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
+	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+	p->setRestitution(.4f);
+	p->setFriction(.005f);
+	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
+	impulse = Vector2f(-impulse.x * _impulse, -impulse.y * _impulse);
+	p->impulse(impulse);
 
 }
 
