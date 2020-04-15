@@ -61,25 +61,25 @@ void MainScene::Load() {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, 0});
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10));
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET));
 			break;
 		case 2:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10));
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET));
 			break;
 		case 4:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale));
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET));
 			break;
 		case 6:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale));
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET));
 			break;
 		}
 		s->getShape().setFillColor(Color::Magenta);
@@ -108,7 +108,7 @@ void MainScene::Load() {
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto i = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f));
+		auto i = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short) (constWALL) );
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 
 		s->getSprite().setTextureRect(rect);
@@ -140,7 +140,7 @@ void MainScene::Load() {
 			e->getSprite().setScale({ 0.05, 0.05 });
 			enemy->addComponent<SteeringComponent>(player.get());
 
-			auto i = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f));
+			auto i = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short) (constBULLET | constPLAYER));
 		}
 	}
 
@@ -157,9 +157,9 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setScale({ 0.5, 0.5 });
 
-		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f));
-		i->impulse({ 10,10 });
-		i->setRestitution(1);
+		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f), constENEMY, (short) (constBULLET |  constWALL |  constPLAYER));
+		//i->impulse({ 10,10 });
+		//i->setRestitution(1);
 
 	}
 	//Simulate long loading times UNCOMMENT FOR RELEASE

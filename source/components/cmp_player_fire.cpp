@@ -169,39 +169,16 @@ void PlayerFireComponent::fireTriple(float rotation) {
 }
 void PlayerFireComponent::fireNormal(float rotation) {
 	auto playerSprite = _parent->get_components<SpriteComponent>()[0];
-	//auto bullet = _parent->scene->makeEntity();
-	//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-	//auto b = bullet->addComponent<BulletComponent>(); //Adds bullet component which determines bullet pickup
-	//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	//auto p = bullet->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
-	//Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
-	//impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
-	//p->impulse(impulse);
-	////b->setSpeed(1000 * _speed);
-	//bulletSprite.setTexture(sprite);
-	//bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-	//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-	//bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
-	//s->setSprite<Sprite>(bulletSprite);
-	//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-	//bullet->setRotation(inverse);
-
 	auto bullet = _parent->scene->makeEntity();
 	bullet->setPosition(_parent->getPosition());
 	bullet->addComponent<BulletComponent>();
-	//auto s = bullet->addComponent<ShapeComponent>();
-
-	/*s->setShape<sf::CircleShape>(8.f);
-	s->getShape().setFillColor(Color::Red);
-	s->getShape().setOrigin(8.f, 8.f);*/
-
 	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
 	bulletSprite.setTexture(sprite);
 	bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 	s->setSprite<Sprite>(bulletSprite);
-	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short) (constENEMY | constWALL));
 	p->setRestitution(.4f);
 	p->setFriction(.005f);
 	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());

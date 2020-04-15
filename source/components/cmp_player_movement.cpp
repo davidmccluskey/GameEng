@@ -7,7 +7,7 @@
 #include "cmp_player_fire.h"
 #include "cmp_bullet_base.h"
 #include <SFML/Window/Joystick.hpp>
-
+#include "../game.h"
 // Constructor
 PlayerMovementComponent::PlayerMovementComponent(Entity* p)
     : ActorMovementComponent(p) {
