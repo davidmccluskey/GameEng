@@ -1,5 +1,7 @@
 #include "cmp_physics.h"
 #include "system_physics.h"
+#include "cmp_bullet.h"
+#include "cmp_base_enemy.h"
 
 using namespace std;
 using namespace sf;
@@ -41,7 +43,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
 
     FixtureDef.filter.categoryBits = cBits;
     FixtureDef.filter.maskBits = mBits;
-    FixtureDef.userData = userdata;
+    _body->SetUserData(this);
     // Add to body
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)
@@ -77,6 +79,34 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
 }
 
 void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r); }
+
+void PhysicsComponent::collisionResponse(void* collider) {
+    PhysicsComponent* c = static_cast<PhysicsComponent*>(collider);
+    auto child = c->_parent;
+    //cout << "A " << _parent << endl;
+    //cout << "B " << c->_parent << endl;
+    auto tagSet = _parent->getTags();
+    string parentTag = tagSet.begin()->c_str();
+   // cout << "parent " << parentTag << endl;
+
+    tagSet = child->getTags();
+    string childTag = tagSet.begin()->c_str();
+   // cout << "child " << childTag << endl;
+    if (parentTag == "enemy" && childTag == "enemy") {
+        return;
+    }
+    if ((parentTag == "bullet" && childTag == "enemy")) {
+        auto bullet = _parent->get_components<BulletComponent>()[0];
+        auto enemy = child->get_components<EnemyComponent>()[0];
+
+        float damage = bullet->getDamage();
+        cout << "damage " << damage << endl;
+        cout << "enemy health " << enemy->getHealth() << endl;
+
+        enemy->setHealth(enemy->getHealth() - damage);
+        _parent->setForDelete();
+    }
+}
 
 void PhysicsComponent::setMass(float m) { _fixture->SetDensity(m); }
 

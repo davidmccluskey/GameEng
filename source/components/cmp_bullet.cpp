@@ -9,5 +9,12 @@ void BulletComponent::update(double dt) {
   }
 }
 
+float BulletComponent::getDamage() {
+    return _damage;
+}
+
+void BulletComponent::setDamage(float damage) {
+    _damage = damage;
+}
 BulletComponent::BulletComponent(Entity* p, float lifetime, float size, float impulse, float speed, float damage)
     : Component(p), _lifetime(lifetime), _size(size), _impulse(impulse), _speed(speed), _damage(damage) {}

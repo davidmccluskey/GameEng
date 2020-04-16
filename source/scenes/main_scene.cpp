@@ -16,6 +16,7 @@
 #include<string>
 #include "system_physics.h"
 #include "../contactListener.cpp"
+#include "../components/cmp_base_enemy.h"
 
 using namespace std;
 using namespace sf;
@@ -92,10 +93,11 @@ void MainScene::Load() {
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
 			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
-			cout << "wall right " <<  p->getFixture()->GetUserData() << endl;
+			cout << "wall right " << p->getFixture()->GetUserData() << endl;
 
 		}
 		s->getShape().setFillColor(Color::Cyan);
+		e->addTag("wall");
 		//e->addComponent<PhysicsComponent>(true, Vector2f(20, gameHeight * scale));
 		//auto body = CreatePhysicsBox(*world, false, *s);
 	}
@@ -164,12 +166,18 @@ void MainScene::Load() {
 		}
 	}
 
+<<<<<<< Updated upstream
+=======
+
+
+
+>>>>>>> Stashed changes
 	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
 	{
 		asteroidSprite.setTexture(asteroidSheet);
 		auto asteroid = makeEntity();
 		asteroid->setPosition({ 800,800 });
-
+		asteroid->addTag("asteroid");
 		auto s = asteroid->addComponent<SpriteComponent>();
 		s->setSprite<Sprite>(asteroidSprite);
 		auto rect = IntRect(0, 0, 850, 700);
@@ -258,3 +266,103 @@ void MainScene::Render() {
 
 	Scene::Render();
 }
+<<<<<<< Updated upstream
+=======
+
+
+void MainScene::createEnemyOrb() {
+
+	enemySprite.setTexture(enemySheet);
+
+	random_device dev;
+	default_random_engine engine(dev());
+	uniform_real_distribution<float> x_dist(0.0f,
+		Engine::GetWindow().getSize().x);
+	uniform_real_distribution<float> y_dist(0.0f,
+		Engine::GetWindow().getSize().y);
+
+
+	auto enemy = makeEntity();
+	enemy->addTag("enemy");
+
+	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	auto e = enemy->addComponent<SpriteComponent>();
+	e->setSprite<Sprite>(enemySprite);
+	e->getSprite().setOrigin(800, 800);
+	e->getSprite().setScale({ 0.05, 0.05 });
+
+	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+	e->getSprite().setTextureRect(rect);
+
+	enemy->addComponent<SteeringComponent>(player.get());
+	auto enemyComponent = enemy->addComponent<EnemyComponent>();
+	enemyComponent->setHealth(2);
+
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
+
+}
+
+void MainScene::createEnemyHarpoon() {
+
+	enemySprite.setTexture(enemySheet);
+
+	random_device dev;
+	default_random_engine engine(dev());
+	uniform_real_distribution<float> x_dist(0.0f,
+		Engine::GetWindow().getSize().x);
+	uniform_real_distribution<float> y_dist(0.0f,
+		Engine::GetWindow().getSize().y);
+
+
+	auto enemy = makeEntity();
+	enemy->addTag("enemy");
+
+	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	auto e = enemy->addComponent<SpriteComponent>();
+	e->setSprite<Sprite>(enemySprite);
+	e->getSprite().setOrigin(800, 800);
+	e->getSprite().setScale({ 0.05, 0.05 });
+	auto rect = IntRect(1600, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setTextureRect(rect);
+	enemy->addComponent<SteeringComponent>(player.get());
+	auto enemyComponent = enemy->addComponent<EnemyComponent>();
+	enemyComponent->setHealth(5);
+
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
+
+}
+
+void MainScene::createEnemySpike() {
+
+	enemySprite.setTexture(enemySheet);
+
+
+	random_device dev;
+	default_random_engine engine(dev());
+	uniform_real_distribution<float> x_dist(0.0f,
+		Engine::GetWindow().getSize().x);
+	uniform_real_distribution<float> y_dist(0.0f,
+		Engine::GetWindow().getSize().y);
+
+
+	auto enemy = makeEntity();
+	enemy->addTag("enemy");
+
+	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	auto e = enemy->addComponent<SpriteComponent>();
+	e->setSprite<Sprite>(enemySprite);
+	e->getSprite().setOrigin(800, 800);
+	e->getSprite().setScale({ 0.05, 0.05 });
+	auto rect = IntRect(3200, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setTextureRect(rect);
+	enemy->addComponent<SteeringComponent>(player.get());
+	auto enemyComponent = enemy->addComponent<EnemyComponent>();
+	enemyComponent->setHealth(4);
+
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
+
+}
+>>>>>>> Stashed changes
