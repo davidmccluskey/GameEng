@@ -20,6 +20,7 @@ public:
   const sf::Vector2f getVelocity() const;
   void setRestitution(float r);
   void setFriction(float r);
+  void collisionResponse(void* collider);
   void setMass(float m);
   void update(double dt) override;
   void render() override;
