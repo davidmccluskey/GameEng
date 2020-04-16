@@ -39,7 +39,6 @@ void PlayerFireComponent::update(double dt)
 		if (_burstTime <= 0) {
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
 			//playerPhysics->setFriction(0.1f);
-			playerPhysics->setMass(50.0f);
 			//playerPhysics->setTimer();
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
@@ -58,7 +57,6 @@ void PlayerFireComponent::update(double dt)
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
 			//playerPhysics->setFriction(0.1f);
-			playerPhysics->setMass(50.0f);
 			//playerPhysics->setTimer();
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
@@ -178,13 +176,12 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 	s->setSprite<Sprite>(bulletSprite);
-	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short) (constENEMY | constWALL));
+	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short) (constENEMY | constWALL), &bullet);
 	p->setRestitution(.4f);
 	p->setFriction(.005f);
 	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
 	impulse = Vector2f(-impulse.x * _impulse, -impulse.y * _impulse);
 	p->impulse(impulse);
-
 }
 
 void PlayerFireComponent::render() {} //empty required method

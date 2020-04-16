@@ -18,7 +18,7 @@ void PhysicsComponent::update(double dt) {
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
-                                   const Vector2f& size, short cBits, short mBits)
+                                   const Vector2f& size, short cBits, short mBits, void* userdata)
     : Component(p), _dynamic(dyn) {
 
   b2BodyDef BodyDef;
@@ -43,6 +43,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
 
     FixtureDef.filter.categoryBits = cBits;
     FixtureDef.filter.maskBits = mBits;
+    FixtureDef.userData = userdata;
     // Add to body
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)

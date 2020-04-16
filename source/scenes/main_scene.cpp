@@ -13,6 +13,8 @@
 #include <random>
 #include <chrono>
 #include "../components/cmp_ai_steering.h"
+#include<string>  
+
 using namespace std;
 using namespace sf;
 
@@ -20,8 +22,8 @@ static shared_ptr<Entity> player; //Player Entity
 sf::Texture spritesheet; //Player spritesheet
 sf::Sprite playerSprite; //Player sprite
 
-sf::Texture enemySheet; 
-sf::Sprite enemySprite; 
+sf::Texture enemySheet;
+sf::Sprite enemySprite;
 
 sf::Texture asteroidSheet;
 sf::Sprite asteroidSprite;
@@ -29,7 +31,10 @@ sf::Sprite asteroidSprite;
 Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
 static shared_ptr<Entity> walls[4];
-sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference]
+sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
+
+static shared_ptr<Entity> txt;
+static shared_ptr<TextComponent> txtComponent;
 
 void MainScene::Load() {
 	cout << "" << endl;
@@ -60,29 +65,29 @@ void MainScene::Load() {
 		case 0:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
-			s->getShape().setPosition({ gameWidth * scale, 0});
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET));
+			s->getShape().setPosition({ gameWidth * scale, 0 });
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
 			break;
 		case 2:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET));
+			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
 			break;
 		case 4:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET));
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
 			break;
 		case 6:
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET));
+			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
 			break;
 		}
-		s->getShape().setFillColor(Color::Magenta);
+		s->getShape().setFillColor(Color::Cyan);
 		//e->addComponent<PhysicsComponent>(true, Vector2f(20, gameHeight * scale));
 		//auto body = CreatePhysicsBox(*world, false, *s);
 	}
@@ -105,10 +110,12 @@ void MainScene::Load() {
 		auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement 
+		player->addTag("enemy");
+
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto i = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short) (constWALL) );
+		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL), &player);
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 
 		s->getSprite().setTextureRect(rect);
@@ -133,6 +140,8 @@ void MainScene::Load() {
 				Engine::GetWindow().getSize().y);
 
 			auto enemy = makeEntity();
+			enemy->addTag("enemy");
+
 			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
 			auto e = enemy->addComponent<SpriteComponent>();
 			e->setSprite<Sprite>(enemySprite);
@@ -140,7 +149,8 @@ void MainScene::Load() {
 			e->getSprite().setScale({ 0.05, 0.05 });
 			enemy->addComponent<SteeringComponent>(player.get());
 
-			auto i = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short) (constBULLET | constPLAYER));
+
+			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER), &enemy);
 		}
 	}
 
@@ -157,7 +167,7 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setScale({ 0.5, 0.5 });
 
-		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f), constENEMY, (short) (constBULLET |  constWALL |  constPLAYER));
+		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
 		//i->impulse({ 10,10 });
 		//i->setRestitution(1);
 
@@ -166,11 +176,13 @@ void MainScene::Load() {
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << " Main scene Load Done" << endl;
 
-
-	view.setSize(gameWidth / 2, gameHeight / 2); //sets size of camera
-	view.zoom(5.0f); //sets zoom for camera allowing animation
+	txt = makeEntity();
+	txtComponent = txt->addComponent<TextComponent>("Wave timer");
+	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
+	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
+
 }
 
 void MainScene::UnLoad() {
@@ -198,30 +210,33 @@ void MainScene::Update(const double& dt) {
 	}
 
 	Engine::GetWindow().setView(currentView);
-	//_wavetimer -= dt;
 
-	//if (_wavetimer < 0)//SPAWNING WAVES
-	//{
-	//	_wavetimer = 5;
-	//	_wavenumber++;
+	Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 20), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
+	txtComponent->SetPosition(topLeft);
+	_wavetimer -= dt;
+	string str = to_string(_wavetimer);
+	str.resize(str.size() - 5);
+	txtComponent->SetText(str);
 
-	//	cout << "wave spawned" << endl;
-	//	cout << _wavenumber << endl;
+	if (_wavetimer < 0)//SPAWNING WAVES
+	{
+		_wavetimer = 5;
+		_wavenumber++;
 
-	//	random_device dev;
-	//	default_random_engine engine(dev());
-	//	uniform_real_distribution<float> x_dist(0.0f,
-	//		Engine::GetWindow().getSize().x);
-	//	uniform_real_distribution<float> y_dist(0.0f,
-	//		Engine::GetWindow().getSize().y);
-	//	auto enemy = makeEntity();
-	//	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-	//	auto e = enemy->addComponent<SpriteComponent>();
-	//	e->setSprite<Sprite>(enemySprite);
-	//	e->getSprite().setOrigin(800, 800);
-	//	e->getSprite().setScale({ 0.05, 0.05 });
-	//	enemy->addComponent<SteeringComponent>(player.get());
-	//}
+		//random_device dev;
+		//default_random_engine engine(dev());
+		//uniform_real_distribution<float> x_dist(0.0f,
+		//	Engine::GetWindow().getSize().x);
+		//uniform_real_distribution<float> y_dist(0.0f,
+		//	Engine::GetWindow().getSize().y);
+		//auto enemy = makeEntity();
+		//enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+		//auto e = enemy->addComponent<SpriteComponent>();
+		//e->setSprite<Sprite>(enemySprite);
+		//e->getSprite().setOrigin(800, 800);
+		//e->getSprite().setScale({ 0.05, 0.05 });
+		//enemy->addComponent<SteeringComponent>(player.get());
+	}
 }
 
 void MainScene::Render() {

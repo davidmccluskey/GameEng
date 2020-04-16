@@ -37,10 +37,10 @@ void PlayerMovementComponent::update(double dt)
 
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
-        rotate(dt * -300); //Rotates ship left at speed of 300
+        rotate(dt * -400); //Rotates ship left at speed of 300
     }
     if (Keyboard::isKeyPressed(Keyboard::D))
     {
-        rotate(dt * 300); //Rotates ship right at speed of 300
+        rotate(dt * 400); //Rotates ship right at speed of 300
     }
 }
