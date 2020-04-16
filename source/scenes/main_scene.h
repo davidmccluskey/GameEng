@@ -7,11 +7,17 @@ private:
     float _wavetimer;
     float _wavenumber;
 public:
-  void Load() override;
+    void Load() override;
 
-  void UnLoad() override;
+    void UnLoad() override;
 
-  void Update(const double& dt) override;
+    void Update(const double& dt) override;
 
-  void Render() override;
+    void Render() override;
+
+    void createEnemyOrb();
+
+    void createEnemyHarpoon();
+
+    void createEnemySpike();
 };

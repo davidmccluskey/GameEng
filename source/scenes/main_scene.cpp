@@ -139,39 +139,15 @@ void MainScene::Load() {
 		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
 	}
-	if (enemySheet.loadFromFile("res/enemy_orb.png")) {
-		enemySprite.setTexture(enemySheet);
-
-		for (size_t n = 0; n < 1; ++n) {
-			random_device dev;
-			default_random_engine engine(dev());
-			uniform_real_distribution<float> x_dist(0.0f,
-				Engine::GetWindow().getSize().x * scale);
-			uniform_real_distribution<float> y_dist(0.0f,
-				Engine::GetWindow().getSize().y * scale);
-
-			auto enemy = makeEntity();
-			enemy->addTag("enemy");
-			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-			auto e = enemy->addComponent<SpriteComponent>();
-			e->setSprite<Sprite>(enemySprite);
-			e->getSprite().setOrigin(800, 800);
-			e->getSprite().setScale({ 0.05, 0.05 });
-			//enemy->addComponent<SteeringComponent>(player.get());
-
-
-			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constWALL), &enemy);
-			cout << phys->getFixture()->GetUserData() << endl;
-
+	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
+		for (size_t i = 0; i < 4; i++)
+		{
+			createEnemyOrb();
+			createEnemyHarpoon();
+			createEnemySpike();
 		}
 	}
 
-<<<<<<< Updated upstream
-=======
-
-
-
->>>>>>> Stashed changes
 	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
 	{
 		asteroidSprite.setTexture(asteroidSheet);
@@ -266,8 +242,6 @@ void MainScene::Render() {
 
 	Scene::Render();
 }
-<<<<<<< Updated upstream
-=======
 
 
 void MainScene::createEnemyOrb() {
@@ -365,4 +339,3 @@ void MainScene::createEnemySpike() {
 
 
 }
->>>>>>> Stashed changes
