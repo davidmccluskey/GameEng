@@ -13,7 +13,9 @@
 #include <random>
 #include <chrono>
 #include "../components/cmp_ai_steering.h"
-#include<string>  
+#include<string>
+#include "system_physics.h"
+#include "../contactListener.cpp"
 
 using namespace std;
 using namespace sf;
@@ -35,8 +37,10 @@ sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) refere
 
 static shared_ptr<Entity> txt;
 static shared_ptr<TextComponent> txtComponent;
+MyContactListener listenerInstance;
 
 void MainScene::Load() {
+	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
 	cout << "Controls: 1 for normal" << endl;
 	cout << "Controls: 2 for heavy" << endl;
@@ -61,31 +65,35 @@ void MainScene::Load() {
 		auto e = makeEntity();
 		e->setPosition(walls[i]);
 		auto s = e->addComponent<ShapeComponent>();
-		switch (i) {
-		case 0:
+
+		if (i == 0) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, 0 });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 2:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
+			cout << "wall top " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 2) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 4:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
+			cout << "wall bottom " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 4) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 6:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
+			cout << "wall left " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 6) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
+			cout << "wall right " <<  p->getFixture()->GetUserData() << endl;
+
 		}
 		s->getShape().setFillColor(Color::Cyan);
 		//e->addComponent<PhysicsComponent>(true, Vector2f(20, gameHeight * scale));
@@ -115,12 +123,13 @@ void MainScene::Load() {
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL), &player);
+		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY), &player);
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
-
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
 		s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
+
+		cout << playerPhysics->getFixture()->GetUserData() << endl;
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
@@ -149,7 +158,7 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setScale({ 0.5, 0.5 });
 
-		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
+		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 160.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
 		//i->impulse({ 10,10 });
 		//i->setRestitution(1);
 
