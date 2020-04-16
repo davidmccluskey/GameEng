@@ -1,10 +1,12 @@
-
 #include "system_physics.h"
 #include "Box2D/Box2D.h"
+#include "../source/contactListener.cpp"
 
 using namespace std;
 using namespace sf;
+// Add to top of file
 
+// Add inside @interface
 namespace Physics {
 static shared_ptr<b2World> world;
 const int32 velocityIterations = 6;

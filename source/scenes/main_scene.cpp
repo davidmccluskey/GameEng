@@ -13,7 +13,9 @@
 #include <random>
 #include <chrono>
 #include "../components/cmp_ai_steering.h"
-#include<string>  
+#include<string>
+#include "system_physics.h"
+#include "../contactListener.cpp"
 
 using namespace std;
 using namespace sf;
@@ -35,8 +37,10 @@ sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) refere
 
 static shared_ptr<Entity> txt;
 static shared_ptr<TextComponent> txtComponent;
+MyContactListener listenerInstance;
 
 void MainScene::Load() {
+	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
 	cout << "Controls: 1 for normal" << endl;
 	cout << "Controls: 2 for heavy" << endl;
@@ -61,31 +65,35 @@ void MainScene::Load() {
 		auto e = makeEntity();
 		e->setPosition(walls[i]);
 		auto s = e->addComponent<ShapeComponent>();
-		switch (i) {
-		case 0:
+
+		if (i == 0) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, 0 });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 2:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			cout << "wall top " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 2) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 4:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			cout << "wall bottom " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 4) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
-		case 6:
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			cout << "wall left " << p->getFixture()->GetUserData() << endl;
+		}
+		else if (i == 6) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
-			break;
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			cout << "wall right " <<  p->getFixture()->GetUserData() << endl;
+
 		}
 		s->getShape().setFillColor(Color::Cyan);
 		//e->addComponent<PhysicsComponent>(true, Vector2f(20, gameHeight * scale));
@@ -110,17 +118,18 @@ void MainScene::Load() {
 		auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement 
-		player->addTag("enemy");
+		player->addTag("player");
 
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL), &player);
+		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY), &player);
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
-
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
 		s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
+
+		cout << playerPhysics->getFixture()->GetUserData() << endl;
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
@@ -131,26 +140,27 @@ void MainScene::Load() {
 	if (enemySheet.loadFromFile("res/enemy_orb.png")) {
 		enemySprite.setTexture(enemySheet);
 
-		for (size_t n = 0; n < 2; ++n) {
+		for (size_t n = 0; n < 1; ++n) {
 			random_device dev;
 			default_random_engine engine(dev());
 			uniform_real_distribution<float> x_dist(0.0f,
-				Engine::GetWindow().getSize().x);
+				Engine::GetWindow().getSize().x * scale);
 			uniform_real_distribution<float> y_dist(0.0f,
-				Engine::GetWindow().getSize().y);
+				Engine::GetWindow().getSize().y * scale);
 
 			auto enemy = makeEntity();
 			enemy->addTag("enemy");
-
 			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
 			auto e = enemy->addComponent<SpriteComponent>();
 			e->setSprite<Sprite>(enemySprite);
 			e->getSprite().setOrigin(800, 800);
 			e->getSprite().setScale({ 0.05, 0.05 });
-			enemy->addComponent<SteeringComponent>(player.get());
+			//enemy->addComponent<SteeringComponent>(player.get());
 
 
 			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER), &enemy);
+			cout << phys->getFixture()->GetUserData() << endl;
+
 		}
 	}
 
@@ -177,7 +187,7 @@ void MainScene::Load() {
 	//cout << " Main scene Load Done" << endl;
 
 	txt = makeEntity();
-	txtComponent = txt->addComponent<TextComponent>("Wave timer");
+	txtComponent = txt->addComponent<TextComponent>("Waver");
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
