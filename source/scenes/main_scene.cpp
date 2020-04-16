@@ -137,12 +137,16 @@ void MainScene::Load() {
 		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
 	}
-
-	for (size_t i = 0; i < 2; i++)
-	{
-		createEnemyOrb();
-		createEnemyHarpoon();
+	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
+		for (size_t i = 0; i < 4; i++)
+		{
+			createEnemyOrb();
+			createEnemyHarpoon();
+			createEnemySpike();
+		}
 	}
+
+	
 	
 
 	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
@@ -242,8 +246,9 @@ void MainScene::Render() {
 
 
 void MainScene::createEnemyOrb() {
-	if (enemySheet.loadFromFile("res/enemy_sprites.png")) {
+	
 		enemySprite.setTexture(enemySheet);
+		
 
 		
 			random_device dev;
@@ -262,16 +267,20 @@ void MainScene::createEnemyOrb() {
 			e->setSprite<Sprite>(enemySprite);
 			e->getSprite().setOrigin(800, 800);
 			e->getSprite().setScale({ 0.05, 0.05 });
+
+			auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+			e->getSprite().setTextureRect(rect);
+
 			enemy->addComponent<SteeringComponent>(player.get());
 
 
 			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
 		
-	}
+	
 }
 
 void MainScene::createEnemyHarpoon() {
-	if (enemySheet.loadFromFile("res/enemy_harpoon.jpeg")) {
+	
 		enemySprite.setTexture(enemySheet);
 
 
@@ -291,16 +300,18 @@ void MainScene::createEnemyHarpoon() {
 		e->setSprite<Sprite>(enemySprite);
 		e->getSprite().setOrigin(800, 800);
 		e->getSprite().setScale({ 0.05, 0.05 });
+		auto rect = IntRect(1600, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+		e->getSprite().setTextureRect(rect);
 		enemy->addComponent<SteeringComponent>(player.get());
 
 
 		auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
 
-	}
+	
 }
 
-void MainScene::createEnemyHarpoon() {
-	if (enemySheet.loadFromFile("res/enemy_spiked.jpeg")) {
+void MainScene::createEnemySpike() {
+
 		enemySprite.setTexture(enemySheet);
 
 
@@ -320,10 +331,12 @@ void MainScene::createEnemyHarpoon() {
 		e->setSprite<Sprite>(enemySprite);
 		e->getSprite().setOrigin(800, 800);
 		e->getSprite().setScale({ 0.05, 0.05 });
+		auto rect = IntRect(3200, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+		e->getSprite().setTextureRect(rect);
 		enemy->addComponent<SteeringComponent>(player.get());
 
 
 		auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
 
-	}
+	
 }
