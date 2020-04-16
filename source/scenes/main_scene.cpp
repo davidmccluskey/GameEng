@@ -70,28 +70,28 @@ void MainScene::Load() {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, 0 });
-			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
 			cout << "wall top " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 2) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
 			cout << "wall bottom " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 4) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
 			cout << "wall left " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 6) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
-			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET), &walls[i]);
+			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
 			cout << "wall right " <<  p->getFixture()->GetUserData() << endl;
 
 		}
@@ -158,7 +158,7 @@ void MainScene::Load() {
 			//enemy->addComponent<SteeringComponent>(player.get());
 
 
-			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER), &enemy);
+			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constWALL), &enemy);
 			cout << phys->getFixture()->GetUserData() << endl;
 
 		}
@@ -177,7 +177,7 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setScale({ 0.5, 0.5 });
 
-		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(270.0f, 200.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
+		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 160.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
 		//i->impulse({ 10,10 });
 		//i->setRestitution(1);
 
@@ -187,7 +187,7 @@ void MainScene::Load() {
 	//cout << " Main scene Load Done" << endl;
 
 	txt = makeEntity();
-	txtComponent = txt->addComponent<TextComponent>("Waver");
+	txtComponent = txt->addComponent<TextComponent>("Wave timer");
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
