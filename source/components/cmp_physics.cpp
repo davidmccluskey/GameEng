@@ -8,8 +8,6 @@ using namespace Physics;
 
 void PhysicsComponent::update(double dt) {
 	
-
-	
     _parent->setPosition(bv2_to_sv2(_body->GetPosition()));
 	
 
