@@ -110,7 +110,7 @@ void MainScene::Load() {
 		auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement 
-		player->addTag("enemy");
+		player->addTag("player");
 
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
@@ -128,31 +128,13 @@ void MainScene::Load() {
 		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
 	}
-	if (enemySheet.loadFromFile("res/enemy_orb.png")) {
-		enemySprite.setTexture(enemySheet);
 
-		for (size_t n = 0; n < 2; ++n) {
-			random_device dev;
-			default_random_engine engine(dev());
-			uniform_real_distribution<float> x_dist(0.0f,
-				Engine::GetWindow().getSize().x);
-			uniform_real_distribution<float> y_dist(0.0f,
-				Engine::GetWindow().getSize().y);
-
-			auto enemy = makeEntity();
-			enemy->addTag("enemy");
-
-			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-			auto e = enemy->addComponent<SpriteComponent>();
-			e->setSprite<Sprite>(enemySprite);
-			e->getSprite().setOrigin(800, 800);
-			e->getSprite().setScale({ 0.05, 0.05 });
-			enemy->addComponent<SteeringComponent>(player.get());
-
-
-			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER), &enemy);
-		}
+	for (size_t i = 0; i < 2; i++)
+	{
+		createEnemyOrb();
+		createEnemyHarpoon();
 	}
+	
 
 	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
 	{
@@ -247,4 +229,92 @@ void MainScene::Render() {
 
 
 	Scene::Render();
+}
+
+
+void MainScene::createEnemyOrb() {
+	if (enemySheet.loadFromFile("res/enemy_sprites.png")) {
+		enemySprite.setTexture(enemySheet);
+
+		
+			random_device dev;
+			default_random_engine engine(dev());
+			uniform_real_distribution<float> x_dist(0.0f,
+				Engine::GetWindow().getSize().x);
+			uniform_real_distribution<float> y_dist(0.0f,
+				Engine::GetWindow().getSize().y);
+
+
+			auto enemy = makeEntity();
+			enemy->addTag("enemy");
+
+			enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+			auto e = enemy->addComponent<SpriteComponent>();
+			e->setSprite<Sprite>(enemySprite);
+			e->getSprite().setOrigin(800, 800);
+			e->getSprite().setScale({ 0.05, 0.05 });
+			enemy->addComponent<SteeringComponent>(player.get());
+
+
+			auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+		
+	}
+}
+
+void MainScene::createEnemyHarpoon() {
+	if (enemySheet.loadFromFile("res/enemy_harpoon.jpeg")) {
+		enemySprite.setTexture(enemySheet);
+
+
+		random_device dev;
+		default_random_engine engine(dev());
+		uniform_real_distribution<float> x_dist(0.0f,
+			Engine::GetWindow().getSize().x);
+		uniform_real_distribution<float> y_dist(0.0f,
+			Engine::GetWindow().getSize().y);
+
+
+		auto enemy = makeEntity();
+		enemy->addTag("enemy");
+
+		enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+		auto e = enemy->addComponent<SpriteComponent>();
+		e->setSprite<Sprite>(enemySprite);
+		e->getSprite().setOrigin(800, 800);
+		e->getSprite().setScale({ 0.05, 0.05 });
+		enemy->addComponent<SteeringComponent>(player.get());
+
+
+		auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
+	}
+}
+
+void MainScene::createEnemyHarpoon() {
+	if (enemySheet.loadFromFile("res/enemy_spiked.jpeg")) {
+		enemySprite.setTexture(enemySheet);
+
+
+		random_device dev;
+		default_random_engine engine(dev());
+		uniform_real_distribution<float> x_dist(0.0f,
+			Engine::GetWindow().getSize().x);
+		uniform_real_distribution<float> y_dist(0.0f,
+			Engine::GetWindow().getSize().y);
+
+
+		auto enemy = makeEntity();
+		enemy->addTag("enemy");
+
+		enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+		auto e = enemy->addComponent<SpriteComponent>();
+		e->setSprite<Sprite>(enemySprite);
+		e->getSprite().setOrigin(800, 800);
+		e->getSprite().setScale({ 0.05, 0.05 });
+		enemy->addComponent<SteeringComponent>(player.get());
+
+
+		auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
+	}
 }

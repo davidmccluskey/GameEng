@@ -14,4 +14,10 @@ public:
   void Update(const double& dt) override;
 
   void Render() override;
+
+  void createEnemyOrb();
+
+  void createEnemyHarpoon();
+
+  void createEnemySpike();
 };
