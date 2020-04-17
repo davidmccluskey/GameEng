@@ -35,8 +35,8 @@ void MenuItemComponent::update(double dt) {
     if ((mouse_pos.x > parentX - 200) && (mouse_pos.x < parentX + 200) && (mouse_pos.y > parentY - 50) && (mouse_pos.y < parentY + 50)) {
         auto text = _parent->get_components<TextComponent>()[0];
         auto sprite = _parent->get_components<SpriteComponent>()[0];
-        text->SetColour(sf::Color::Black);
-        sprite->getSprite().setColor(sf::Color::Yellow);
+        text->SetColour(sf::Color::White);
+        sprite->getSprite().setColor(sf::Color::Red);
 
         if (sf::Mouse::isButtonPressed(Mouse::Left)) {
             resolveClick();
