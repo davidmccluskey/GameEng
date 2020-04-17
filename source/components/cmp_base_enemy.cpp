@@ -14,7 +14,7 @@ void EnemyComponent::update(double dt)
 		if (_flicker == true) {
 			if (_flickerTimer < 0) {
 				auto enemySprite = _parent->get_components<SpriteComponent>()[0];
-				enemySprite->getSprite().setColor(sf::Color::Red);
+				enemySprite->getSprite().setColor(sf::Color::Transparent);
 				_flickerTimer = 0.1;
 				_flicker = false;
 			}
