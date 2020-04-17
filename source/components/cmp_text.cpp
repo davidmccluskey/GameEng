@@ -21,3 +21,13 @@ void TextComponent::SetText(const std::string& str) {
 void TextComponent::SetPosition(sf::Vector2f coords) {
     _text.setPosition(coords);
 }
+
+void TextComponent::SetSize(float size)
+{
+    _text.setCharacterSize(size);
+}
+
+void TextComponent::SetColour(sf::Color colour)
+{
+    _text.setColor(colour);
+}

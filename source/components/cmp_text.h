@@ -17,15 +17,12 @@ public:
 
   void SetPosition(sf::Vector2f coords);
 
-<<<<<<< Updated upstream
-=======
   void SetOrigin(sf::Vector2f origin);
 
   void SetSize(float size);
 
   void SetColour(sf::Color colour);
 
->>>>>>> Stashed changes
 protected:
   std::shared_ptr<sf::Font> _font;
   std::string _string;
