@@ -84,3 +84,9 @@ void MenuScene::Render()
 	Renderer::queue(&spriteBackground);
 	Scene::Render();
 }
+
+void MenuScene::Render()
+{
+    Renderer::queue(&spriteBackground);
+    Scene::Render();
+}
