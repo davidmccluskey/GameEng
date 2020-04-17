@@ -225,7 +225,7 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	p->setRestitution(.4f);
 	p->setFriction(.005f);
 	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
-	impulse = Vector2f(-impulse.x * _impulse, -impulse.y * _impulse);
+	impulse = Vector2f(-impulse.x, -impulse.y);
 	p->impulse(impulse);
 }
 
