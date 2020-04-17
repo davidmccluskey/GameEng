@@ -10,18 +10,26 @@
 #include "../game.h"
 #include <random>
 #include "cmp_physics.h"
+#include <SFML\Audio\SoundBuffer.hpp>
+#include <SFML\Audio\Sound.hpp>
+
 using namespace sf;
 using namespace std;
 sf::Texture sprite;
 sf::Sprite bulletSprite;
 Texture beamSprite;
 Sprite beam;
+sf::SoundBuffer buffer;
+sf::Sound sound;
 
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
 	srand(time(0));
-
+	if (buffer.loadFromFile("res/soundFX/blaster.wav"))
+	{
+		cout << "sound loaded" << endl;
+	}
 	sprite.loadFromFile("res/bullet.png");
 	beamSprite.loadFromFile("res/brimstone.png");
 }
@@ -37,6 +45,9 @@ void PlayerFireComponent::update(double dt)
 	if (_burst == true) {
 		_burstTime -= dt;
 		if (_burstTime <= 0) {
+			sound.setBuffer(buffer);
+			sound.setVolume(20);
+			sound.play();
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
 			//playerPhysics->setFriction(0.1f);
 			//playerPhysics->setTimer();
@@ -54,6 +65,9 @@ void PlayerFireComponent::update(double dt)
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W) || sf::Joystick::isButtonPressed(0, 1)) {
 		if (_firetime <= 0.f) {
+			sound.setBuffer(buffer);
+			sound.setVolume(20);
+			sound.play();
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
 			//playerPhysics->setFriction(0.1f);
@@ -207,7 +221,7 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 	s->setSprite<Sprite>(bulletSprite);
-	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short) (constENEMY | constWALL), &bullet);
+	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short)(constENEMY | constWALL), &bullet);
 	p->setRestitution(.4f);
 	p->setFriction(.005f);
 	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());

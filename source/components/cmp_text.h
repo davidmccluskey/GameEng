@@ -17,6 +17,10 @@ public:
 
   void SetPosition(sf::Vector2f coords);
 
+  void SetSize(float size);
+
+  void SetColour(sf::Color colour);
+
 protected:
   std::shared_ptr<sf::Font> _font;
   std::string _string;
