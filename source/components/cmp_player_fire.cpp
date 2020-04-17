@@ -114,8 +114,8 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 	for (int i = 0; i < 5; i++) {
 
 		//auto bullet = _parent->scene->makeEntity();
-		//float spacing = rand() % 20 + (-10);
-		//float speed =  rand() % (1500 - 500 + 1) + 500;
+		float spacing = rand() % 20 + (-10);
+		float speed = rand() % (30 - 5 + 1) + 5;
 		//bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
 		//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
 		//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
@@ -127,6 +127,29 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 		//s->setSprite<Sprite>(bulletSprite);
 		//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
 		//bullet->setRotation(inverse + spacing);
+
+		auto playerSprite = _parent->get_components<SpriteComponent>()[0];
+		auto bullet = _parent->scene->makeEntity();
+		bullet->addTag("bullet");
+		bullet->setPosition(_parent->getPosition());
+		auto b = bullet->addComponent<BulletComponent>();
+		float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
+		b->setDamage(_damage);
+		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+		bulletSprite.setTexture(sprite);
+		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
+		s->setSprite<Sprite>(bulletSprite);
+		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short)(constENEMY | constWALL), &bullet);
+		p->setRestitution(.4f);
+		p->setFriction(.005f);
+		Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
+		impulse = Vector2f(-impulse.x + speed, -impulse.y + speed);
+		p->impulse(impulse);
+
+		bullet->setRotation(inverse + spacing);
+
 	}
 }
 
@@ -206,7 +229,7 @@ void PlayerFireComponent::setAsTriple()
 void PlayerFireComponent::setAsHeavy()
 {
 	_bulletType = 'H';
-	_impulse = 3;
+	_impulse = 5;
 	_fireRate = 1;
 	_damage = 5;
 	_size = 3;

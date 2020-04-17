@@ -270,7 +270,6 @@ void MainScene::createEnemyOrb() {
 
 	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 	e->getSprite().setTextureRect(rect);
-
 	enemy->addComponent<SteeringComponent>(player.get());
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2);

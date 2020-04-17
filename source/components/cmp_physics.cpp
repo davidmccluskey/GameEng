@@ -100,9 +100,9 @@ void PhysicsComponent::collisionResponse(void* collider) {
         auto enemy = child->get_components<EnemyComponent>()[0];
 
         float damage = bullet->getDamage();
-        cout << "damage " << damage << endl;
-        cout << "enemy health " << enemy->getHealth() << endl;
-
+        //cout << "damage " << damage << endl;
+        //cout << "enemy health " << enemy->getHealth() << endl;
+        enemy->setShot(1);
         enemy->setHealth(enemy->getHealth() - damage);
         _parent->setForDelete();
     }

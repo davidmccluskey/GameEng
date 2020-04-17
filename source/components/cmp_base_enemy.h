@@ -7,6 +7,9 @@ protected:
     float _speed;
     float _damage;
     float _health;
+    float _shotTimer;
+    float _flickerTimer = 0.1;
+    bool _flicker = true;
 
 public:
     void update(double dt) override;
@@ -16,4 +19,5 @@ public:
     
     float getHealth();
     void setHealth(float health);
+    void setShot(float shotTimer);
 };
