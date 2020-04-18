@@ -1,6 +1,9 @@
 #include "cmp_base_enemy.h"
-
+#include "engine.h"
+#include "cmp_state_machine.h"
+#include "enemy_states.h"
 #pragma once
+using namespace std;
 
 void EnemyComponent::update(double dt)
 {
@@ -35,7 +38,15 @@ void EnemyComponent::update(double dt)
 }
 
 EnemyComponent::EnemyComponent(Entity* p, float speed, float damage, float health)
-	: Component(p), _speed(speed), _damage(damage), _health(health) {}
+	: Component(p), _speed(speed), _damage(damage), _health(health) {
+
+	auto player = _parent->scene->ents.find("player");
+	auto sm = _parent->addComponent<StateMachineComponent>();
+	sm->addState("normal", make_shared<NormalState>(player[0]));
+	sm->addState("near", make_shared<NearState>(player[0]));
+	sm->changeState("normal");
+
+}
 
 
 float EnemyComponent::getHealth()

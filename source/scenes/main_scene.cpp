@@ -17,6 +17,8 @@
 #include "system_physics.h"
 #include "../contactListener.cpp"
 #include "../components/cmp_base_enemy.h"
+#include "../components/cmp_state_machine.h"
+#include "../components/enemy_states.h"
 
 using namespace std;
 using namespace sf;
@@ -180,6 +182,8 @@ void MainScene::Load() {
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
 
+	 
+
 }
 
 void MainScene::UnLoad() {
@@ -219,7 +223,7 @@ void MainScene::Update(const double& dt) {
 	{
 		_wavetimer = 5;
 		_wavenumber++;
-
+		cout << "Wave " << _wavenumber << endl;
 		//random_device dev;
 		//default_random_engine engine(dev());
 		//uniform_real_distribution<float> x_dist(0.0f,
@@ -306,6 +310,7 @@ void MainScene::createEnemyHarpoon() {
 	enemyComponent->setHealth(5);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+
 
 
 }
