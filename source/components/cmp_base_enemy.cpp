@@ -19,7 +19,7 @@ void EnemyComponent::update(double dt)
 				pickup->setPosition(_parent->getPosition());
 
 				auto s = pickup->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
-				auto phys = pickup->addComponent<PhysicsComponent>(false, sf::Vector2f(20,20), constPICKUP, (short)(constPLAYER), &pickup);
+				auto phys = pickup->addComponent<PhysicsComponent>(true, sf::Vector2f(20,20), constPICKUP, (short)(constPLAYER), &pickup);
 				pickup->setPosition(_parent->getPosition());
 				pickupSprite.setTexture(pickupTex);
 				s->setSprite<sf::Sprite>(pickupSprite);

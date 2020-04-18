@@ -70,6 +70,18 @@ void MenuItemComponent::resolveClick() {
     else if (parentTag == "highscore") {
         Engine::ChangeScene(&scene_highscores);
     }
+    else if (parentTag == "back") {
+        Engine::ChangeScene(&menu);
+    }
+
+}
+
+void MenuItemComponent::setSize(float size)
+{
+    auto text = _parent->get_components<TextComponent>()[0];
+    text->SetSize(30 * size);
+    auto sprite = _parent->get_components<SpriteComponent>()[0];
+    sprite->getSprite().setScale({ size, size });
 
 }
 

@@ -3,11 +3,19 @@
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
+#include "../components/cmp_menu.h"
 
 using namespace std;
 using namespace sf;
 
 void SettingsScreen::Load() {
+    auto back = makeEntity();
+    back->addTag("back");
+
+    back->setPosition({ gameWidth * 0.15, gameHeight * 0.1});
+
+    auto s = back->addComponent<MenuItemComponent>("Back");
+
   cout << "Menu Load \n";
   {
     auto txt = makeEntity();
