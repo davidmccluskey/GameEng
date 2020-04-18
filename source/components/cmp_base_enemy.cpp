@@ -1,10 +1,67 @@
 #include "cmp_base_enemy.h"
-
+#include "engine.h"
+#include "../game.h"
 #pragma once
+
+sf::Texture pickupTex; //Player spritesheet
+sf::Sprite pickupSprite; //Player sprite
 
 void EnemyComponent::update(double dt)
 {
+	srand(time(0));
+
 	if (_health <= 0) {
+		if (pickupTex.loadFromFile("res/pickups.png")) {
+			float dropChance = rand() % 10 + 1;
+			if (dropChance == 10) {
+				int drop = rand() % 6 + 1;
+				auto pickup = _parent->scene->makeEntity();
+				pickup->setPosition(_parent->getPosition());
+
+				auto s = pickup->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
+				auto phys = pickup->addComponent<PhysicsComponent>(false, sf::Vector2f(20,20), constPICKUP, (short)(constPLAYER), &pickup);
+				pickup->setPosition(_parent->getPosition());
+				pickupSprite.setTexture(pickupTex);
+				s->setSprite<sf::Sprite>(pickupSprite);
+				s->getSprite().setScale(0.3, 0.3);
+				auto rect = sf::IntRect(200, 0, 200, 200);
+
+				switch (drop) {
+				case 1:
+					rect = sf::IntRect(0, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("triple");
+					break;
+				case 2:
+					rect = sf::IntRect(210, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("heavy");
+					break;
+				case 3:
+					rect = sf::IntRect(420, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("quick");
+					break;
+				case 4:
+					rect = sf::IntRect(630, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("burst");
+					break;
+				case 5:
+					rect = sf::IntRect(840, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("shotgun");
+					break;
+				case 6:
+					rect = sf::IntRect(1040, 0, 200, 200);
+					s->getSprite().setTextureRect(rect);
+					pickup->addTag("health");
+					break;
+				}
+				s->getSprite().setOrigin({ 100,100 });
+			}
+
+		}
 		_parent->setForDelete();
 	}
 	if (_shotTimer > 0) {

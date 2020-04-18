@@ -12,6 +12,8 @@ private:
 	float _damage = 1;
 	float _size = 1;
 
+	float _bulletSpeed = 1;
+
 	bool _burst = false;
 	float _burstTime = 0.1;
 	float _burstNum = 3;

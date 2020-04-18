@@ -125,7 +125,7 @@ void MainScene::Load() {
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY), &player);
+		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constPICKUP), &player);
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
@@ -179,6 +179,18 @@ void MainScene::Load() {
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
+
+	if (music.getStatus() != 2)
+	{
+		if (!music.openFromFile("res/soundFX/main_music.WAV")) {
+			cout << "error loading music" << endl;
+		}
+		else {
+			music.setVolume(30);
+			music.play();
+			music.setLoop(true);
+		}
+	}
 
 }
 

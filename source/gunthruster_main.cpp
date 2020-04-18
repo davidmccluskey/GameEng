@@ -11,6 +11,8 @@ MainScene scene_main;   //Main scene reference
 HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
 
+sf::Music music;
+
 int main() {
   Engine::Start(gameWidth, gameHeight, "GUN THRUSTERS",&menu);  //Starts engine in user specified resolution
 }

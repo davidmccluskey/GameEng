@@ -2,6 +2,7 @@
 #include "system_physics.h"
 #include "cmp_bullet.h"
 #include "cmp_base_enemy.h"
+#include "cmp_player_fire.h"
 
 using namespace std;
 using namespace sf;
@@ -105,6 +106,35 @@ void PhysicsComponent::collisionResponse(void* collider) {
         enemy->setShot(1);
         enemy->setHealth(enemy->getHealth() - damage);
         _parent->setForDelete();
+    }
+    if (parentTag == "shotgun" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        fire->setAsShotgun();
+    }
+    if (parentTag == "burst" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        fire->setAsBurst();
+    }
+    if (parentTag == "triple" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        fire->setAsTriple();
+    }
+    if (parentTag == "quick" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        fire->setAsQuick();
+    }
+    if (parentTag == "heavy" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        fire->setAsHeavy();
+    }
+    if (parentTag == "health" && childTag == "player") {
+        _parent->setForDelete();
+        cout << "health up" << endl;
     }
 }
 

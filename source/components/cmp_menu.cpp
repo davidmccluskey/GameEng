@@ -58,6 +58,7 @@ void MenuItemComponent::resolveClick() {
     cout << parentTag << "Clicked" << endl;
 
     if (parentTag == "start") {
+        music.stop();
         Engine::ChangeScene(&scene_main);
     }
     else if (parentTag == "exit") {
