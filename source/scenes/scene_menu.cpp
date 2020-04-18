@@ -78,10 +78,8 @@ void MenuScene::Update(const double& dt) {
 
 	Scene::Update(dt);
 }
-
 void MenuScene::Render()
 {
-	Renderer::queue(&spriteBackground);
-	Scene::Render();
+    Renderer::queue(&spriteBackground);
+    Scene::Render();
 }
-
