@@ -2,7 +2,8 @@
 #include "system_physics.h"
 #include "cmp_bullet.h"
 #include "cmp_base_enemy.h"
-
+#include "cmp_player_fire.h"
+#include "../game.h"
 using namespace std;
 using namespace sf;
 
@@ -93,7 +94,8 @@ void PhysicsComponent::collisionResponse(void* collider) {
     if (parentTag == "enemy" && childTag == "enemy") {
         return;
     }
-    if (parentTag == "bullet" && childTag == "enemy") {
+    if ((parentTag == "bullet" && childTag == "enemy")) {
+        score.setScore(50);
         auto bullet = _parent->get_components<BulletComponent>()[0];
         auto enemy = child->get_components<EnemyComponent>()[0];
 
@@ -102,7 +104,43 @@ void PhysicsComponent::collisionResponse(void* collider) {
         //cout << "enemy health " << enemy->getHealth() << endl;
         enemy->setShot(1);
         enemy->setHealth(enemy->getHealth() - damage);
+
         _parent->setForDelete();
+    }
+    if (parentTag == "shotgun" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        score.setScore(100);
+        fire->setAsShotgun();
+    }
+    if (parentTag == "burst" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        score.setScore(100);
+        fire->setAsBurst();
+    }
+    if (parentTag == "triple" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        score.setScore(100);
+        fire->setAsTriple();
+    }
+    if (parentTag == "quick" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        score.setScore(100);
+        fire->setAsQuick();
+    }
+    if (parentTag == "heavy" && childTag == "player") {
+        _parent->setForDelete();
+        auto fire = child->get_components<PlayerFireComponent>()[0];
+        score.setScore(100);
+        fire->setAsHeavy();
+    }
+    if (parentTag == "health" && childTag == "player") {
+        _parent->setForDelete();
+        score.setScore(100);
+        cout << "health up" << endl;
     }
 	if (parentTag == "enemyBullet" && childTag == "player") {
 		_parent->setForDelete();

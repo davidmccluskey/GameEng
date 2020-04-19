@@ -25,7 +25,6 @@ sf::Sound sound;
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
-	srand(time(0));
 	if (buffer.loadFromFile("res/soundFX/blaster.wav"))
 	{
 		cout << "sound loaded" << endl;
@@ -202,7 +201,7 @@ void PlayerFireComponent::fireTriple(float rotation) {
 		p->setRestitution(.4f);
 		p->setFriction(.005f);
 		Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation() + angle);
-		impulse = Vector2f(-impulse.x * _impulse, -impulse.y * _impulse);
+		impulse = Vector2f(-impulse.x * _bulletSpeed, -impulse.y * _bulletSpeed);
 		p->impulse(impulse);
 		angle += 10;
 	}
@@ -225,7 +224,7 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	p->setRestitution(.4f);
 	p->setFriction(.005f);
 	Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
-	impulse = Vector2f(-impulse.x, -impulse.y);
+	impulse = Vector2f(-impulse.x * _bulletSpeed, -impulse.y * _bulletSpeed);
 	p->impulse(impulse);
 }
 
@@ -238,6 +237,9 @@ void PlayerFireComponent::setAsTriple()
 	_impulse = 2;
 	_damage = 1;
 	_size = 1.5;
+	_bulletSpeed = 0.5;
+
+	_firetime = 0;
 }
 
 void PlayerFireComponent::setAsHeavy()
@@ -247,6 +249,10 @@ void PlayerFireComponent::setAsHeavy()
 	_fireRate = 1;
 	_damage = 5;
 	_size = 3;
+	_bulletSpeed = 0.5;
+
+	_firetime = 0;
+
 }
 
 void PlayerFireComponent::setAsBeam()
@@ -256,6 +262,10 @@ void PlayerFireComponent::setAsBeam()
 	_impulse = 1;
 	_damage = 1;
 	_size = 3;
+	_bulletSpeed = 1;
+
+	_firetime = 0;
+
 }
 
 void PlayerFireComponent::setAsNormal()
@@ -265,6 +275,10 @@ void PlayerFireComponent::setAsNormal()
 	_impulse = 1;
 	_damage = 1;
 	_size = 1;
+	_bulletSpeed = 1;
+
+	_firetime = 0;
+
 }
 
 void PlayerFireComponent::setAsQuick()
@@ -274,6 +288,10 @@ void PlayerFireComponent::setAsQuick()
 	_impulse = 0.5;
 	_damage = 1;
 	_size = 0.5;
+	_bulletSpeed = 1.5;
+
+	_firetime = 0;
+
 }
 
 void PlayerFireComponent::setAsShotgun()
@@ -283,6 +301,9 @@ void PlayerFireComponent::setAsShotgun()
 	_impulse = 4;
 	_damage = 1;
 	_size = 1;
+
+	_firetime = 0;
+
 }
 
 void PlayerFireComponent::setAsBurst()
@@ -292,6 +313,10 @@ void PlayerFireComponent::setAsBurst()
 	_impulse = 1;
 	_damage = 1;
 	_size = 1;
+	_bulletSpeed = 1.5;
+
+	_firetime = 0;
+
 }
 
 
