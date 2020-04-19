@@ -50,11 +50,11 @@ static shared_ptr<TextComponent> scoreTextComponent;
 
 MyContactListener listenerInstance;
 
-sf::Sprite pauseMenu;
-
-static shared_ptr<Entity> resumeButton; //Player Entity
-static shared_ptr<Entity> restartButton; //Player Entity
-static shared_ptr<Entity> exitButton; //Player Entity
+//sf::Sprite pauseMenu;
+//
+//static shared_ptr<Entity> resumeButton; //Player Entity
+//static shared_ptr<Entity> restartButton; //Player Entity
+//static shared_ptr<Entity> exitButton; //Player Entity
 
 void MainScene::Load() {
 	_paused = false;
@@ -151,15 +151,15 @@ void MainScene::Load() {
 		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
 
-		pauseMenu.setPosition({ -1000, -1000 });
+		/*pauseMenu.setPosition({ -1000, -1000 });
 		pauseMenu.setTexture(backgroundtexture);
-		pauseMenu.setOrigin({ 800,450 });
+		pauseMenu.setOrigin({ 800,450 });*/
 	}
 	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
 		for (size_t i = 0; i < 10; i++)
 		{
 			createEnemyOrb();
-			createEnemyHarpoon();
+			//createEnemyHarpoon();
 			createEnemySpike();
 		}
 	}
@@ -205,7 +205,7 @@ void MainScene::Load() {
 
 	//pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
 
-	resumeButton = makeEntity();
+	/*resumeButton = makeEntity();
 	resumeButton->addTag("resume");
 	resumeButton->setPosition({ -1000, -1100 });
 	resumeButton->addComponent<MenuItemComponent>("resume");
@@ -218,7 +218,7 @@ void MainScene::Load() {
 	exitButton = makeEntity();
 	exitButton->addTag("home");
 	exitButton->setPosition({ -1000, -900 });
-	exitButton->addComponent<MenuItemComponent>("exit");
+	exitButton->addComponent<MenuItemComponent>("exit");*/
 
 	if (music.getStatus() != 2)
 	{
@@ -314,23 +314,23 @@ void MainScene::Update(const double& dt) {
 			//enemy->addComponent<SteeringComponent>(player.get());
 		}
 	}
-	else if (_paused) {
+	/*else if (_paused) {
 		music.setVolume(25);
 		resumeButton->update(dt);
 		restartButton->update(dt);
 		exitButton->update(dt);
-	}
+	}*/
 }
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
-	if (_paused) {
+	/*if (_paused) {
 		sf::View pauseView = Engine::GetWindow().getView();
 		pauseView.setCenter({ -1000, -1000 });
 		Engine::GetWindow().setView(pauseView);
 		Renderer::queue(&pauseMenu);
 
-	}
+	}*/
 	Scene::Render();
 }
 

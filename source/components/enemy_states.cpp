@@ -17,7 +17,7 @@ void FarState::execute(Entity *owner, double dt) noexcept {
     if (length(owner->getPosition() - _player->getPosition()) < 350.0f){
         auto sm = owner->get_components<StateMachineComponent>()[0];
         sm->changeState("idle");
-		//cout << "change to idle from far" << endl;
+		cout << "change to idle from far" << endl;
     }
 }
 
@@ -29,7 +29,7 @@ void NearState::execute(Entity *owner, double dt) noexcept {
     if (length(owner->getPosition() - _player->getPosition()) < 400.0f && length(owner->getPosition() - _player->getPosition()) > 250.0f){
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("idle");
-		//cout << "change to idle from near" << endl;
+		cout << "change to idle from near" << endl;
     }
 }
 
@@ -40,15 +40,15 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 	
 	//TODO
 	//Shoot after some random time
-	
+	//srand(time(0));
 	_fireDelay -= dt;
 	if (_fireDelay <= 0) {
 		float random = rand() % 100 + 1;
+		//cout << random << endl;
 		if (random == 100) {
 			//FIRE
 			cout << "FIRE BULLET" << endl;
 			_fireDelay = 4;
-
 			auto bullet = owner->scene->makeEntity();
 			bullet->addTag("enemyBullet");
 			bullet->setPosition(owner->getPosition());
@@ -75,12 +75,12 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 	if (length(owner->getPosition() - _player->getPosition()) > 400.0f) {
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("seek");
-		//cout << "change to far from idle" << endl;
+		cout << "change to far from idle" << endl;
 	}
 	//Change to near if the player is closer than 200 units away
 	if (length(owner->getPosition() - _player->getPosition()) < 200.01f) {
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("flee");
-		//cout << "change to near from idle" << endl;
+		cout << "change to near from idle" << endl;
 	}
 }
