@@ -18,6 +18,7 @@
 #include "../contactListener.cpp"
 #include "../components/cmp_base_enemy.h"
 #include "../components/cmp_menu.h"
+#include "../score.h"
 
 using namespace std;
 using namespace sf;
@@ -37,8 +38,14 @@ Sprite backgroundSprite;	//Background sprite
 static shared_ptr<Entity> walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
 
-static shared_ptr<Entity> txt;
-static shared_ptr<TextComponent> txtComponent;
+static shared_ptr<Entity> timerText;
+static shared_ptr<TextComponent> timerTextComponent;
+static shared_ptr<Entity> waveText;
+static shared_ptr<TextComponent> waveTextComponent;
+static shared_ptr<Entity> scoreText;
+static shared_ptr<TextComponent> scoreTextComponent;
+
+
 MyContactListener listenerInstance;
 
 sf::Sprite pauseMenu;
@@ -46,7 +53,6 @@ sf::Sprite pauseMenu;
 static shared_ptr<Entity> resumeButton; //Player Entity
 static shared_ptr<Entity> restartButton; //Player Entity
 static shared_ptr<Entity> exitButton; //Player Entity
-
 
 void MainScene::Load() {
 	_paused = false;
@@ -83,29 +89,24 @@ void MainScene::Load() {
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, 0 });
 			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
-			cout << "wall top " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 2) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
 			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(gameWidth * scale, 10), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
-			cout << "wall bottom " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 4) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
 			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
-			cout << "wall left " << p->getFixture()->GetUserData() << endl;
 		}
 		else if (i == 6) {
 			s->setShape<sf::RectangleShape>(walls[i + 1]);
 			s->getShape().setOrigin(walls[i + 1].x / 2, walls[i + 1].y / 2);
 			s->getShape().setPosition({ gameWidth * scale, gameHeight * scale });
 			auto p = e->addComponent<PhysicsComponent>(false, Vector2f(10, gameHeight * scale), constWALL, (short)(constPLAYER | constBULLET | constENEMY), &walls[i]);
-			cout << "wall right " << p->getFixture()->GetUserData() << endl;
-
 		}
 		s->getShape().setFillColor(Color::Cyan);
 		e->addTag("wall");
@@ -141,14 +142,16 @@ void MainScene::Load() {
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
 		s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
-
-		cout << playerPhysics->getFixture()->GetUserData() << endl;
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
 		backgroundSprite.setOrigin(800, 450);
 		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
+
+		pauseMenu.setPosition({ -1000, -1000 });
+		pauseMenu.setTexture(backgroundtexture);
+		pauseMenu.setOrigin({ 800,450 });
 	}
 	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
 		for (size_t i = 0; i < 4; i++)
@@ -184,17 +187,22 @@ void MainScene::Load() {
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << " Main scene Load Done" << endl;
 
-	txt = makeEntity();
-	txtComponent = txt->addComponent<TextComponent>("Wave timer");
+	timerText = makeEntity();
+	timerTextComponent = timerText->addComponent<TextComponent>("Wave timer");
+
+	waveText = makeEntity();
+	waveTextComponent = timerText->addComponent<TextComponent>("Wave 1");
+
+	scoreText = makeEntity();
+	scoreTextComponent = timerText->addComponent<TextComponent>("0");
+
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
 
 	//pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
-	pauseMenu.setPosition({ -1000, -1000 });
-	pauseMenu.setTexture(backgroundtexture);
-	pauseMenu.setOrigin({ 800,450 });
+
 	resumeButton = makeEntity();
 	resumeButton->addTag("resume");
 	resumeButton->setPosition({ -1000, -1100 });
@@ -231,6 +239,12 @@ void MainScene::UnLoad() {
 }
 
 void MainScene::Update(const double& dt) {
+	// catch the resize events
+	// catch the resize events
+	sf::Event Event;
+	sf::Window window;
+;
+
 	_keyboardCooldown -= dt;
 	if (_keyboardCooldown < 0) {
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
@@ -259,18 +273,30 @@ void MainScene::Update(const double& dt) {
 
 		Engine::GetWindow().setView(currentView);
 
-		Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 20), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
-		txtComponent->SetPosition(topLeft);
+		Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 50), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
+		Vector2f topRight = { (currentView.getCenter().x + (currentView.getSize().x / 2) - 150), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
+		Vector2f topMiddle = { (currentView.getCenter().x), (currentView.getCenter().y) - (currentView.getSize().y / 2) + 20 };
+		timerTextComponent->SetPosition(topLeft);
+		waveTextComponent->SetPosition(topRight);
+		scoreTextComponent->SetPosition(topMiddle);
+
 		_wavetimer -= dt;
 		string str = to_string(_wavetimer);
 		str.resize(str.size() - 5);
-		txtComponent->SetText(str);
+		timerTextComponent->SetText(str);
+
+		str = (to_string(score.getScore()));
+		str.resize(str.size() - 7);
+		scoreTextComponent->SetText(str);
 
 		if (_wavetimer < 0)//SPAWNING WAVES
 		{
 			_wavetimer = 5;
 			_wavenumber++;
-
+			string wavenum = to_string(_wavenumber);
+			wavenum = "Wave " + wavenum;
+			wavenum.resize(wavenum.size() - 7);
+			waveTextComponent->SetText(wavenum);
 			//random_device dev;
 			//default_random_engine engine(dev());
 			//uniform_real_distribution<float> x_dist(0.0f,
@@ -300,7 +326,6 @@ void MainScene::Render() {
 		sf::View pauseView = Engine::GetWindow().getView();
 		pauseView.setCenter({ -1000, -1000 });
 		Engine::GetWindow().setView(pauseView);
-		//pauseMenu.setPosition(player->getPosition());
 		Renderer::queue(&pauseMenu);
 
 	}

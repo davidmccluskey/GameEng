@@ -3,6 +3,7 @@
 #include "scenes/scene_menu.h"
 #include "scenes/scene_highscores.h"
 #include "scenes/scene_settings.h"
+#include "score.h"
 
 using namespace std;
 
@@ -10,6 +11,7 @@ MenuScene menu;
 MainScene scene_main;   //Main scene reference
 HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
+Score score;
 
 bool _paused = false;
 

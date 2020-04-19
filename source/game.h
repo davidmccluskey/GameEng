@@ -6,11 +6,13 @@
 #include "scenes/scene_highscores.h"
 #include "scenes/scene_settings.h"
 #include <SFML\Audio\Music.hpp>
-
+#include "score.h"
 extern MenuScene menu;
 extern MainScene scene_main;
 extern HighScoreScene scene_highscores;
 extern SettingsScreen scene_settings;
+
+extern Score score;
 
 extern sf::Music music;
 

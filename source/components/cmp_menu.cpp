@@ -34,8 +34,6 @@ void MenuItemComponent::update(double dt) {
 	auto tagSet = _parent->getTags();
 	string parentTag = tagSet.begin()->c_str();
 	if ((parentTag == "resume" || parentTag == "home" || parentTag == "restart") && _paused == true) {
-		cout << mouse_pos.x - 1500 << endl;
-		cout << parentX << endl;
 		float xmult = gameWidth  + 350;
 		float ymult = gameHeight + 650;
 		if ((mouse_pos.x - xmult > parentX - 200) && (mouse_pos.x - xmult < parentX + 200) && (mouse_pos.y - ymult > parentY - 50) && (mouse_pos.y - ymult < parentY + 50)) {

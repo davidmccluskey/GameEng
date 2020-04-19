@@ -62,6 +62,7 @@ void EnemyComponent::update(double dt)
 			}
 
 		}
+		score.setScore(500);
 		_parent->setForDelete();
 	}
 	if (_shotTimer > 0) {
