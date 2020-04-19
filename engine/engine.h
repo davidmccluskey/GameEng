@@ -9,6 +9,7 @@
 class Scene {
 public:
   Scene() = default;
+
   virtual ~Scene();
   virtual void Load() = 0;
   virtual void LoadAsync();

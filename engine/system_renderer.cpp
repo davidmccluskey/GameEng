@@ -1,5 +1,6 @@
 #include "system_renderer.h"
 #include <queue>
+#include "../source/game.h"
 
 using namespace std;
 using namespace sf;
@@ -26,4 +27,6 @@ void Renderer::render() {
   }
 }
 
-void Renderer::queue(const sf::Drawable* s) { sprites.push(s); }
+void Renderer::queue(const sf::Drawable* s) { 
+    sprites.push(s); 
+}

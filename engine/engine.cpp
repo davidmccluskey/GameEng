@@ -142,7 +142,9 @@ void Engine::ChangeScene(Scene* s) {
   }
 }
 
-void Scene::Update(const double& dt) { ents.update(dt); }
+void Scene::Update(const double& dt) { 
+    ents.update(dt);
+}
 
 void Scene::Render() { ents.render(); }
 

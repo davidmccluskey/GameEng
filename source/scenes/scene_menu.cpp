@@ -7,6 +7,7 @@
 #include <system_renderer.h>
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_menu.h"
+#include <SFML\Audio\Music.hpp>
 
 using namespace std;
 using namespace sf;
@@ -15,6 +16,25 @@ Texture background;
 Sprite spriteBackground;
 
 void MenuScene::Load() {
+	_paused = false;
+	View view = Engine::GetWindow().getView();
+	view.setCenter({ gameWidth / 2, gameHeight / 2 });
+	Engine::GetWindow().setView(view);
+
+
+	if (music.getStatus() != 2)
+	{
+		if (!music.openFromFile("res/soundFX/menu_music.WAV")) {
+			cout << "error loading music" << endl;
+		}
+		else {
+			music.setVolume(30);
+			music.play();
+
+		}
+	}
+
+
 	cout << "Menu Load \n";
 	if (background.loadFromFile("res/background.jpeg")) {
 		spriteBackground.setTexture(background);
@@ -60,11 +80,9 @@ void MenuScene::Load() {
 
 void MenuScene::Update(const double& dt) {
 	// cout << "Menu Update "<<dt<<"\n";
-	static bool mouse_down = false;
-	auto mouse_pos = Mouse::getPosition(Engine::GetWindow());
-
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
 		Engine::ChangeScene(&scene_main);
+		music.stop();
 	}
 	else if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
 		Engine::ChangeScene(&scene_highscores);
@@ -80,6 +98,6 @@ void MenuScene::Update(const double& dt) {
 }
 void MenuScene::Render()
 {
-    Renderer::queue(&spriteBackground);
-    Scene::Render();
+	Renderer::queue(&spriteBackground);
+	Scene::Render();
 }
