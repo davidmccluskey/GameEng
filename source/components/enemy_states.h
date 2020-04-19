@@ -3,20 +3,30 @@
 
 #include "cmp_state_machine.h"
 
-class NormalState : public State
+class FarState : public State
 {
 private:
     std::shared_ptr<Entity> _player;
 public:
-    NormalState(std::shared_ptr<Entity> player) : _player(player) { }
+    FarState(std::shared_ptr<Entity> player) : _player(player) { }
     void execute(Entity*, double) noexcept override;
 };
 
 class NearState : public State
 {
 private:
-    std::shared_ptr<Entity> _player;
+	std::shared_ptr<Entity> _player;
 public:
-    NearState(std::shared_ptr<Entity> player) : _player(player) { }
-    void execute(Entity*, double) noexcept override;
+	NearState(std::shared_ptr<Entity> player) : _player(player) { }
+	void execute(Entity*, double) noexcept override;
+};
+
+class IdleState : public State
+{
+private:
+	float _fireDelay = 4;
+	std::shared_ptr<Entity> _player;
+public:
+	IdleState(std::shared_ptr<Entity> player) : _player(player) { }
+	void execute(Entity*, double) noexcept override;
 };

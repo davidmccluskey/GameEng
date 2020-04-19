@@ -20,3 +20,11 @@ SteeringOutput Flee::getSteering() const noexcept {
     steering.rotation = 0.0f;
     return steering;
 }
+//
+//void Seek::setSpeed(float speed) {
+//	_maxSpeed = speed;
+//}
+//
+//void Flee::setSpeed(float speed) {
+//	_maxSpeed = speed;
+//}

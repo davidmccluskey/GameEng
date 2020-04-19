@@ -13,8 +13,6 @@ void PhysicsComponent::update(double dt) {
     _parent->setPosition(bv2_to_sv2(_body->GetPosition()));
 	
 
-	//_parent->setRotation((180 / b2_pi) * _body->GetAngle());
-	//cout << getVelocity() << endl;
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
@@ -95,7 +93,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
     if (parentTag == "enemy" && childTag == "enemy") {
         return;
     }
-    if ((parentTag == "bullet" && childTag == "enemy")) {
+    if (parentTag == "bullet" && childTag == "enemy") {
         auto bullet = _parent->get_components<BulletComponent>()[0];
         auto enemy = child->get_components<EnemyComponent>()[0];
 
@@ -106,6 +104,9 @@ void PhysicsComponent::collisionResponse(void* collider) {
         enemy->setHealth(enemy->getHealth() - damage);
         _parent->setForDelete();
     }
+	if (parentTag == "enemyBullet" && childTag == "player") {
+		_parent->setForDelete();
+	}
 }
 
 void PhysicsComponent::setMass(float m) { _fixture->SetDensity(m); }
@@ -187,3 +188,8 @@ std::vector<const b2Contact const*> PhysicsComponent::getTouching() const {
 void PhysicsComponent::setRestitution(float r) {
   _fixture->SetRestitution(r);
 }
+
+b2Body* PhysicsComponent::getBody() {
+	return _body;
+}
+

@@ -9,12 +9,13 @@ struct SteeringOutput
     sf::Vector2f direction;
     // Rotation of travel.
     float rotation;
+
 };
 
 class SteeringBehaviour {
 public:
     virtual ~SteeringBehaviour() = default;
-
+	
     // Gets the output from a steering behaviour.
     virtual SteeringOutput getSteering() const noexcept = 0;
 };
@@ -22,6 +23,7 @@ public:
 // Seek steering behaviour
 class Seek : public SteeringBehaviour {
 private:
+	//void setSpeed(float speed);
     Entity* _character;
     Entity* _target;
     float _maxSpeed;
@@ -34,6 +36,7 @@ public:
 
 class Flee : public SteeringBehaviour {
 private:
+	//void setSpeed(float speed);
     Entity* _character;
     Entity* _target;
     float _maxSpeed;

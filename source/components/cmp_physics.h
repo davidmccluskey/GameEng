@@ -6,11 +6,12 @@
 
 class PhysicsComponent : public Component {
 protected:
-  b2Body* _body;
+	b2Body* _body;
   const bool _dynamic;
   b2Fixture* _fixture;
 
 public:
+
   PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size, short cBits, short mBits, void* userData);
 
   b2Fixture* const getFixture() const;
@@ -19,6 +20,7 @@ public:
   std::vector<const b2Contact*> getTouching() const;
   const sf::Vector2f getVelocity() const;
   void setRestitution(float r);
+  b2Body* getBody();
   void setFriction(float r);
   void collisionResponse(void* collider);
   void setMass(float m);

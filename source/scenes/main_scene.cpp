@@ -127,7 +127,7 @@ void MainScene::Load() {
 		playerSprite.setTexture(spritesheet);
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
-		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY), &player);
+		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET), &player);
 		auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 		s->getSprite().setTextureRect(rect);
 		s->getSprite().setOrigin(800, 800);
@@ -142,7 +142,7 @@ void MainScene::Load() {
 		backgroundSprite.setScale(scale, scale);
 	}
 	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
-		for (size_t i = 0; i < 4; i++)
+		for (size_t i = 0; i < 10; i++)
 		{
 			createEnemyOrb();
 			createEnemyHarpoon();
@@ -258,9 +258,9 @@ void MainScene::createEnemyOrb() {
 	random_device dev;
 	default_random_engine engine(dev());
 	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x);
+		Engine::GetWindow().getSize().x * scale);
 	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y);
+		Engine::GetWindow().getSize().y* scale);
 
 
 	auto enemy = makeEntity();
@@ -271,14 +271,16 @@ void MainScene::createEnemyOrb() {
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(800, 800);
 	e->getSprite().setScale({ 0.05, 0.05 });
-
+	
 	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 	e->getSprite().setTextureRect(rect);
-	enemy->addComponent<SteeringComponent>(player.get());
+	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
+	
+	
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2);
 
-	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 
 }
@@ -290,9 +292,9 @@ void MainScene::createEnemyHarpoon() {
 	random_device dev;
 	default_random_engine engine(dev());
 	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x);
+		Engine::GetWindow().getSize().x * scale);
 	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y);
+		Engine::GetWindow().getSize().y* scale);
 
 
 	auto enemy = makeEntity();
@@ -305,11 +307,11 @@ void MainScene::createEnemyHarpoon() {
 	e->getSprite().setScale({ 0.05, 0.05 });
 	auto rect = IntRect(1600, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
 	e->getSprite().setTextureRect(rect);
-	enemy->addComponent<SteeringComponent>(player.get());
+	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(5);
 
-	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 
 
@@ -323,9 +325,9 @@ void MainScene::createEnemySpike() {
 	random_device dev;
 	default_random_engine engine(dev());
 	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x);
+		Engine::GetWindow().getSize().x * scale);
 	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y);
+		Engine::GetWindow().getSize().y* scale);
 
 
 	auto enemy = makeEntity();
@@ -338,11 +340,11 @@ void MainScene::createEnemySpike() {
 	e->getSprite().setScale({ 0.05, 0.05 });
 	auto rect = IntRect(3200, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
 	e->getSprite().setTextureRect(rect);
-	enemy->addComponent<SteeringComponent>(player.get());
+	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4);
 
-	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY), &enemy);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 
 }
