@@ -35,7 +35,6 @@ PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 // Update
 void PlayerFireComponent::update(double dt)
 {
-
 	_firetime -= dt; //Firetime set later, allows us to control weapon cooldown 
 
 	auto playerSprite = _parent->get_components<SpriteComponent>()[0];

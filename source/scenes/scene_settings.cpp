@@ -1,4 +1,4 @@
-#include "scene_settings.h"
+#include "scene_enter_score.h"
 #include "../components/cmp_text.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
@@ -27,6 +27,13 @@ void SettingsScreen::Load() {
 
 void SettingsScreen::Update(const double& dt) {
   // cout << "Menu Update "<<dt<<"\n";
+    sf::Event event;
+    RenderWindow& window = Engine::GetWindow();
+    while (window.pollEvent(event)) {
+        if (event.type == Event::Closed) {
+            window.close();
+        }
+    }
 
     if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
         Engine::ChangeScene(&menu);

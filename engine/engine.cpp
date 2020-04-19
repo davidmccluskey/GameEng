@@ -19,7 +19,6 @@ static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
-
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
   if (scn->isLoaded()) {
@@ -94,11 +93,11 @@ void Engine::Start(unsigned int width, unsigned int height,
   ChangeScene(scn);
   while (window.isOpen()) {
     Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == Event::Closed) {
-        window.close();
-      }
-    }
+    //while (window.pollEvent(event)) {
+    //  if (event.type == Event::Closed) {
+    //    window.close();
+    //  }
+    //}
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       //window.close();
     }
