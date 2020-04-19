@@ -11,6 +11,8 @@ MainScene scene_main;   //Main scene reference
 HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
 
+bool _paused = false;
+
 sf::Music music;
 
 int main() {

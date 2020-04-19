@@ -16,6 +16,12 @@ Texture background;
 Sprite spriteBackground;
 
 void MenuScene::Load() {
+	_paused = false;
+	View view = Engine::GetWindow().getView();
+	view.setCenter({ gameWidth / 2, gameHeight / 2 });
+	Engine::GetWindow().setView(view);
+
+
 	if (music.getStatus() != 2)
 	{
 		if (!music.openFromFile("res/soundFX/menu_music.WAV")) {
@@ -74,9 +80,6 @@ void MenuScene::Load() {
 
 void MenuScene::Update(const double& dt) {
 	// cout << "Menu Update "<<dt<<"\n";
-	static bool mouse_down = false;
-	auto mouse_pos = Mouse::getPosition(Engine::GetWindow());
-
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
 		Engine::ChangeScene(&scene_main);
 		music.stop();

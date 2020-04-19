@@ -17,6 +17,7 @@
 #include "system_physics.h"
 #include "../contactListener.cpp"
 #include "../components/cmp_base_enemy.h"
+#include "../components/cmp_menu.h"
 
 using namespace std;
 using namespace sf;
@@ -40,7 +41,17 @@ static shared_ptr<Entity> txt;
 static shared_ptr<TextComponent> txtComponent;
 MyContactListener listenerInstance;
 
+sf::Sprite pauseMenu;
+
+static shared_ptr<Entity> resumeButton; //Player Entity
+static shared_ptr<Entity> restartButton; //Player Entity
+static shared_ptr<Entity> exitButton; //Player Entity
+
+
 void MainScene::Load() {
+	_paused = false;
+
+
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
 	cout << "Controls: 1 for normal" << endl;
@@ -180,6 +191,25 @@ void MainScene::Load() {
 	Engine::GetWindow().setView(view); //sets window view to created view
 	setLoaded(true);
 
+	//pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
+	pauseMenu.setPosition({ -1000, -1000 });
+	pauseMenu.setTexture(backgroundtexture);
+	pauseMenu.setOrigin({ 800,450 });
+	resumeButton = makeEntity();
+	resumeButton->addTag("resume");
+	resumeButton->setPosition({ -1000, -1100 });
+	resumeButton->addComponent<MenuItemComponent>("resume");
+
+	restartButton = makeEntity();
+	restartButton->addTag("restart");
+	restartButton->setPosition({ -1000, -1000 });
+	restartButton->addComponent<MenuItemComponent>("restart");
+
+	exitButton = makeEntity();
+	exitButton->addTag("home");
+	exitButton->setPosition({ -1000, -900 });
+	exitButton->addComponent<MenuItemComponent>("exit");
+
 	if (music.getStatus() != 2)
 	{
 		if (!music.openFromFile("res/soundFX/main_music.WAV")) {
@@ -201,60 +231,79 @@ void MainScene::UnLoad() {
 }
 
 void MainScene::Update(const double& dt) {
-	Scene::Update(dt);
-	sf::View currentView = Engine::GetWindow().getView();
-	auto playerSprite = player->get_components<SpriteComponent>()[0];
-	float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
-	float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
-
-	float topCheck = playerSprite->getSprite().getPosition().y - ((currentView.getSize().y / 2));
-
-	float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
-
-	if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
-		currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+	_keyboardCooldown -= dt;
+	if (_keyboardCooldown < 0) {
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+			_paused = !_paused;
+			_keyboardCooldown = 0.5;
+		}
 	}
-	if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
-		currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+	if (!_paused) {
+		music.setVolume(50);
+		Scene::Update(dt);
+		sf::View currentView = Engine::GetWindow().getView();
+		auto playerSprite = player->get_components<SpriteComponent>()[0];
+		float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
+		float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
+
+		float topCheck = playerSprite->getSprite().getPosition().y - ((currentView.getSize().y / 2));
+
+		float bottomCheck = playerSprite->getSprite().getPosition().y + ((currentView.getSize().y / 2));
+
+		if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
+			currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+		}
+		if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
+			currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+		}
+
+		Engine::GetWindow().setView(currentView);
+
+		Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 20), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
+		txtComponent->SetPosition(topLeft);
+		_wavetimer -= dt;
+		string str = to_string(_wavetimer);
+		str.resize(str.size() - 5);
+		txtComponent->SetText(str);
+
+		if (_wavetimer < 0)//SPAWNING WAVES
+		{
+			_wavetimer = 5;
+			_wavenumber++;
+
+			//random_device dev;
+			//default_random_engine engine(dev());
+			//uniform_real_distribution<float> x_dist(0.0f,
+			//	Engine::GetWindow().getSize().x);
+			//uniform_real_distribution<float> y_dist(0.0f,
+			//	Engine::GetWindow().getSize().y);
+			//auto enemy = makeEntity();
+			//enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+			//auto e = enemy->addComponent<SpriteComponent>();
+			//e->setSprite<Sprite>(enemySprite);
+			//e->getSprite().setOrigin(800, 800);
+			//e->getSprite().setScale({ 0.05, 0.05 });
+			//enemy->addComponent<SteeringComponent>(player.get());
+		}
 	}
-
-	Engine::GetWindow().setView(currentView);
-
-	Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 20), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
-	txtComponent->SetPosition(topLeft);
-	_wavetimer -= dt;
-	string str = to_string(_wavetimer);
-	str.resize(str.size() - 5);
-	txtComponent->SetText(str);
-
-	if (_wavetimer < 0)//SPAWNING WAVES
-	{
-		_wavetimer = 5;
-		_wavenumber++;
-
-		//random_device dev;
-		//default_random_engine engine(dev());
-		//uniform_real_distribution<float> x_dist(0.0f,
-		//	Engine::GetWindow().getSize().x);
-		//uniform_real_distribution<float> y_dist(0.0f,
-		//	Engine::GetWindow().getSize().y);
-		//auto enemy = makeEntity();
-		//enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-		//auto e = enemy->addComponent<SpriteComponent>();
-		//e->setSprite<Sprite>(enemySprite);
-		//e->getSprite().setOrigin(800, 800);
-		//e->getSprite().setScale({ 0.05, 0.05 });
-		//enemy->addComponent<SteeringComponent>(player.get());
+	else if (_paused) {
+		music.setVolume(25);
+		resumeButton->update(dt);
+		restartButton->update(dt);
+		exitButton->update(dt);
 	}
 }
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
-	//for (auto& p : walls) {
-	//	Renderer::queue(&p);
-	//}
+	if (_paused) {
+		sf::View pauseView = Engine::GetWindow().getView();
+		pauseView.setCenter({ -1000, -1000 });
+		Engine::GetWindow().setView(pauseView);
+		//pauseMenu.setPosition(player->getPosition());
+		Renderer::queue(&pauseMenu);
 
-
+	}
 	Scene::Render();
 }
 

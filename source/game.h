@@ -14,6 +14,8 @@ extern SettingsScreen scene_settings;
 
 extern sf::Music music;
 
+extern bool _paused;
+
 constexpr uint16_t gameWidth = 1280;
 constexpr uint16_t gameHeight = 720;
 constexpr uint16_t scale = 3;

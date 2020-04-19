@@ -9,6 +9,8 @@ using namespace std;
 using namespace sf;
 
 void HighScoreScene::Load() {
+	_paused = false;
+
 	auto back = makeEntity();
 	back->addTag("back");
 
