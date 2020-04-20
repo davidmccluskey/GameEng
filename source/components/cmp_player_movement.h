@@ -7,7 +7,7 @@ private:
 	float _shotTimer;
 	float _flickerTimer = 0.1;
 	bool _flicker = true;
-	bool _invuln = false;
+	bool _invuln = true;
 public:
 	PlayerMovementComponent() = delete;
 	explicit PlayerMovementComponent(Entity *p);

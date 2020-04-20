@@ -19,6 +19,7 @@ using namespace std;
 // Update
 void PlayerMovementComponent::update(double dt)
 {
+	cout << _invuln << endl;	
 	if (_shotTimer > 0) {
 		_shotTimer -= dt;
 		_flickerTimer -= dt;
