@@ -3,6 +3,7 @@
 #include "cmp_state_machine.h"
 #include "enemy_states.h"
 #include "../game.h"
+#include "cmp_pickup.h"
 #pragma once
 using namespace std;
 
@@ -16,9 +17,11 @@ void EnemyComponent::update(double dt)
 	if (_health <= 0) {
 		if (pickupTex.loadFromFile("res/pickups.png")) {
 			float dropChance = rand() % 10 + 1;
+			dropChance = 10;
 			if (dropChance == 10) {
 				int drop = rand() % 6 + 1;
 				auto pickup = _parent->scene->makeEntity();
+				pickup->addComponent<PickupComponent>();
 				pickup->setPosition(_parent->getPosition());
 
 				auto s = pickup->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
