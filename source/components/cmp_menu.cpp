@@ -115,7 +115,7 @@ void MenuItemComponent::resolveClick() {
 			str.resize(str.size() - 7);
 
 			std::ofstream outfile;
-			string output = str + ", " + name + "\n";
+			string output = str + " " + name + "\n";
 			outfile.open("scores.txt", std::ios_base::app); // append instead of overwrite
 			outfile << output;
 		}
