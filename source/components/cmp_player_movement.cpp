@@ -20,7 +20,7 @@ using namespace std;
 void PlayerMovementComponent::update(double dt)
 {
 	if (_health <= 0) {
- 		Engine::ChangeScene(&scene_enter_highscore);
+		Engine::ChangeScene(&scene_enter_highscore);
 		return;
 	}
 	else {
@@ -51,17 +51,6 @@ void PlayerMovementComponent::update(double dt)
 			cout << _health << endl;
 		}
 	}
-
-	//Old Fake Friction
-	//_timer -= dt;
-	//if (_timer < 0) {
-	//	_timer = 0.1;
-	//    auto p = _parent->get_components<PhysicsComponent>()[0];
-	//	Vector2f vel = p->getVelocity();
-	//	p->setVelocity(Vector2f(vel.x * 0.7, vel.y * 0.7));
-	//}
-
-	//Fake Friction
 }
 
 void PlayerMovementComponent::addHealth()
@@ -84,4 +73,28 @@ void PlayerMovementComponent::removeHealth()
 void PlayerMovementComponent::setHealth(int health)
 {
 	_health = health;
+}
+
+int PlayerMovementComponent::getHealth() {
+	return _health;
+}
+
+void PlayerMovementComponent::switchSprite() {
+	auto s = _parent->get_components<SpriteComponent>()[0];
+	switch (_health) {
+	case 4:
+		s->getSprite().setTextureRect(IntRect(0, 0, 1600, 1600));
+		break;
+	case 3:
+		s->getSprite().setTextureRect(IntRect(1600, 0, 1600, 1600));
+		break;
+	case 2:
+		s->getSprite().setTextureRect(IntRect(3200, 0, 1600, 1600));
+		break;
+	case 1:
+		s->getSprite().setTextureRect(IntRect(4800, 0, 1600, 1600));
+		break;
+	case 0:
+		break;
+	}
 }

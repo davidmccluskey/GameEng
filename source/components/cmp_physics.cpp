@@ -3,6 +3,7 @@
 #include "cmp_bullet.h"
 #include "cmp_base_enemy.h"
 #include "cmp_player_fire.h"
+#include "cmp_player_movement.h"
 #include "../game.h"
 using namespace std;
 using namespace sf;
@@ -140,10 +141,21 @@ void PhysicsComponent::collisionResponse(void* collider) {
     if (parentTag == "health" && childTag == "player") {
         _parent->setForDelete();
         score.setScore(100);
-        cout << "health up" << endl;
+		auto p = child->get_components<PlayerMovementComponent>()[0];
+		p->addHealth();
+		p->switchSprite();
+  //      cout << "health up" << endl;
+		//cout << p->getHealth() << endl;
     }
 	if (parentTag == "enemyBullet" && childTag == "player") {
 		_parent->setForDelete();
+		auto p = child->get_components<PlayerMovementComponent>()[0];
+		p->removeHealth();
+		p->switchSprite();
+		/*if (p->getHealth() <= 0) {
+			Engine::ChangeScene(&scene_enter_highscore);
+			return;
+		}*/
 	}
 }
 

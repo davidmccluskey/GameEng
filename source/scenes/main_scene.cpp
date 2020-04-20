@@ -156,7 +156,7 @@ void MainScene::Load() {
 		pauseMenu.setOrigin({ 800,450 });
 	}
 	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
-		for (size_t i = 0; i < 10; i++)
+		for (size_t i = 0; i < 1; i++)
 		{
 			createEnemyOrb();
 			//createEnemyHarpoon();

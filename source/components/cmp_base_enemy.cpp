@@ -11,8 +11,6 @@ sf::Sprite pickupSprite; //Player sprite
 
 void EnemyComponent::update(double dt)
 {
-	//srand(time(0));
-
 	if (_health <= 0) {
 		if (pickupTex.loadFromFile("res/pickups.png")) {
 			float dropChance = rand() % 10 + 1;

@@ -4,6 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 #include "../components/cmp_menu.h"
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -16,9 +17,18 @@ void HighScoreScene::Load() {
 	auto back = makeEntity();
 	back->addTag("back");
 
-	back->setPosition({ gameWidth * 0.15, gameHeight * 0.1 });
-
+	back->setPosition({ gameWidth * 0.15, gameHeight * 0.9 });
 	auto s = back->addComponent<MenuItemComponent>("Back");
+
+	ifstream inFile;
+	inFile.open("scores.txt");
+	if (!inFile) {
+		cerr << "Unable to open file datafile.txt";
+		exit(1);   // call system to stop
+	}
+	//inFile.getline()
+	
+	inFile.close();
 	cout << "Menu Load \n";
 	{
 		auto txt = makeEntity();

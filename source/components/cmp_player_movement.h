@@ -12,4 +12,6 @@ public:
 	void addHealth();
 	void removeHealth();
 	void setHealth(int health);
+	int getHealth();
+	void switchSprite();
 };
