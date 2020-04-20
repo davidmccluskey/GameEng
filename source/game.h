@@ -15,7 +15,9 @@ extern SettingsScreen scene_settings;
 extern EnterScoreScreen scene_enter_highscore;
 
 extern Score score;
+extern string name;
 
+extern float clickCooldown;
 extern sf::Music music;
 
 extern bool _paused;

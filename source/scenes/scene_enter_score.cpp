@@ -10,14 +10,13 @@ using namespace sf;
 
 static shared_ptr<Entity> nameText;
 static shared_ptr<TextComponent> nameTextComponent;
-string name;
 
 void EnterScoreScreen::Load() {
 	View view = Engine::GetWindow().getView();
 	view.setCenter({ gameWidth / 2, gameHeight / 2 });
 	Engine::GetWindow().setView(view);
 	auto back = makeEntity();
-	back->addTag("enter");
+	back->addTag("enter score");
 	back->setPosition({ gameWidth * 0.5, gameHeight * 0.8 });
 
 	auto s = back->addComponent<MenuItemComponent>("Enter");
@@ -29,6 +28,13 @@ void EnterScoreScreen::Load() {
 			"Please enter your name");
 		t->SetPosition({ gameWidth / 2 - 200, 200 });
 	}
+	{
+		auto txt = makeEntity();
+		string str = to_string(score.getScore());
+		str.resize(str.size() - 7);
+		auto t = txt->addComponent<TextComponent>("Final Score: " + str);
+		t->SetPosition({ gameWidth / 2 - 100, 100 });
+	}
 	nameText = makeEntity();
 	nameTextComponent = nameText->addComponent<TextComponent>(
 		"");
@@ -39,9 +45,13 @@ void EnterScoreScreen::Load() {
 
 void EnterScoreScreen::Update(const double& dt) {
 	_keyboardCooldown -= dt;
+	clickCooldown -= dt;
 	RenderWindow& window = Engine::GetWindow();
 	Event event;
 	while (window.pollEvent(event)) {
+		if (event.type == Event::Closed) {
+			window.close();
+		}
 		if (event.type == sf::Event::TextEntered)
 		{
 			if (event.text.unicode == '\b') {

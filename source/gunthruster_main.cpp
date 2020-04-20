@@ -14,7 +14,8 @@ HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
 EnterScoreScreen scene_enter_highscore;
 Score score;
-
+string name;
+float clickCooldown = 0;
 bool _paused = false;
 
 sf::Music music;

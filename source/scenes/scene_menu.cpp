@@ -79,6 +79,7 @@ void MenuScene::Load() {
 }
 
 void MenuScene::Update(const double& dt) {
+	clickCooldown -= dt;
 	sf::Event event;
 	RenderWindow& window = Engine::GetWindow();
 	while (window.pollEvent(event)) {

@@ -19,6 +19,7 @@ static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
+
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
   if (scn->isLoaded()) {
@@ -54,6 +55,7 @@ void Engine::Update() {
   float dt = clock.restart().asSeconds();
   {
     frametimes[++ftc] = dt;
+    
     static string avg = _gameName + " FPS:";
     if (ftc % 60 == 0) {
       double davg = 0;
@@ -85,7 +87,7 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
                    const std::string& gameName, Scene* scn) {
-  RenderWindow window(VideoMode(width, height), gameName);
+  RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar | sf::Style::Close);
   _gameName = gameName;
   _window = &window;
   Renderer::initialise(window);

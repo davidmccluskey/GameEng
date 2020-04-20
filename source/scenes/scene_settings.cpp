@@ -26,6 +26,7 @@ void SettingsScreen::Load() {
 }
 
 void SettingsScreen::Update(const double& dt) {
+    clickCooldown -= dt;
   // cout << "Menu Update "<<dt<<"\n";
     sf::Event event;
     RenderWindow& window = Engine::GetWindow();

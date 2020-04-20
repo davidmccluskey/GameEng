@@ -259,6 +259,7 @@ void MainScene::Update(const double& dt) {
 		}
 	}
 	if (!_paused) {
+		clickCooldown -= dt;
 		music.setVolume(50);
 		sf::View currentView = Engine::GetWindow().getView();
 		auto playerSprite = player->get_components<SpriteComponent>()[0];

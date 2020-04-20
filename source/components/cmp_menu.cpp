@@ -4,6 +4,8 @@
 #include "cmp_text.h"
 #include <engine.cpp>
 #include "../game.h"
+#include <fstream>
+
 using namespace std;
 using namespace sf;
 // Constructor
@@ -30,45 +32,46 @@ void MenuItemComponent::update(double dt) {
 	auto mouse_pos = Mouse::getPosition(Engine::GetWindow());
 	float parentX = _parent->getPosition().x;
 	float parentY = _parent->getPosition().y;
+	if (clickCooldown < 0) {
+		auto tagSet = _parent->getTags();
+		string parentTag = tagSet.begin()->c_str();
+		if ((parentTag == "resume" || parentTag == "home" || parentTag == "restart") && _paused == true) {
+			float xmult = gameWidth + 350;
+			float ymult = gameHeight + 650;
+			if ((mouse_pos.x - xmult > parentX - 200) && (mouse_pos.x - xmult < parentX + 200) && (mouse_pos.y - ymult > parentY - 50) && (mouse_pos.y - ymult < parentY + 50)) {
+				auto text = _parent->get_components<TextComponent>()[0];
+				auto sprite = _parent->get_components<SpriteComponent>()[0];
+				text->SetColour(sf::Color::White);
+				sprite->getSprite().setColor(sf::Color::Red);
 
-	auto tagSet = _parent->getTags();
-	string parentTag = tagSet.begin()->c_str();
-	if ((parentTag == "resume" || parentTag == "home" || parentTag == "restart") && _paused == true) {
-		float xmult = gameWidth  + 350;
-		float ymult = gameHeight + 650;
-		if ((mouse_pos.x - xmult > parentX - 200) && (mouse_pos.x - xmult < parentX + 200) && (mouse_pos.y - ymult > parentY - 50) && (mouse_pos.y - ymult < parentY + 50)) {
-			auto text = _parent->get_components<TextComponent>()[0];
-			auto sprite = _parent->get_components<SpriteComponent>()[0];
-			text->SetColour(sf::Color::White);
-			sprite->getSprite().setColor(sf::Color::Red);
-
-			if (sf::Mouse::isButtonPressed(Mouse::Left)) {
-				resolveClick();
+				if (sf::Mouse::isButtonPressed(Mouse::Left)) {
+					resolveClick();
+				}
+			}
+			else {
+				auto text = _parent->get_components<TextComponent>()[0];
+				text->SetColour(sf::Color::White);
+				auto sprite = _parent->get_components<SpriteComponent>()[0];
+				sprite->getSprite().setColor(sf::Color::White);
 			}
 		}
 		else {
-			auto text = _parent->get_components<TextComponent>()[0];
-			text->SetColour(sf::Color::White);
-			auto sprite = _parent->get_components<SpriteComponent>()[0];
-			sprite->getSprite().setColor(sf::Color::White);
-		}
-	}
-	else {
-		if ((mouse_pos.x > parentX - 200) && (mouse_pos.x < parentX + 200) && (mouse_pos.y > parentY - 50) && (mouse_pos.y < parentY + 50)) {
-			auto text = _parent->get_components<TextComponent>()[0];
-			auto sprite = _parent->get_components<SpriteComponent>()[0];
-			text->SetColour(sf::Color::White);
-			sprite->getSprite().setColor(sf::Color::Red);
+			if ((mouse_pos.x > parentX - 200) && (mouse_pos.x < parentX + 200) && (mouse_pos.y > parentY - 50) && (mouse_pos.y < parentY + 50)) {
+				auto text = _parent->get_components<TextComponent>()[0];
+				auto sprite = _parent->get_components<SpriteComponent>()[0];
+				text->SetColour(sf::Color::White);
+				sprite->getSprite().setColor(sf::Color::Red);
 
-			if (sf::Mouse::isButtonPressed(Mouse::Left)) {
-				resolveClick();
+				if (sf::Mouse::isButtonPressed(Mouse::Left)) {
+					resolveClick();
+				}
 			}
-		}
-		else {
-			auto text = _parent->get_components<TextComponent>()[0];
-			text->SetColour(sf::Color::White);
-			auto sprite = _parent->get_components<SpriteComponent>()[0];
-			sprite->getSprite().setColor(sf::Color::White);
+			else {
+				auto text = _parent->get_components<TextComponent>()[0];
+				text->SetColour(sf::Color::White);
+				auto sprite = _parent->get_components<SpriteComponent>()[0];
+				sprite->getSprite().setColor(sf::Color::White);
+			}
 		}
 	}
 
@@ -77,7 +80,7 @@ void MenuItemComponent::update(double dt) {
 void MenuItemComponent::resolveClick() {
 	auto tagSet = _parent->getTags();
 	string parentTag = tagSet.begin()->c_str();
-
+	clickCooldown = 0.2;
 	//cout << parentTag << "Clicked" << endl;
 
 	if (parentTag == "start") {
@@ -104,6 +107,19 @@ void MenuItemComponent::resolveClick() {
 	}
 	else if (parentTag == "home") {
 		Engine::ChangeScene(&menu);
+	}
+	else if (parentTag == "enter score") {
+		if (name != "") {
+			cout << score.getScore() << name << endl;
+			string str = to_string(score.getScore());
+			str.resize(str.size() - 7);
+
+			std::ofstream outfile;
+			string output = str + ", " + name + "\n";
+			outfile.open("scores.txt", std::ios_base::app); // append instead of overwrite
+			outfile << output;
+		}
+		else { cout << "please enter a name" << endl; }
 	}
 
 }
