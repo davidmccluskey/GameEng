@@ -63,7 +63,6 @@ int enemySpawns = 1;
 void MainScene::Load() {
 	_paused = false;
 
-
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
 	cout << "Controls: 1 for normal" << endl;
@@ -229,6 +228,7 @@ void MainScene::Load() {
 			music.setLoop(true);
 		}
 	}
+	createEnemyOrb();
 
 	setLoaded(true);
 
@@ -242,7 +242,7 @@ void MainScene::UnLoad() {
 }
 
 void MainScene::Update(const double& dt) {
-	cout << "on scren " << _enemyNum << endl;
+	//cout << "on scren " << _enemyNum << endl;
 	// catch the resize events
 	// catch the resize events
 	sf::Event event;
@@ -297,48 +297,48 @@ void MainScene::Update(const double& dt) {
 		str.resize(str.size() - 7);
 		scoreTextComponent->SetText(str);
 
-		if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
-		{
-			healthMultiplier = healthMultiplier + 0.2;
-			score.setScore(1000);
+		//if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
+		//{
+		//	healthMultiplier = healthMultiplier + 0.2;
+		//	score.setScore(1000);
 
-			if (baseWaveNum - 1 != 5) {
-				_wavetimer = baseWaveNum;
-				baseWaveNum -= 0.5;
-			}
-			else {
-				_wavetimer = 5;
-			}
-			int enemyCheck = enemySpawns;
-			_wavenumber++;
+		//	if (baseWaveNum - 1 != 5) {
+		//		_wavetimer = baseWaveNum;
+		//		baseWaveNum -= 0.5;
+		//	}
+		//	else {
+		//		_wavetimer = 5;
+		//	}
+		//	int enemyCheck = enemySpawns;
+		//	_wavenumber++;
 
-			if (enemySpawns + 1 != 10) {
-				if (_wavenumber % 2 == 0) {
-					enemySpawns++;
-				}
-			}
+		//	if (enemySpawns + 1 != 10) {
+		//		if (_wavenumber % 2 == 0) {
+		//			enemySpawns++;
+		//		}
+		//	}
 
-			string wavenum = to_string(_wavenumber);
-			wavenum = "Wave " + wavenum;
-			//wavenum.resize(wavenum.size() - 7);
-			waveTextComponent->SetText(wavenum);
-			
-			for (int i = 0; i < enemySpawns; i++) {
-				int enemyType = rand() % 3 + 1;
-				switch (enemyType) {
-				case 1:
-					createEnemyHarpoon();
-					break;
-				case 2:
-					createEnemyOrb();
-					break;
-				case 3: 
-					createEnemySpike();
-					break;
-				}
-			}
-			cout << "spawned " << enemySpawns << endl;
-		}
+		//	string wavenum = to_string(_wavenumber);
+		//	wavenum = "Wave " + wavenum;
+		//	wavenum.resize(wavenum.size() - 7);
+		//	waveTextComponent->SetText(wavenum);
+		//	
+		//	for (int i = 0; i < enemySpawns; i++) {
+		//		int enemyType = rand() % 3 + 1;
+		//		switch (enemyType) {
+		//		case 1:
+		//			createEnemyHarpoon();
+		//			break;
+		//		case 2:
+		//			createEnemyOrb();
+		//			break;
+		//		case 3: 
+		//			createEnemySpike();
+		//			break;
+		//		}
+		//	}
+		//	cout << "spawned " << enemySpawns << endl;
+		//}
 		Scene::Update(dt);
 	}
 	else if (_paused) {
