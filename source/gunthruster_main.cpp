@@ -17,7 +17,7 @@ Score score;
 string name;
 float clickCooldown = 0;
 bool _paused = false;
-
+int _enemyNum = 0;
 sf::Music music;
 
 int main() {

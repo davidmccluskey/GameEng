@@ -5,7 +5,7 @@
 class MainScene : public Scene {
 private:
     float _wavetimer;
-    float _wavenumber;
+    int _wavenumber;
     float _keyboardCooldown = 0;
 public:
     void Load() override;
