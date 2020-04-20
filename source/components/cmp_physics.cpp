@@ -4,6 +4,7 @@
 #include "cmp_base_enemy.h"
 #include "cmp_player_fire.h"
 #include "../game.h"
+#include "cmp_player_movement.h"
 using namespace std;
 using namespace sf;
 
@@ -141,7 +142,9 @@ void PhysicsComponent::collisionResponse(void* collider) {
         cout << "health up" << endl;
     }
 	if (parentTag == "enemyBullet" && childTag == "player") {
-		_parent->setForDelete();
+        auto fire = child->get_components<PlayerMovementComponent>()[0];
+        fire->setShot(1);
+        _parent->setForDelete();
 	}
 }
 
