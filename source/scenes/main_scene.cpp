@@ -201,7 +201,6 @@ void MainScene::Load() {
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
-	setLoaded(true);
 
 	//pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
 
@@ -232,6 +231,9 @@ void MainScene::Load() {
 		}
 	}
 
+	setLoaded(true);
+
+
 }
 
 void MainScene::UnLoad() {
@@ -243,9 +245,13 @@ void MainScene::UnLoad() {
 void MainScene::Update(const double& dt) {
 	// catch the resize events
 	// catch the resize events
-	sf::Event Event;
-	sf::Window window;
-;
+	sf::Event event;
+	RenderWindow &window = Engine::GetWindow();
+    while (window.pollEvent(event)) {
+	  if (event.type == Event::Closed) {
+	    window.close();
+	  }
+	}
 
 	_keyboardCooldown -= dt;
 	if (_keyboardCooldown < 0) {
@@ -255,8 +261,8 @@ void MainScene::Update(const double& dt) {
 		}
 	}
 	if (!_paused) {
+		clickCooldown -= dt;
 		music.setVolume(50);
-		Scene::Update(dt);
 		sf::View currentView = Engine::GetWindow().getView();
 		auto playerSprite = player->get_components<SpriteComponent>()[0];
 		float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
@@ -313,6 +319,7 @@ void MainScene::Update(const double& dt) {
 			//e->getSprite().setScale({ 0.05, 0.05 });
 			//enemy->addComponent<SteeringComponent>(player.get());
 		}
+		Scene::Update(dt);
 	}
 	/*else if (_paused) {
 		music.setVolume(25);

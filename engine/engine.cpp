@@ -55,6 +55,7 @@ void Engine::Update() {
   float dt = clock.restart().asSeconds();
   {
     frametimes[++ftc] = dt;
+    
     static string avg = _gameName + " FPS:";
     if (ftc % 60 == 0) {
       double davg = 0;
@@ -86,7 +87,7 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
                    const std::string& gameName, Scene* scn) {
-  RenderWindow window(VideoMode(width, height), gameName);
+  RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar | sf::Style::Close);
   _gameName = gameName;
   _window = &window;
   Renderer::initialise(window);
@@ -94,11 +95,11 @@ void Engine::Start(unsigned int width, unsigned int height,
   ChangeScene(scn);
   while (window.isOpen()) {
     Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == Event::Closed) {
-        window.close();
-      }
-    }
+    //while (window.pollEvent(event)) {
+    //  if (event.type == Event::Closed) {
+    //    window.close();
+    //  }
+    //}
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       //window.close();
     }

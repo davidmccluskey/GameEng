@@ -3,10 +3,13 @@
 class PlayerMovementComponent : public ActorMovementComponent
 {
 private:
+	int _health;
 public:
 	float _timer = 0;
-	float _health = 4;
 	PlayerMovementComponent() = delete;
 	explicit PlayerMovementComponent(Entity *p);
 	void update(double dt) override;
+	void addHealth();
+	void removeHealth();
+	void setHealth(int health);
 };

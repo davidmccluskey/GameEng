@@ -72,13 +72,21 @@ void MenuScene::Load() {
 		auto t = txt->addComponent<TextComponent>("Gunthrusters");
 		t->SetPosition({ 70, gameHeight * 0.10 });
 		t->SetSize(60);
-		t->SetColour(sf::Color::Red);
+		t->SetColour(sf::Color::White);
 
 	}
 	setLoaded(true);
 }
 
 void MenuScene::Update(const double& dt) {
+	clickCooldown -= dt;
+	sf::Event event;
+	RenderWindow& window = Engine::GetWindow();
+	while (window.pollEvent(event)) {
+		if (event.type == Event::Closed) {
+			window.close();
+		}
+	}
 	// cout << "Menu Update "<<dt<<"\n";
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
 		Engine::ChangeScene(&scene_main);
