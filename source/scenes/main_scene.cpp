@@ -47,6 +47,7 @@ static shared_ptr<TextComponent> waveTextComponent;
 static shared_ptr<Entity> scoreText;
 static shared_ptr<TextComponent> scoreTextComponent;
 
+float healthMultiplier = 1;
 
 MyContactListener listenerInstance;
 
@@ -298,6 +299,7 @@ void MainScene::Update(const double& dt) {
 
 		if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
 		{
+			healthMultiplier = healthMultiplier + 0.2;
 			score.setScore(1000);
 
 			if (baseWaveNum - 1 != 5) {
@@ -387,7 +389,7 @@ void MainScene::createEnemyOrb() {
 	
 	
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(2);
+	enemyComponent->setHealth(2 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -418,7 +420,7 @@ void MainScene::createEnemyHarpoon() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(5);
+	enemyComponent->setHealth(5 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -451,7 +453,7 @@ void MainScene::createEnemySpike() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(4);
+	enemyComponent->setHealth(4 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
