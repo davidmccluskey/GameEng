@@ -47,6 +47,7 @@ static shared_ptr<TextComponent> waveTextComponent;
 static shared_ptr<Entity> scoreText;
 static shared_ptr<TextComponent> scoreTextComponent;
 
+float healthMultiplier = 1;
 
 MyContactListener listenerInstance;
 
@@ -56,9 +57,11 @@ static shared_ptr<Entity> resumeButton; //Player Entity
 static shared_ptr<Entity> restartButton; //Player Entity
 static shared_ptr<Entity> exitButton; //Player Entity
 
+double baseWaveNum = 20;
+int enemySpawns = 1;
+
 void MainScene::Load() {
 	_paused = false;
-
 
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
@@ -155,13 +158,8 @@ void MainScene::Load() {
 		pauseMenu.setTexture(backgroundtexture);
 		pauseMenu.setOrigin({ 800,450 });
 	}
-	if (enemySheet.loadFromFile("res/enemySpritesheet.png")) {
-		for (size_t i = 0; i < 1; i++)
-		{
-			createEnemyOrb();
-			//createEnemyHarpoon();
-			createEnemySpike();
-		}
+	if (!enemySheet.loadFromFile("res/enemySpritesheet.png")) {
+		cout << "exeption" << endl;
 	}
 
 
@@ -230,6 +228,7 @@ void MainScene::Load() {
 			music.setLoop(true);
 		}
 	}
+	createEnemyOrb();
 
 	setLoaded(true);
 
@@ -243,6 +242,7 @@ void MainScene::UnLoad() {
 }
 
 void MainScene::Update(const double& dt) {
+	//cout << "on scren " << _enemyNum << endl;
 	// catch the resize events
 	// catch the resize events
 	sf::Event event;
@@ -297,28 +297,48 @@ void MainScene::Update(const double& dt) {
 		str.resize(str.size() - 7);
 		scoreTextComponent->SetText(str);
 
-		if (_wavetimer < 0)//SPAWNING WAVES
-		{
-			_wavetimer = 5;
-			_wavenumber++;
-			string wavenum = to_string(_wavenumber);
-			wavenum = "Wave " + wavenum;
-			wavenum.resize(wavenum.size() - 7);
-			waveTextComponent->SetText(wavenum);
-			//random_device dev;
-			//default_random_engine engine(dev());
-			//uniform_real_distribution<float> x_dist(0.0f,
-			//	Engine::GetWindow().getSize().x);
-			//uniform_real_distribution<float> y_dist(0.0f,
-			//	Engine::GetWindow().getSize().y);
-			//auto enemy = makeEntity();
-			//enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
-			//auto e = enemy->addComponent<SpriteComponent>();
-			//e->setSprite<Sprite>(enemySprite);
-			//e->getSprite().setOrigin(800, 800);
-			//e->getSprite().setScale({ 0.05, 0.05 });
-			//enemy->addComponent<SteeringComponent>(player.get());
-		}
+		//if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
+		//{
+		//	healthMultiplier = healthMultiplier + 0.2;
+		//	score.setScore(1000);
+
+		//	if (baseWaveNum - 1 != 5) {
+		//		_wavetimer = baseWaveNum;
+		//		baseWaveNum -= 0.5;
+		//	}
+		//	else {
+		//		_wavetimer = 5;
+		//	}
+		//	int enemyCheck = enemySpawns;
+		//	_wavenumber++;
+
+		//	if (enemySpawns + 1 != 10) {
+		//		if (_wavenumber % 2 == 0) {
+		//			enemySpawns++;
+		//		}
+		//	}
+
+		//	string wavenum = to_string(_wavenumber);
+		//	wavenum = "Wave " + wavenum;
+		//	wavenum.resize(wavenum.size() - 7);
+		//	waveTextComponent->SetText(wavenum);
+		//	
+		//	for (int i = 0; i < enemySpawns; i++) {
+		//		int enemyType = rand() % 3 + 1;
+		//		switch (enemyType) {
+		//		case 1:
+		//			createEnemyHarpoon();
+		//			break;
+		//		case 2:
+		//			createEnemyOrb();
+		//			break;
+		//		case 3: 
+		//			createEnemySpike();
+		//			break;
+		//		}
+		//	}
+		//	cout << "spawned " << enemySpawns << endl;
+		//}
 		Scene::Update(dt);
 	}
 	else if (_paused) {
@@ -343,7 +363,7 @@ void MainScene::Render() {
 
 
 void MainScene::createEnemyOrb() {
-
+	_enemyNum++;
 	enemySprite.setTexture(enemySheet);
 
 	random_device dev;
@@ -369,7 +389,7 @@ void MainScene::createEnemyOrb() {
 	
 	
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(2);
+	enemyComponent->setHealth(2 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -377,7 +397,7 @@ void MainScene::createEnemyOrb() {
 }
 
 void MainScene::createEnemyHarpoon() {
-
+	_enemyNum++;
 	enemySprite.setTexture(enemySheet);
 
 	random_device dev;
@@ -400,7 +420,7 @@ void MainScene::createEnemyHarpoon() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(5);
+	enemyComponent->setHealth(5 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -411,7 +431,7 @@ void MainScene::createEnemyHarpoon() {
 void MainScene::createEnemySpike() {
 
 	enemySprite.setTexture(enemySheet);
-
+	_enemyNum++;
 
 	random_device dev;
 	default_random_engine engine(dev());
@@ -433,7 +453,7 @@ void MainScene::createEnemySpike() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(4);
+	enemyComponent->setHealth(4 * healthMultiplier);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 

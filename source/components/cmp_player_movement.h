@@ -4,8 +4,11 @@ class PlayerMovementComponent : public ActorMovementComponent
 {
 private:
 	int _health;
+	float _shotTimer;
+	float _flickerTimer = 0.1;
+	bool _flicker = true;
+	bool _invuln = false;
 public:
-	float _timer = 0;
 	PlayerMovementComponent() = delete;
 	explicit PlayerMovementComponent(Entity *p);
 	void update(double dt) override;
@@ -14,4 +17,6 @@ public:
 	void setHealth(int health);
 	int getHealth();
 	void switchSprite();
+	void setShot(float shotTimer);
+	bool getInvuln();
 };

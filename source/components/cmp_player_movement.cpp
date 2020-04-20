@@ -19,6 +19,34 @@ using namespace std;
 // Update
 void PlayerMovementComponent::update(double dt)
 {
+	if (_shotTimer > 0) {
+		_shotTimer -= dt;
+		_flickerTimer -= dt;
+		_invuln = true;
+
+		if (_flicker == true) {
+			if (_flickerTimer < 0) {
+				auto enemySprite = _parent->get_components<SpriteComponent>()[0];
+				enemySprite->getSprite().setColor(sf::Color::Red);
+				_flickerTimer = 0.1;
+				_flicker = false;
+			}
+		}
+		else if (_flicker == false) {
+			if (_flickerTimer < 0) {
+				auto enemySprite = _parent->get_components<SpriteComponent>()[0];
+				enemySprite->getSprite().setColor(sf::Color::White);
+				_flickerTimer = 0.1;
+				_flicker = true;
+			}
+		}
+	}
+	else if (_shotTimer < 0) {
+		_shotTimer = 0;
+		auto enemySprite = _parent->get_components<SpriteComponent>()[0];
+		enemySprite->getSprite().setColor(sf::Color::White);
+		_invuln = false;
+	}
 	if (_health <= 0) {
 		Engine::ChangeScene(&scene_enter_highscore);
 		return;
@@ -97,4 +125,13 @@ void PlayerMovementComponent::switchSprite() {
 	case 0:
 		break;
 	}
+}
+void PlayerMovementComponent::setShot(float shotTimer)
+{
+	_shotTimer = shotTimer;
+}
+
+bool PlayerMovementComponent::getInvuln()
+{
+	return _invuln;
 }

@@ -22,6 +22,8 @@ extern sf::Music music;
 
 extern bool _paused;
 
+extern int _enemyNum;
+
 constexpr uint16_t gameWidth = 1280;
 constexpr uint16_t gameHeight = 720;
 constexpr uint16_t scale = 3;

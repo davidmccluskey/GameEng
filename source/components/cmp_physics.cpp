@@ -5,6 +5,7 @@
 #include "cmp_player_fire.h"
 #include "cmp_player_movement.h"
 #include "../game.h"
+#include "cmp_player_movement.h"
 using namespace std;
 using namespace sf;
 
@@ -99,13 +100,11 @@ void PhysicsComponent::collisionResponse(void* collider) {
         score.setScore(50);
         auto bullet = _parent->get_components<BulletComponent>()[0];
         auto enemy = child->get_components<EnemyComponent>()[0];
-
         float damage = bullet->getDamage();
         //cout << "damage " << damage << endl;
         //cout << "enemy health " << enemy->getHealth() << endl;
         enemy->setShot(1);
         enemy->setHealth(enemy->getHealth() - damage);
-
         _parent->setForDelete();
     }
     if (parentTag == "shotgun" && childTag == "player") {
@@ -150,6 +149,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 	if (parentTag == "enemyBullet" && childTag == "player") {
 		_parent->setForDelete();
 		auto p = child->get_components<PlayerMovementComponent>()[0];
+    p->setShot(1);
 		p->removeHealth();
 		p->switchSprite();
 		/*if (p->getHealth() <= 0) {
