@@ -12,12 +12,18 @@ public:
 	void set_value(int v);
 	static Options* instance();
 	void save();
+
 	int volume;
 	bool windowMode;
 	bool musicOn;
 	bool effectsOn;
 	int width;
 	int height;
+
+	int moveLeft;
+	int moveRight;
+	int shootKey;
+	int pauseKey;
 };
 
 // Allocating and initializing GlobalClass's

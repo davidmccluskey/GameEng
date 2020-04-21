@@ -10,6 +10,13 @@ Options::Options(int v)
 	effectsOn = 1;
 	width = 1280;
 	height = 720;
+
+	moveLeft = 0;
+	moveRight = 3;
+	shootKey = 22;
+	pauseKey = 36;
+
+
 }
 
 int Options::get_value()
@@ -37,8 +44,12 @@ void Options::save() {
 	string widthStr = to_string(width);
 	string heightStr = to_string(height);
 
+	string ctrlLeft = to_string(moveLeft);
+	string ctrlRight = to_string(moveRight);
+	string ctrlShoot = to_string(shootKey);
+	string ctrlPause = to_string(pauseKey);
 
-	string output = volumeStr + "\n" + windowModeStr + "\n" + musicOnStr + "\n" + effectsOnStr + "\n" + widthStr + "\n" + heightStr;
+	string output = volumeStr + "\n" + windowModeStr + "\n" + musicOnStr + "\n" + effectsOnStr + "\n" + widthStr + "\n" + heightStr + "\n" + ctrlLeft + "\n" + ctrlRight + "\n" + ctrlShoot + "\n" + ctrlPause;
 	std::ofstream ofs("options.txt", std::ofstream::trunc);
 	ofs << output;
 	ofs.close();

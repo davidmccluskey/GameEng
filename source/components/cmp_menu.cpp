@@ -96,7 +96,7 @@ void MenuItemComponent::resolveClick() {
 	else if (parentTag == "exit") {
 		exit(EXIT_SUCCESS);
 	}
-	else if (parentTag == "options") {
+	else if (parentTag == "options" || parentTag == "ctrlBack") {
 		Engine::ChangeScene(&scene_settings);
 	}
 	else if (parentTag == "highscore") {
@@ -117,6 +117,9 @@ void MenuItemComponent::resolveClick() {
 	}
 	else if (parentTag == "home") {
 		Engine::ChangeScene(&menu);
+	}
+	else if (parentTag == "controls") {
+		Engine::ChangeScene(&scene_controls);
 	}
 	else if (parentTag == "enter score") {
 		if (name != "") {

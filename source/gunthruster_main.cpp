@@ -14,6 +14,7 @@ MainScene scene_main;   //Main scene reference
 HighScoreScene scene_highscores;    //High score scene reference
 SettingsScreen scene_settings; //Settings scene reference
 EnterScoreScreen scene_enter_highscore;
+ControlsScreen scene_controls;
 Score score;
 string name;
 float clickCooldown = 0;
@@ -47,6 +48,12 @@ int main() {
 	Options::instance()->effectsOn = input[3];
 	Options::instance()->width = input[4];
 	Options::instance()->height = input[5];
+
+	Options::instance()->moveLeft = input[6];
+	Options::instance()->moveRight = input[7];
+	Options::instance()->shootKey = input[8];
+	Options::instance()->pauseKey = input[9];
+
 	inFile.close();
 	Engine::Start(Options::instance()->width, Options::instance()->height, "GUN THRUSTERS", &menu, Options::instance()->windowMode);  //Starts engine in user specified resolution
 }

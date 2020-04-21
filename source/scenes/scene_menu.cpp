@@ -115,3 +115,9 @@ void MenuScene::Render()
 	Renderer::queue(&spriteBackground);
 	Scene::Render();
 }
+
+void MenuScene::UnLoad() {
+	cout << "Scene 1 Unload" << endl;
+	//player.reset();
+	Scene::UnLoad();
+}

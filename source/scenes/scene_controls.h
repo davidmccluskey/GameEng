@@ -2,10 +2,10 @@
 
 #include "engine.h"
 
-class SettingsScreen : public Scene {
+class ControlsScreen : public Scene {
 public:
-   SettingsScreen() = default;
-  ~SettingsScreen() override = default;
+    ControlsScreen() = default;
+  ~ControlsScreen() override = default;
 
   void Load() override;
 

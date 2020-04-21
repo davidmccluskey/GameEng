@@ -64,7 +64,7 @@ void PlayerFireComponent::update(double dt)
 		_burst = false;
 		_burstNum = 3;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::W) || sf::Joystick::isButtonPressed(0, 1)) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->shootKey)) || sf::Joystick::isButtonPressed(0, 1)) {
 		if (_firetime <= 0.f) {
 			if (Options::instance()->effectsOn == true) {
 				sound.setBuffer(buffer);

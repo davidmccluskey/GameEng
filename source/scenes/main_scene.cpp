@@ -264,7 +264,7 @@ void MainScene::Update(const double& dt) {
 
 	_keyboardCooldown -= dt;
 	if (_keyboardCooldown < 0) {
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->pauseKey))) {
 			_paused = !_paused;
 			_keyboardCooldown = 0.5;
 		}

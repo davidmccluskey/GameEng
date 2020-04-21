@@ -8,6 +8,7 @@
 #include "cmp_bullet_base.h"
 #include <SFML/Window/Joystick.hpp>
 #include "../game.h"
+#include "../options.h"
 // Constructor
 PlayerMovementComponent::PlayerMovementComponent(Entity* p)
 	: ActorMovementComponent(p) {
@@ -66,11 +67,11 @@ void PlayerMovementComponent::update(double dt)
 			rotate(dt * (x * 3));
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::A))
+		if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->moveLeft)))
 		{
 			rotate(dt * -400); //Rotates ship left at speed of 300
 		}
-		if (Keyboard::isKeyPressed(Keyboard::D))
+		if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->moveRight)))
 		{
 			rotate(dt * 400); //Rotates ship right at speed of 300
 		}

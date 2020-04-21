@@ -34,7 +34,7 @@ void SettingsScreen::Load() {
 	}
 	{
 		auto controls = makeEntity();
-		controls->addTag("save");
+		controls->addTag("controls");
 
 		controls->setPosition({ gameWidth * 0.8, gameHeight * 0.9 });
 
@@ -275,4 +275,9 @@ void SettingsScreen::Update(const double& dt) {
 	}
 
 	Scene::Update(dt);
+}
+
+void SettingsScreen::UnLoad() {
+	cout << "Scene 1 Unload" << endl;
+	Scene::UnLoad();
 }
