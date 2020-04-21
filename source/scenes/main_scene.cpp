@@ -65,6 +65,8 @@ int enemySpawns = 1;
 int windowWidth;
 int windowHeight;
 
+int viewX;
+int viewY;
 void MainScene::Load() {
 	_paused = false;
 
@@ -207,6 +209,7 @@ void MainScene::Load() {
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
+	//prevView.setCenter(view.getCenter());
 
 	pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
 
@@ -283,9 +286,18 @@ void MainScene::Update(const double& dt) {
 
 		if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
 			currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+			viewX = currentView.getCenter().x;
+		}
+		else {
+			currentView.setCenter(viewX, viewY);
 		}
 		if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
 			currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+			viewY = currentView.getCenter().y;
+			//prevView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+		}
+		else {
+			currentView.setCenter(viewX, viewY);
 		}
 
 		Engine::GetWindow().setView(currentView);
@@ -378,9 +390,9 @@ void MainScene::createEnemyOrb() {
 	random_device dev;
 	default_random_engine engine(dev());
 	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x * scale);
+		gameHeight * scale - 100);
 	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y* scale);
+		gameWidth * scale - 100);
 
 
 	auto enemy = makeEntity();
