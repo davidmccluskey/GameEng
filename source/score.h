@@ -7,4 +7,5 @@ private:
 public:
 	float getScore();
 	void setScore(float score);
+	void resetScore();
 };

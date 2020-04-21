@@ -1,7 +1,7 @@
 #include "system_physics.h"
 #include "Box2D/Box2D.h"
 #include "../source/contactListener.cpp"
-
+#include "../source/game.h"
 using namespace std;
 using namespace sf;
 // Add to top of file
@@ -22,7 +22,10 @@ void initialise() {
 void shutdown() { world.reset(); }
 
 void update(const double& dt) {
-  world->Step((float)dt, velocityIterations, positionIterations);
+    if (_paused == false) {
+        world->Step((float)dt, velocityIterations, positionIterations);
+
+    }
 }
 
 std::shared_ptr<b2World> GetWorld() { return world; }

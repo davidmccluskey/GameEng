@@ -22,6 +22,8 @@
 #include "../components/cmp_menu.h"
 #include "../score.h"
 
+#include "../options.h"
+
 using namespace std;
 using namespace sf;
 
@@ -60,8 +62,14 @@ static shared_ptr<Entity> exitButton; //Player Entity
 double baseWaveNum = 20;
 int enemySpawns = 1;
 
+int windowWidth;
+int windowHeight;
+
 void MainScene::Load() {
 	_paused = false;
+
+	windowWidth = Options::instance()->width;
+	windowHeight = Options::instance()->height;
 
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
@@ -151,10 +159,10 @@ void MainScene::Load() {
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
 		backgroundSprite.setOrigin(800, 450);
-		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
+		backgroundSprite.setPosition((windowWidth* scale) / 2, (windowHeight * scale) / 2);
 		backgroundSprite.setScale(scale, scale);
 
-		pauseMenu.setPosition({ -1000, -1000 });
+		pauseMenu.setPosition({ -gameWidth, -gameHeight});
 		pauseMenu.setTexture(backgroundtexture);
 		pauseMenu.setOrigin({ 800,450 });
 	}
@@ -204,34 +212,35 @@ void MainScene::Load() {
 
 	resumeButton = makeEntity();
 	resumeButton->addTag("resume");
-	resumeButton->setPosition({ -1000, -1100 });
+	resumeButton->setPosition({ -gameWidth, -gameHeight - 100});
 	resumeButton->addComponent<MenuItemComponent>("resume");
 
 	restartButton = makeEntity();
 	restartButton->addTag("restart");
-	restartButton->setPosition({ -1000, -1000 });
+	restartButton->setPosition({ -gameWidth, -gameHeight });
 	restartButton->addComponent<MenuItemComponent>("restart");
 
 	exitButton = makeEntity();
 	exitButton->addTag("home");
-	exitButton->setPosition({ -1000, -900 });
+	exitButton->setPosition({ -gameWidth, -gameHeight + 100 });
 	exitButton->addComponent<MenuItemComponent>("exit");
 
-	if (music.getStatus() != 2)
-	{
-		if (!music.openFromFile("res/soundFX/main_music.WAV")) {
-			cout << "error loading music" << endl;
-		}
-		else {
-			music.setVolume(30);
-			music.play();
-			music.setLoop(true);
+	if (Options::instance()->musicOn) {
+		if (music.getStatus() != 2)
+		{
+			if (!music.openFromFile("res/soundFX/main_music.WAV")) {
+				cout << "error loading music" << endl;
+			}
+			else {
+				music.setVolume(Options::instance()->volume);
+				music.play();
+				music.setLoop(true);
+			}
 		}
 	}
 	createEnemyOrb();
 
 	setLoaded(true);
-
 
 }
 
@@ -262,7 +271,7 @@ void MainScene::Update(const double& dt) {
 	}
 	if (!_paused) {
 		clickCooldown -= dt;
-		music.setVolume(50);
+		music.setVolume(Options::instance()->volume);
 		sf::View currentView = Engine::GetWindow().getView();
 		auto playerSprite = player->get_components<SpriteComponent>()[0];
 		float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
@@ -342,7 +351,7 @@ void MainScene::Update(const double& dt) {
 		Scene::Update(dt);
 	}
 	else if (_paused) {
-		music.setVolume(25);
+		music.setVolume(Options::instance()->volume / 2);
 		resumeButton->update(dt);
 		restartButton->update(dt);
 		exitButton->update(dt);
@@ -353,7 +362,7 @@ void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
 	if (_paused) {
 		sf::View pauseView = Engine::GetWindow().getView();
-		pauseView.setCenter({ -1000, -1000 });
+		pauseView.setCenter({ -gameWidth, -gameHeight});
 		Engine::GetWindow().setView(pauseView);
 		Renderer::queue(&pauseMenu);
 
