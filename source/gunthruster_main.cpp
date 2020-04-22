@@ -22,6 +22,9 @@ bool _paused = false;
 int _enemyNum = 0;
 sf::Music music;
 
+float windowWidth;
+float windowHeight;
+
 int main() {
 	ifstream inFile;
 	inFile.open("options.txt");
@@ -46,8 +49,11 @@ int main() {
 	Options::instance()->windowMode = input[1];
 	Options::instance()->musicOn = input[2];
 	Options::instance()->effectsOn = input[3];
+
 	Options::instance()->width = input[4];
 	Options::instance()->height = input[5];
+	Options::instance()->launchWidth = input[4];
+	Options::instance()->launchHeight = input[5];
 
 	Options::instance()->moveLeft = input[6];
 	Options::instance()->moveRight = input[7];
@@ -55,5 +61,8 @@ int main() {
 	Options::instance()->pauseKey = input[9];
 
 	inFile.close();
+
+	windowWidth = Options::instance()->launchWidth;
+	windowHeight = Options::instance()->launchHeight;
 	Engine::Start(Options::instance()->width, Options::instance()->height, "GUN THRUSTERS", &menu, Options::instance()->windowMode);  //Starts engine in user specified resolution
 }

@@ -25,6 +25,9 @@ extern bool _paused;
 
 extern int _enemyNum;
 
+extern float windowWidth;
+extern float windowHeight;
+
 constexpr uint16_t gameWidth = 1280;
 constexpr uint16_t gameHeight = 720;
 constexpr uint16_t scale = 3;

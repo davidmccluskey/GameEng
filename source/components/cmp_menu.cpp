@@ -33,8 +33,6 @@ void MenuItemComponent::update(double dt) {
 	auto mouse_pos = Mouse::getPosition(Engine::GetWindow());
 	float parentX = _parent->getPosition().x;
 	float parentY = _parent->getPosition().y;
-	int width = Options::instance()->width;
-	int height = Options::instance()->width;
 
 	if (clickCooldown < 0) {
 		auto tagSet = _parent->getTags();
@@ -42,10 +40,7 @@ void MenuItemComponent::update(double dt) {
 		if ((parentTag == "resume" || parentTag == "home" || parentTag == "restart") && _paused == true) {
 			auto sprite = _parent->get_components<SpriteComponent>()[0];
 			FloatRect rect = sprite->getSprite().getLocalBounds();
-			//cout << sprite->getSprite().getOrigin() << endl;
-
-
-			if ((mouse_pos.x - (width) > parentX - (rect.width/2)) && (mouse_pos.x - (height) < parentX + (rect.width/2))){
+			if ((mouse_pos.x - windowWidth) > (sprite->getSprite().getPosition().x - (rect.width / 2) - 50) && (mouse_pos.x - windowWidth) < (sprite->getSprite().getPosition().x + (rect.width / 2)) && (mouse_pos.y - windowHeight) > (sprite->getSprite().getPosition().y - (rect.height / 2)) && (mouse_pos.y - windowHeight) < (sprite->getSprite().getPosition().y + (rect.height / 2))) {
 				auto text = _parent->get_components<TextComponent>()[0];
 				text->SetColour(sf::Color::White);
 				sprite->getSprite().setColor(sf::Color::Red);

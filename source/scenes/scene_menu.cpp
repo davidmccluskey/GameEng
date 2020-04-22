@@ -16,16 +16,20 @@ using namespace sf;
 Texture background;
 Sprite spriteBackground;
 
-float windowWidth;
-float windowHeight;
+
 
 void MenuScene::Load() {
-	windowWidth = Options::instance()->width;
-	windowHeight = Options::instance()->height;
-
+	View view = Engine::GetWindow().getDefaultView();
+	//View view;
+	//view.setSize(gameWidth / 3, gameHeight / 3);
+	//if (_paused == true) {
+	//	view.zoom(1);
+	//}
 	_paused = false;
-	View view = Engine::GetWindow().getView();
-	view.setCenter({windowWidth / 2, windowHeight / 2 });
+
+	float scaleWidth = windowWidth/1600;
+	float scaleHeight = windowHeight/900;
+	//view.setCenter({windowWidth / 2, windowHeight / 2 });
 	Engine::GetWindow().setView(view);
 
 	if (Options::instance()->musicOn == true) {
@@ -45,6 +49,7 @@ void MenuScene::Load() {
 	if (background.loadFromFile("res/background.jpeg")) {
 		spriteBackground.setTexture(background);
 		spriteBackground.setPosition(0, 0);
+		spriteBackground.setScale({ scaleWidth, scaleHeight });
 	}
 	{
 

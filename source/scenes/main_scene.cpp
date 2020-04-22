@@ -62,16 +62,15 @@ static shared_ptr<Entity> exitButton; //Player Entity
 double baseWaveNum = 20;
 int enemySpawns = 1;
 
-int windowWidth;
-int windowHeight;
-
 int viewX;
 int viewY;
 void MainScene::Load() {
+	windowWidth = Options::instance()->launchWidth;
+	windowHeight = Options::instance()->launchHeight;
 	_paused = false;
 
-	windowWidth = Options::instance()->width;
-	windowHeight = Options::instance()->height;
+	float scaleWidth = windowWidth / 1600;
+	float scaleHeight = windowHeight / 900;
 
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
@@ -160,13 +159,13 @@ void MainScene::Load() {
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
-		backgroundSprite.setOrigin(800, 450);
-		backgroundSprite.setPosition((windowWidth* scale) / 2, (windowHeight * scale) / 2);
-		backgroundSprite.setScale(scale, scale);
+		backgroundSprite.setOrigin(0, 0);
+		backgroundSprite.setPosition(0,0);
+		backgroundSprite.setScale(scaleWidth * scale, scaleHeight * scale);
 
-		pauseMenu.setPosition({ -gameWidth, -gameHeight});
+		pauseMenu.setPosition({ -windowWidth, -windowHeight});
 		pauseMenu.setTexture(backgroundtexture);
-		pauseMenu.setOrigin({ 800,450 });
+		pauseMenu.setOrigin({ 0,0 });
 	}
 	if (!enemySheet.loadFromFile("res/enemySpritesheet.png")) {
 		cout << "exeption" << endl;
@@ -211,21 +210,19 @@ void MainScene::Load() {
 	Engine::GetWindow().setView(view); //sets window view to created view
 	//prevView.setCenter(view.getCenter());
 
-	pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
-
 	resumeButton = makeEntity();
 	resumeButton->addTag("resume");
-	resumeButton->setPosition({ -gameWidth, -gameHeight - 100});
+	resumeButton->setPosition({ -(windowWidth/2) , -(windowHeight / 2) - 100});
 	resumeButton->addComponent<MenuItemComponent>("resume");
 
 	restartButton = makeEntity();
 	restartButton->addTag("restart");
-	restartButton->setPosition({ -gameWidth, -gameHeight });
+	restartButton->setPosition({ -(windowWidth / 2) , -(windowHeight / 2) });
 	restartButton->addComponent<MenuItemComponent>("restart");
 
 	exitButton = makeEntity();
 	exitButton->addTag("home");
-	exitButton->setPosition({ -gameWidth, -gameHeight + 100 });
+	exitButton->setPosition({ -(windowWidth / 2) , -(windowHeight / 2) + 100 });
 	exitButton->addComponent<MenuItemComponent>("exit");
 
 	if (Options::instance()->musicOn) {
@@ -276,6 +273,7 @@ void MainScene::Update(const double& dt) {
 		clickCooldown -= dt;
 		music.setVolume(Options::instance()->volume);
 		sf::View currentView = Engine::GetWindow().getView();
+		//currentView.zoom(3.f);
 		auto playerSprite = player->get_components<SpriteComponent>()[0];
 		float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
 		float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
@@ -366,15 +364,16 @@ void MainScene::Update(const double& dt) {
 		resumeButton->update(dt);
 		restartButton->update(dt);
 		exitButton->update(dt);
+
+		sf::View pauseView = Engine::GetWindow().getView();
+		pauseView.setCenter({ -(windowWidth / 2), -(windowHeight/2) });
+		Engine::GetWindow().setView(pauseView);
 	}
 }
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
 	if (_paused) {
-		sf::View pauseView = Engine::GetWindow().getView();
-		pauseView.setCenter({ -gameWidth, -gameHeight});
-		Engine::GetWindow().setView(pauseView);
 		Renderer::queue(&pauseMenu);
 
 	}

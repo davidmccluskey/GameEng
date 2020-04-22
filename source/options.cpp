@@ -11,11 +11,14 @@ Options::Options(int v) : m_value(v)
 	effectsOn = 1;
 	width = 1280;
 	height = 720;
-
+	launchWidth = 1280;
+	launchHeight = 720;
 	moveLeft = 0;
 	moveRight = 3;
 	shootKey = 22;
 	pauseKey = 36;
+
+	
 }
 
 int Options::get_value()

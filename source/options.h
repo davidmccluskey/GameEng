@@ -26,6 +26,9 @@ public:
 	int moveRight;
 	int shootKey;
 	int pauseKey;
+
+	int launchWidth;
+	int launchHeight;
 };
 
 // Allocating and initializing GlobalClass's

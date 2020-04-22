@@ -27,7 +27,8 @@ void SettingsScreen::Load() {
 		auto back = makeEntity();
 		back->addTag("save");
 
-		back->setPosition({ gameWidth * 0.15, gameHeight * 0.9 });
+		//back->setPosition({(float) windowWidth * 0.15, (float)windowHeight * 0.9 });
+		back->setPosition(Vector2f(windowWidth * 0.15, windowHeight * 0.9));
 
 		auto s = back->addComponent<MenuItemComponent>("Back");
 		s->setSize(30, 0.7);
@@ -35,8 +36,9 @@ void SettingsScreen::Load() {
 	{
 		auto controls = makeEntity();
 		controls->addTag("controls");
+		controls->setPosition(Vector2f(windowWidth * 0.8, windowHeight * 0.9));
 
-		controls->setPosition({ gameWidth * 0.8, gameHeight * 0.9 });
+		//controls->setPosition({ gameWidth * 0.8, gameHeight * 0.9 });
 
 		auto sa = controls->addComponent<MenuItemComponent>("Controls");
 		sa->setSize(30, 0.7);
