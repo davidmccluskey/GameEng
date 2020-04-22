@@ -1,9 +1,8 @@
 #include "options.h"
 #include <fstream>
 
-Options::Options(int v)
+Options::Options(int v) : m_value(v)
 {
-	m_value = v;
 	volume = 50;
 	windowMode = 0;
 	musicOn = 1;
@@ -15,8 +14,6 @@ Options::Options(int v)
 	moveRight = 3;
 	shootKey = 22;
 	pauseKey = 36;
-
-
 }
 
 int Options::get_value()

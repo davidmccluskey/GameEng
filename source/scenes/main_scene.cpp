@@ -318,48 +318,47 @@ void MainScene::Update(const double& dt) {
 		str.resize(str.size() - 7);
 		scoreTextComponent->SetText(str);
 
-		//if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
-		//{
-		//	healthMultiplier = healthMultiplier + 0.2;
-		//	score.setScore(1000);
+		if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
+		{
+			healthMultiplier = healthMultiplier + 0.2;
+			score.setScore(1000);
 
-		//	if (baseWaveNum - 1 != 5) {
-		//		_wavetimer = baseWaveNum;
-		//		baseWaveNum -= 0.5;
-		//	}
-		//	else {
-		//		_wavetimer = 5;
-		//	}
-		//	int enemyCheck = enemySpawns;
-		//	_wavenumber++;
+			if (baseWaveNum - 1 != 5) {
+				_wavetimer = baseWaveNum;
+				baseWaveNum -= 0.5;
+			}
+			else {
+				_wavetimer = 5;
+			}
+			int enemyCheck = enemySpawns;
+			_wavenumber++;
 
-		//	if (enemySpawns + 1 != 10) {
-		//		if (_wavenumber % 2 == 0) {
-		//			enemySpawns++;
-		//		}
-		//	}
+			if (enemySpawns + 1 != 10) {
+				if (_wavenumber % 2 == 0) {
+					enemySpawns++;
+				}
+			}
 
-		//	string wavenum = to_string(_wavenumber);
-		//	wavenum = "Wave " + wavenum;
-		//	wavenum.resize(wavenum.size() - 7);
-		//	waveTextComponent->SetText(wavenum);
-		//	
-		//	for (int i = 0; i < enemySpawns; i++) {
-		//		int enemyType = rand() % 3 + 1;
-		//		switch (enemyType) {
-		//		case 1:
-		//			createEnemyHarpoon();
-		//			break;
-		//		case 2:
-		//			createEnemyOrb();
-		//			break;
-		//		case 3: 
-		//			createEnemySpike();
-		//			break;
-		//		}
-		//	}
-		//	cout << "spawned " << enemySpawns << endl;
-		//}
+			string wavenum = to_string(_wavenumber);
+			wavenum = "Wave " + wavenum;
+			waveTextComponent->SetText(wavenum);
+			
+			for (int i = 0; i < enemySpawns; i++) {
+				int enemyType = rand() % 3 + 1;
+				switch (enemyType) {
+				case 1:
+					createEnemyHarpoon();
+					break;
+				case 2:
+					createEnemyOrb();
+					break;
+				case 3: 
+					createEnemySpike();
+					break;
+				}
+			}
+			cout << "spawned " << enemySpawns << endl;
+		}
 		Scene::Update(dt);
 	}
 	else if (_paused) {

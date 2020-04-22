@@ -11,5 +11,5 @@ void Score::setScore(float score)
 }
 void Score::resetScore()
 {
-	_score = 0;
+	_score = -1000;
 }

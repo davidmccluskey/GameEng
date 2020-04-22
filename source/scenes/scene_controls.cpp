@@ -79,7 +79,7 @@ void ControlsScreen::Load() {
 
 void ControlsScreen::Update(const double& dt) {
 	clickCooldown -= dt;
-	
+
 	sf::Event event;
 	RenderWindow& window = Engine::GetWindow();
 	while (window.pollEvent(event)) {
@@ -99,4 +99,11 @@ void ControlsScreen::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
 	//player.reset();
 	Scene::UnLoad();
+}
+
+void ControlsScreen::iterate() {
+	for (int key = Keyboard::Key::A; key < Keyboard::Key::Return; key++)
+	{
+		
+	}
 }
