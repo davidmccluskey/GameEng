@@ -13,6 +13,8 @@ public:
 	static Options* instance();
 	void save();
 
+	std::string SFKeytoChar(int keycode);
+
 	int volume;
 	bool windowMode;
 	bool musicOn;

@@ -18,4 +18,5 @@ public:
     void setText(std::string inputText);
 
     void resolveClick();
+	void updateOption(int key);
 };

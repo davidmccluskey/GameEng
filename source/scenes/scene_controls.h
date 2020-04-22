@@ -12,4 +12,5 @@ public:
   void Update(const double& dt) override;
   void UnLoad();
   void iterate();
+  std::string SFKeytoChar(int keycode);
 };

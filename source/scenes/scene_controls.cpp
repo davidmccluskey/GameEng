@@ -31,11 +31,15 @@ void ControlsScreen::Load() {
 	{
 		auto txt = makeEntity();
 		auto t = txt->addComponent<TextComponent>("Move Left");
+
 		t->SetSize(30);
 		t->SetPosition({ gameWidth * 0.05, 100 });
 
 		auto moveLeft = makeEntity();
-		string str = to_string(Options::instance()->moveLeft);
+		moveLeft->addTag("moveLeft");
+
+		int key = Options::instance()->moveLeft;
+		string str = Options::instance()->SFKeytoChar(key);
 		auto crc = moveLeft->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
 		crc->setPosition({ gameWidth * 0.4, 100 });
 	}
@@ -45,9 +49,11 @@ void ControlsScreen::Load() {
 		t->SetSize(30);
 		t->SetPosition({ gameWidth * 0.05, 200 });
 
-		auto moveLeft = makeEntity();
-		string str = to_string(Options::instance()->moveRight);
-		auto crc = moveLeft->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
+		auto moveRight = makeEntity();
+		moveRight->addTag("moveRight");
+		int key = Options::instance()->moveRight;
+		string str = Options::instance()->SFKeytoChar(key);
+		auto crc = moveRight->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
 		crc->setPosition({ gameWidth * 0.4, 200 });
 	}
 	{
@@ -56,9 +62,11 @@ void ControlsScreen::Load() {
 		t->SetSize(30);
 		t->SetPosition({ gameWidth * 0.05, 300 });
 
-		auto moveLeft = makeEntity();
-		string str = to_string(Options::instance()->shootKey);
-		auto crc = moveLeft->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
+		auto shoot = makeEntity();
+		shoot->addTag("shootKey");
+		int key = Options::instance()->shootKey;
+		string str = Options::instance()->SFKeytoChar(key);
+		auto crc = shoot->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
 		crc->setPosition({ gameWidth * 0.4, 300 });
 	}
 	{
@@ -67,11 +75,12 @@ void ControlsScreen::Load() {
 		t->SetSize(30);
 		t->SetPosition({ gameWidth * 0.05, 400 });
 
-		auto moveLeft = makeEntity();
+		auto pauseKey = makeEntity();
+		pauseKey->addTag("pauseKey");
 		//string str = to_string();
-		char character = char(Options::instance()->pauseKey + 65);
-		string str = to_string(character);
-		auto crc = moveLeft->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
+		int key = Options::instance()->pauseKey;
+		string str = Options::instance()->SFKeytoChar(key);
+		auto crc = pauseKey->addComponent<ControlRemapComponent>(str, Vector2f(100, 50));
 		crc->setPosition({ gameWidth * 0.4, 400 });
 	}
 	setLoaded(true);
@@ -104,6 +113,6 @@ void ControlsScreen::UnLoad() {
 void ControlsScreen::iterate() {
 	for (int key = Keyboard::Key::A; key < Keyboard::Key::Return; key++)
 	{
-		
+
 	}
 }
