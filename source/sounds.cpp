@@ -18,6 +18,10 @@ Sounds::Sounds(int v) : m_value(v)
 	{
 		blastersound.setBuffer(blasterbuffer);
 	}
+	if (errorbuffer.loadFromFile("res/soundFX/error.wav"))
+	{
+		errorsound.setBuffer(errorbuffer);
+	}
 
 }
 
@@ -43,13 +47,18 @@ void Sounds::playBlaster()
 }
 void Sounds::playPlayerHit()
 {
-	playerhitsound.setVolume(Options::instance()->volume / 5);
+	playerhitsound.setVolume(Options::instance()->volume / 3);
 	playerhitsound.play();
 }
 void Sounds::playEnemyHit()
 {
 	enemyhitsounds.setVolume(Options::instance()->volume / 5);
 	enemyhitsounds.play();
+}
+void Sounds::playError()
+{
+	errorsound.setVolume(Options::instance()->volume);
+	errorsound.play();
 }
 Sounds* Sounds::s_instance = 0;
 

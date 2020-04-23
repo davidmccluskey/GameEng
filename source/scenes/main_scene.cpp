@@ -22,21 +22,18 @@
 #include "../components/cmp_menu.h"
 #include "../score.h"
 #include "../options.h"
+#include "../texture.h"
 
 using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player; //Player Entity
-sf::Texture spritesheet; //Player spritesheet
 sf::Sprite playerSprite; //Player sprite
 
-sf::Texture enemySheet;
 sf::Sprite enemySprite;
 
-sf::Texture asteroidSheet;
 sf::Sprite asteroidSprite;
 
-Texture backgroundtexture;	//Background spritesheet
 Sprite backgroundSprite;	//Background sprite
 static shared_ptr<Entity> walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
@@ -135,19 +132,19 @@ void MainScene::Load() {
 		cout << "No controller connected" << endl;
 
 	}
-	//Loads in player spritesheet and background sprite
-	if (spritesheet.loadFromFile("res/SpriteSheet.png")) {
+
+
+	{
+		//Loads in player spritesheet and background sprite
 		player = makeEntity();				//create player entity
 		player->setPosition({ (gameWidth * scale) / 2, (gameHeight * scale) / 2 });
-
-
 		//sets player position to roughly centre screen
 		auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement
 		player->addTag("player");
 
-		playerSprite.setTexture(spritesheet);
+		playerSprite.setTexture(Textures::instance()->getPlayerStates());
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
 		auto playerPhysics = player->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &player);
@@ -156,27 +153,22 @@ void MainScene::Load() {
 		s->getSprite().setOrigin(800, 800);
 		s->getSprite().setScale({ 0.05, 0.05 }); //scales down as texture is very large
 	}
-	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
-		backgroundSprite.setTexture(backgroundtexture);
+
+	{
+		backgroundSprite.setTexture(Textures::instance()->getBackground());
 		backgroundSprite.setOrigin(0, 0);
 		backgroundSprite.setPosition(0, 0);
 		backgroundSprite.setScale(scaleWidth * scale, scaleHeight * scale);
 
 		pauseMenu.setPosition({ -windowWidth, -windowHeight });
-		pauseMenu.setTexture(backgroundtexture);
+		pauseMenu.setTexture(Textures::instance()->getBackground());
 		pauseMenu.setOrigin({ 0,0 });
 		pauseMenu.setScale(scaleWidth, scaleHeight);
 	}
-	if (!enemySheet.loadFromFile("res/enemySpritesheet.png")) {
-		cout << "exeption" << endl;
-	}
 
 
-
-
-	if (asteroidSheet.loadFromFile("res/asteroid_sheet.png"))
 	{
-		asteroidSprite.setTexture(asteroidSheet);
+		asteroidSprite.setTexture(Textures::instance()->getAstroid());
 		auto asteroid = makeEntity();
 		asteroid->setPosition({ 800,800 });
 		asteroid->addTag("asteroid");
@@ -188,10 +180,10 @@ void MainScene::Load() {
 		s->getSprite().setScale({ 0.5, 0.5 });
 
 		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 160.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
-		//i->impulse({ 10,10 });
-		//i->setRestitution(1);
-
 	}
+
+	//i->impulse({ 10,10 });
+	//i->setRestitution(1);
 	//Simulate long loading times UNCOMMENT FOR RELEASE
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << " Main scene Load Done" << endl;
@@ -383,7 +375,7 @@ void MainScene::Render() {
 
 void MainScene::createEnemyOrb() {
 	_enemyNum++;
-	enemySprite.setTexture(enemySheet);
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
@@ -417,13 +409,13 @@ void MainScene::createEnemyOrb() {
 
 void MainScene::createEnemyHarpoon() {
 	_enemyNum++;
-	enemySprite.setTexture(enemySheet);
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth*scale) - 100);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale)- 100);
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
 	int yVal = yDist(generator);
 	cout << xVal << ", " << yVal << endl;
 
@@ -450,7 +442,7 @@ void MainScene::createEnemyHarpoon() {
 void MainScene::createEnemySpike() {
 	_enemyNum++;
 
-	enemySprite.setTexture(enemySheet);
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);

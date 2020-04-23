@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 class Sounds {
-public:
+private:
 	int m_value;
 	static Sounds* s_instance;
 	Sounds(int v);
@@ -17,6 +17,9 @@ public:
 
 	SoundBuffer enemyhitbuffer;
 	Sound enemyhitsounds;
+
+	SoundBuffer errorbuffer;
+	Sound errorsound;
 public:
 	int get_value();
 	void set_value(int v);
@@ -25,6 +28,8 @@ public:
 	void playBlaster();
 	void playPlayerHit();
 	void playEnemyHit();
+
+	void playError();
 
 
 

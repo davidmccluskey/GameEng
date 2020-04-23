@@ -6,17 +6,18 @@
 #include "../game.h"
 #include <fstream>
 #include "../options.h"
+#include "../texture.h"
+
 using namespace std;
 using namespace sf;
 // Constructor
-Texture textureMenu;
 Sprite spriteMenu;
 
 MenuItemComponent::MenuItemComponent(Entity* p, std::string Text) : Component(p)
 {
 	auto s = _parent->addComponent<SpriteComponent>();
-	if (textureMenu.loadFromFile("res/menu-item.png")) {
-		spriteMenu.setTexture(textureMenu);
+	
+		spriteMenu.setTexture(Textures::instance()->getMenuItem());
 		s->setSprite<Sprite>(spriteMenu);
 		s->getSprite().setOrigin(200, 25);
 
@@ -25,7 +26,7 @@ MenuItemComponent::MenuItemComponent(Entity* p, std::string Text) : Component(p)
 		txt->SetOrigin({ (txtRef.getLocalBounds().getSize().x / 2), (txtRef.getLocalBounds().getSize().y / 2) });
 		txt->SetPosition({ _parent->getPosition().x,_parent->getPosition().y });
 		txt->SetSize(40);
-	}
+	
 
 }
 

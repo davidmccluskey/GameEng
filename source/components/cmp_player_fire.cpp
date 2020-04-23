@@ -14,12 +14,11 @@
 #include <SFML\Audio\Sound.hpp>
 #include "../options.h"
 #include "../sounds.h"
+#include "../texture.cpp"
 
 using namespace sf;
 using namespace std;
-sf::Texture sprite;
 sf::Sprite bulletSprite;
-Texture beamSprite;
 Sprite beam;
 
 unsigned seed;
@@ -27,8 +26,6 @@ unsigned seed;
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
 	seed = std::chrono::system_clock::now().time_since_epoch().count();
-	sprite.loadFromFile("res/bullet.png");
-	beamSprite.loadFromFile("res/brimstone.png");
 }
 // Update
 void PlayerFireComponent::update(double dt)
@@ -138,7 +135,7 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 		float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
 		b->setDamage(_damage);
 		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		bulletSprite.setTexture(sprite);
+		bulletSprite.setTexture(Textures::instance()->getBulletSheet());
 		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
@@ -181,7 +178,7 @@ void PlayerFireComponent::fireTriple(float rotation) {
 		auto b = bullet->addComponent<BulletComponent>();
 		b->setDamage(_damage);
 		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		bulletSprite.setTexture(sprite);
+		bulletSprite.setTexture(Textures::instance()->getBulletSheet());
 		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
@@ -204,7 +201,7 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	auto b = bullet->addComponent<BulletComponent>();
 	b->setDamage(_damage);
 	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	bulletSprite.setTexture(sprite);
+	bulletSprite.setTexture(Textures::instance()->getBulletSheet());
 	bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object

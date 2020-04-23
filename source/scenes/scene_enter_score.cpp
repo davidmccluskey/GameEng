@@ -4,6 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 #include "../components/cmp_menu.h"
+#include "../sounds.h"
 
 using namespace std;
 using namespace sf;
@@ -78,6 +79,7 @@ void EnterScoreScreen::Update(const double& dt) {
 					nameTextComponent->SetText(name);
 				}
 				else{
+					Sounds::instance()->playError();
 					cout << "too long" << endl;
 				}
 
