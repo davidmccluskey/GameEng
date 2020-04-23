@@ -79,11 +79,11 @@ void MenuScene::Load() {
 
 	}
 	{
-		auto txt = makeEntity();
-		auto t = txt->addComponent<TextComponent>("Gunthrusters");
-		t->SetPosition({ 70, gameHeight * 0.10 });
-		t->SetSize(60);
-		t->SetColour(sf::Color::White);
+		//auto txt = makeEntity();
+		//auto t = txt->addComponent<TextComponent>("Gunthrusters");
+		//t->SetPosition({ 70, gameHeight * 0.10 });
+		//t->SetSize(60);
+		//t->SetColour(sf::Color::White);
 
 	}
 	setLoaded(true);

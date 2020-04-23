@@ -23,12 +23,14 @@ Sprite beam;
 sf::SoundBuffer buffer;
 sf::Sound sound;
 
+unsigned seed;
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
+	seed = std::chrono::system_clock::now().time_since_epoch().count();
 	if (buffer.loadFromFile("res/soundFX/blaster.wav"))
 	{
-		cout << "sound loaded" << endl;
+		cout << "blaster sound loaded" << endl;
 	}
 	sprite.loadFromFile("res/bullet.png");
 	beamSprite.loadFromFile("res/brimstone.png");
@@ -129,21 +131,13 @@ void PlayerFireComponent::fireBurst(float rotation) {
 void PlayerFireComponent::fireShotgun(float rotation) {
 
 	for (int i = 0; i < 5; i++) {
-
+		std::default_random_engine generator(seed);
+		std::uniform_int_distribution<int> xDist(-10, 10);
+		int spacing = xDist(generator);
 		//auto bullet = _parent->scene->makeEntity();
-		float spacing = rand() % 20 + (-10);
+		//float spacing = rand() % 20 + (-10);
+
 		float speed = rand() % (30 - 5 + 1) + 5;
-		//bullet->setPosition({ _parent->getPosition().x, _parent->getPosition().y});    //Sets bullet position to player position
-		//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-		//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-		//b->setSpeed(speed);
-		//bulletSprite.setTexture(sprite);
-		//bulletSprite.setScale({ 0.1f, 0.1f});  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-		//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-		//bulletSprite.setPosition(bullet->getPosition());   //sets position of sprite to be same as object
-		//s->setSprite<Sprite>(bulletSprite);
-		//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-		//bullet->setRotation(inverse + spacing);
 
 		auto playerSprite = _parent->get_components<SpriteComponent>()[0];
 		auto bullet = _parent->scene->makeEntity();

@@ -28,6 +28,7 @@ float windowHeight;
 int main() {
 	ifstream inFile;
 	inFile.open("options.txt");
+	srand(time(0));
 	if (!inFile) {
 		cerr << "Unable to open file datafile.txt";
 		//exit(1);   // call system to stop
