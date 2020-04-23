@@ -11,6 +11,7 @@ TextComponent::TextComponent(Entity* const p, const std::string& str)
   _text.setString(_string);
   _font = Resources::get<sf::Font>("spaceranger.ttf");
   _text.setFont(*_font);
+  //_text.setOrigin({ (_text.getLocalBounds().getSize().x / 2), (_text.getLocalBounds().getSize().y / 2) });
 }
 
 void TextComponent::SetText(const std::string& str) {
@@ -22,6 +23,11 @@ void TextComponent::SetPosition(sf::Vector2f coords) {
     _text.setPosition(coords);
 }
 
+void TextComponent::SetOrigin(sf::Vector2f origin)
+{
+    _text.setOrigin(origin);
+}
+
 void TextComponent::SetSize(float size)
 {
     _text.setCharacterSize(size);
@@ -30,4 +36,8 @@ void TextComponent::SetSize(float size)
 void TextComponent::SetColour(sf::Color colour)
 {
     _text.setColor(colour);
+}
+
+sf::Text TextComponent::getText() {
+    return _text;
 }

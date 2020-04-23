@@ -86,36 +86,73 @@ void Engine::Render(RenderWindow& window) {
 }
 
 void Engine::Start(unsigned int width, unsigned int height,
-                   const std::string& gameName, Scene* scn) {
-  RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar | sf::Style::Close);
-  _gameName = gameName;
-  _window = &window;
-  Renderer::initialise(window);
-  Physics::initialise();
-  ChangeScene(scn);
-  while (window.isOpen()) {
-    Event event;
-    //while (window.pollEvent(event)) {
-    //  if (event.type == Event::Closed) {
-    //    window.close();
-    //  }
-    //}
-    if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-      //window.close();
+                   const std::string& gameName, Scene* scn, bool fullscreen) {
+    if (fullscreen == 0) {
+        RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar | sf::Style::Close);
+        _gameName = gameName;
+        _window = &window;
+        Renderer::initialise(window);
+        Physics::initialise();
+        ChangeScene(scn);
+
+        while (window.isOpen()) {
+            Event event;
+            //while (window.pollEvent(event)) {
+            //  if (event.type == Event::Closed) {
+            //    window.close();
+            //  }
+            //}
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+                //window.close();
+            }
+
+            window.clear();
+            Update();
+            Render(window);
+            window.display();
+        }
+        if (_activeScene != nullptr) {
+            _activeScene->UnLoad();
+            _activeScene = nullptr;
+        }
+        Physics::shutdown();
+        window.close();
+        Renderer::shutdown();
+    }
+    else {
+        RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar | sf::Style::Close | sf::Style::Fullscreen);
+        _gameName = gameName;
+        _window = &window;
+        Renderer::initialise(window);
+        Physics::initialise();
+        ChangeScene(scn);
+
+        while (window.isOpen()) {
+            Event event;
+            //while (window.pollEvent(event)) {
+            //  if (event.type == Event::Closed) {
+            //    window.close();
+            //  }
+            //}
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+                //window.close();
+            }
+
+            window.clear();
+            Update();
+            Render(window);
+            window.display();
+        }
+        if (_activeScene != nullptr) {
+            _activeScene->UnLoad();
+            _activeScene = nullptr;
+        }
+        Physics::shutdown();
+        window.close();
+        Renderer::shutdown();
     }
 
-    window.clear();
-    Update();
-    Render(window);
-    window.display();
-  }
-  if (_activeScene != nullptr) {
-    _activeScene->UnLoad();
-    _activeScene = nullptr;
-  }
-  Physics::shutdown();
-  window.close();
-  Renderer::shutdown();
+
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {

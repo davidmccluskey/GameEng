@@ -23,6 +23,8 @@ public:
 
   void SetColour(sf::Color colour);
 
+  sf::Text getText();
+
 protected:
   std::shared_ptr<sf::Font> _font;
   std::string _string;

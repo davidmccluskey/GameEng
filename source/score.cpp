@@ -9,3 +9,7 @@ void Score::setScore(float score)
 {
 	_score += score;
 }
+void Score::resetScore()
+{
+	_score = -1000;
+}

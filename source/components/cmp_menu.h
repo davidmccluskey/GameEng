@@ -14,6 +14,6 @@ public:
 
     void update(double dt) override;
     void resolveClick();
-	void setSize(float size);
+	void setSize(float size, float windowSize);
     void render() override;
 };

@@ -54,6 +54,10 @@ void EnterScoreScreen::Update(const double& dt) {
 		}
 		if (event.type == sf::Event::TextEntered)
 		{
+			cout << event.text.unicode << endl;
+			Uint32 unicodeChar = event.text.unicode;
+			const char* s = u8"\u0444";
+
 			if (event.text.unicode == '\b') {
 				if (name.size() != 0) {
 					name.resize(name.size() - 1);

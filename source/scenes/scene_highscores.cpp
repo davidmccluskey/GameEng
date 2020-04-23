@@ -11,13 +11,11 @@ using namespace sf;
 
 void HighScoreScene::Load() {
 	_paused = false;
-	View view = Engine::GetWindow().getView();
-	view.setCenter({ gameWidth / 2, gameHeight / 2 });
-	Engine::GetWindow().setView(view);
 	auto back = makeEntity();
 	back->addTag("back");
 
-	back->setPosition({ gameWidth * 0.15, gameHeight * 0.9 });
+	
+	back->setPosition(Vector2f(windowWidth * 0.15, windowHeight * 0.9));
 	auto s = back->addComponent<MenuItemComponent>("Back");
 
 	ifstream inFile;

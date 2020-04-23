@@ -22,6 +22,8 @@
 #include "../components/cmp_menu.h"
 #include "../score.h"
 
+#include "../options.h"
+
 using namespace std;
 using namespace sf;
 
@@ -60,8 +62,15 @@ static shared_ptr<Entity> exitButton; //Player Entity
 double baseWaveNum = 20;
 int enemySpawns = 1;
 
+int viewX;
+int viewY;
 void MainScene::Load() {
+	windowWidth = Options::instance()->launchWidth;
+	windowHeight = Options::instance()->launchHeight;
 	_paused = false;
+
+	float scaleWidth = windowWidth / 1600;
+	float scaleHeight = windowHeight / 900;
 
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
 	cout << "" << endl;
@@ -150,13 +159,13 @@ void MainScene::Load() {
 	}
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
-		backgroundSprite.setOrigin(800, 450);
-		backgroundSprite.setPosition((gameWidth * scale) / 2, (gameHeight * scale) / 2);
-		backgroundSprite.setScale(scale, scale);
+		backgroundSprite.setOrigin(0, 0);
+		backgroundSprite.setPosition(0,0);
+		backgroundSprite.setScale(scaleWidth * scale, scaleHeight * scale);
 
-		pauseMenu.setPosition({ -1000, -1000 });
+		pauseMenu.setPosition({ -windowWidth, -windowHeight});
 		pauseMenu.setTexture(backgroundtexture);
-		pauseMenu.setOrigin({ 800,450 });
+		pauseMenu.setOrigin({ 0,0 });
 	}
 	if (!enemySheet.loadFromFile("res/enemySpritesheet.png")) {
 		cout << "exeption" << endl;
@@ -199,39 +208,39 @@ void MainScene::Load() {
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
-
-	pauseMenu.setOrigin(gameWidth / 2, gameHeight / 2);
+	//prevView.setCenter(view.getCenter());
 
 	resumeButton = makeEntity();
 	resumeButton->addTag("resume");
-	resumeButton->setPosition({ -1000, -1100 });
+	resumeButton->setPosition({ -(windowWidth/2) , -(windowHeight / 2) - 100});
 	resumeButton->addComponent<MenuItemComponent>("resume");
 
 	restartButton = makeEntity();
 	restartButton->addTag("restart");
-	restartButton->setPosition({ -1000, -1000 });
+	restartButton->setPosition({ -(windowWidth / 2) , -(windowHeight / 2) });
 	restartButton->addComponent<MenuItemComponent>("restart");
 
 	exitButton = makeEntity();
 	exitButton->addTag("home");
-	exitButton->setPosition({ -1000, -900 });
+	exitButton->setPosition({ -(windowWidth / 2) , -(windowHeight / 2) + 100 });
 	exitButton->addComponent<MenuItemComponent>("exit");
 
-	if (music.getStatus() != 2)
-	{
-		if (!music.openFromFile("res/soundFX/main_music.WAV")) {
-			cout << "error loading music" << endl;
-		}
-		else {
-			music.setVolume(30);
-			music.play();
-			music.setLoop(true);
+	if (Options::instance()->musicOn) {
+		if (music.getStatus() != 2)
+		{
+			if (!music.openFromFile("res/soundFX/main_music.WAV")) {
+				cout << "error loading music" << endl;
+			}
+			else {
+				music.setVolume(Options::instance()->volume);
+				music.play();
+				music.setLoop(true);
+			}
 		}
 	}
 	createEnemyOrb();
 
 	setLoaded(true);
-
 
 }
 
@@ -255,15 +264,16 @@ void MainScene::Update(const double& dt) {
 
 	_keyboardCooldown -= dt;
 	if (_keyboardCooldown < 0) {
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->pauseKey))) {
 			_paused = !_paused;
 			_keyboardCooldown = 0.5;
 		}
 	}
 	if (!_paused) {
 		clickCooldown -= dt;
-		music.setVolume(50);
+		music.setVolume(Options::instance()->volume);
 		sf::View currentView = Engine::GetWindow().getView();
+		//currentView.zoom(3.f);
 		auto playerSprite = player->get_components<SpriteComponent>()[0];
 		float leftCheck = playerSprite->getSprite().getPosition().x - (currentView.getSize().x / 2);
 		float rightCheck = playerSprite->getSprite().getPosition().x + (currentView.getSize().x / 2);
@@ -274,9 +284,18 @@ void MainScene::Update(const double& dt) {
 
 		if (leftCheck >= 0 && rightCheck <= (gameWidth * scale)) {
 			currentView.setCenter(playerSprite->getSprite().getPosition().x, currentView.getCenter().y);
+			viewX = currentView.getCenter().x;
+		}
+		else {
+			currentView.setCenter(viewX, viewY);
 		}
 		if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
 			currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+			viewY = currentView.getCenter().y;
+			//prevView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
+		}
+		else {
+			currentView.setCenter(viewX, viewY);
 		}
 
 		Engine::GetWindow().setView(currentView);
@@ -297,64 +316,64 @@ void MainScene::Update(const double& dt) {
 		str.resize(str.size() - 7);
 		scoreTextComponent->SetText(str);
 
-		//if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
-		//{
-		//	healthMultiplier = healthMultiplier + 0.2;
-		//	score.setScore(1000);
+		if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
+		{
+			healthMultiplier = healthMultiplier + 0.2;
+			score.setScore(1000);
 
-		//	if (baseWaveNum - 1 != 5) {
-		//		_wavetimer = baseWaveNum;
-		//		baseWaveNum -= 0.5;
-		//	}
-		//	else {
-		//		_wavetimer = 5;
-		//	}
-		//	int enemyCheck = enemySpawns;
-		//	_wavenumber++;
+			if (baseWaveNum - 1 != 5) {
+				_wavetimer = baseWaveNum;
+				baseWaveNum -= 0.5;
+			}
+			else {
+				_wavetimer = 5;
+			}
+			int enemyCheck = enemySpawns;
+			_wavenumber++;
 
-		//	if (enemySpawns + 1 != 10) {
-		//		if (_wavenumber % 2 == 0) {
-		//			enemySpawns++;
-		//		}
-		//	}
+			if (enemySpawns + 1 != 10) {
+				if (_wavenumber % 2 == 0) {
+					enemySpawns++;
+				}
+			}
 
-		//	string wavenum = to_string(_wavenumber);
-		//	wavenum = "Wave " + wavenum;
-		//	wavenum.resize(wavenum.size() - 7);
-		//	waveTextComponent->SetText(wavenum);
-		//	
-		//	for (int i = 0; i < enemySpawns; i++) {
-		//		int enemyType = rand() % 3 + 1;
-		//		switch (enemyType) {
-		//		case 1:
-		//			createEnemyHarpoon();
-		//			break;
-		//		case 2:
-		//			createEnemyOrb();
-		//			break;
-		//		case 3: 
-		//			createEnemySpike();
-		//			break;
-		//		}
-		//	}
-		//	cout << "spawned " << enemySpawns << endl;
-		//}
+			string wavenum = to_string(_wavenumber);
+			wavenum = "Wave " + wavenum;
+			waveTextComponent->SetText(wavenum);
+			
+			for (int i = 0; i < enemySpawns; i++) {
+				int enemyType = rand() % 3 + 1;
+				switch (enemyType) {
+				case 1:
+					createEnemyHarpoon();
+					break;
+				case 2:
+					createEnemyOrb();
+					break;
+				case 3: 
+					createEnemySpike();
+					break;
+				}
+			}
+			cout << "spawned " << enemySpawns << endl;
+		}
 		Scene::Update(dt);
 	}
 	else if (_paused) {
-		music.setVolume(25);
+		music.setVolume(Options::instance()->volume / 2);
 		resumeButton->update(dt);
 		restartButton->update(dt);
 		exitButton->update(dt);
+
+		sf::View pauseView = Engine::GetWindow().getView();
+		pauseView.setCenter({ -(windowWidth / 2), -(windowHeight/2) });
+		Engine::GetWindow().setView(pauseView);
 	}
 }
 
 void MainScene::Render() {
 	Renderer::queue(&backgroundSprite);
 	if (_paused) {
-		sf::View pauseView = Engine::GetWindow().getView();
-		pauseView.setCenter({ -1000, -1000 });
-		Engine::GetWindow().setView(pauseView);
 		Renderer::queue(&pauseMenu);
 
 	}
@@ -369,9 +388,9 @@ void MainScene::createEnemyOrb() {
 	random_device dev;
 	default_random_engine engine(dev());
 	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x * scale);
+		gameHeight * scale - 100);
 	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y* scale);
+		gameWidth * scale - 100);
 
 
 	auto enemy = makeEntity();

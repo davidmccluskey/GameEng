@@ -8,6 +8,7 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_menu.h"
 #include <SFML\Audio\Music.hpp>
+#include "../options.h"
 
 using namespace std;
 using namespace sf;
@@ -15,30 +16,40 @@ using namespace sf;
 Texture background;
 Sprite spriteBackground;
 
+
+
 void MenuScene::Load() {
+	View view = Engine::GetWindow().getDefaultView();
+	//View view;
+	//view.setSize(gameWidth / 3, gameHeight / 3);
+	//if (_paused == true) {
+	//	view.zoom(1);
+	//}
 	_paused = false;
-	View view = Engine::GetWindow().getView();
-	view.setCenter({ gameWidth / 2, gameHeight / 2 });
+
+	float scaleWidth = windowWidth/1600;
+	float scaleHeight = windowHeight/900;
+	//view.setCenter({windowWidth / 2, windowHeight / 2 });
 	Engine::GetWindow().setView(view);
 
+	if (Options::instance()->musicOn == true) {
+		if (music.getStatus() != 2)
+		{
+			if (!music.openFromFile("res/soundFX/menu_music.WAV")) {
+				cout << "error loading music" << endl;
+			}
+			else {
+				music.setVolume(Options::instance()->volume);
+				music.play();
 
-	if (music.getStatus() != 2)
-	{
-		if (!music.openFromFile("res/soundFX/menu_music.WAV")) {
-			cout << "error loading music" << endl;
-		}
-		else {
-			music.setVolume(30);
-			music.play();
-
+			}
 		}
 	}
-
-
 	cout << "Menu Load \n";
 	if (background.loadFromFile("res/background.jpeg")) {
 		spriteBackground.setTexture(background);
 		spriteBackground.setPosition(0, 0);
+		spriteBackground.setScale({ scaleWidth, scaleHeight });
 	}
 	{
 
@@ -108,4 +119,10 @@ void MenuScene::Render()
 {
 	Renderer::queue(&spriteBackground);
 	Scene::Render();
+}
+
+void MenuScene::UnLoad() {
+	cout << "Scene 1 Unload" << endl;
+	//player.reset();
+	Scene::UnLoad();
 }
