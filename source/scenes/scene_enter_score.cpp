@@ -12,12 +12,11 @@ static shared_ptr<Entity> nameText;
 static shared_ptr<TextComponent> nameTextComponent;
 
 void EnterScoreScreen::Load() {
-	View view = Engine::GetWindow().getView();
-	view.setCenter({ gameWidth / 2, gameHeight / 2 });
+	View view = Engine::GetWindow().getDefaultView();
 	Engine::GetWindow().setView(view);
 	auto back = makeEntity();
 	back->addTag("enter score");
-	back->setPosition({ gameWidth * 0.5, gameHeight * 0.8 });
+	back->setPosition(Vector2f( windowWidth * 0.5, windowHeight * 0.8 ));
 
 	auto s = back->addComponent<MenuItemComponent>("Enter");
 
@@ -26,19 +25,19 @@ void EnterScoreScreen::Load() {
 		auto txt = makeEntity();
 		auto t = txt->addComponent<TextComponent>(
 			"Please enter your name");
-		t->SetPosition({ gameWidth / 2 - 200, 200 });
+		t->SetPosition({ windowWidth / 2 - 200, 200 });
 	}
 	{
 		auto txt = makeEntity();
 		string str = to_string(score.getScore());
 		str.resize(str.size() - 7);
 		auto t = txt->addComponent<TextComponent>("Final Score: " + str);
-		t->SetPosition({ gameWidth / 2 - 100, 100 });
+		t->SetPosition({ windowWidth / 2 - 100, 100 });
 	}
 	nameText = makeEntity();
 	nameTextComponent = nameText->addComponent<TextComponent>(
 		"");
-	nameTextComponent->SetPosition({ gameWidth / 2 - 200, 300 });
+	nameTextComponent->SetPosition({ windowWidth / 2 - 200, 300 });
 	nameTextComponent->SetSize(70);
 	setLoaded(true);
 }

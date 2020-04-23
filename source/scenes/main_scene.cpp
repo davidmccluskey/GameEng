@@ -21,7 +21,6 @@
 #include "../components/enemy_states.h"
 #include "../components/cmp_menu.h"
 #include "../score.h"
-
 #include "../options.h"
 
 using namespace std;
@@ -67,7 +66,7 @@ int viewY;
 void MainScene::Load() {
 	windowWidth = Options::instance()->launchWidth;
 	windowHeight = Options::instance()->launchHeight;
-	_paused = false;
+	reset();
 
 	float scaleWidth = windowWidth / 1600;
 	float scaleHeight = windowHeight / 900;
@@ -160,12 +159,13 @@ void MainScene::Load() {
 	if (backgroundtexture.loadFromFile("res/background.jpeg")) {
 		backgroundSprite.setTexture(backgroundtexture);
 		backgroundSprite.setOrigin(0, 0);
-		backgroundSprite.setPosition(0,0);
+		backgroundSprite.setPosition(0, 0);
 		backgroundSprite.setScale(scaleWidth * scale, scaleHeight * scale);
 
-		pauseMenu.setPosition({ -windowWidth, -windowHeight});
+		pauseMenu.setPosition({ -windowWidth, -windowHeight });
 		pauseMenu.setTexture(backgroundtexture);
 		pauseMenu.setOrigin({ 0,0 });
+		pauseMenu.setScale(scaleWidth, scaleHeight);
 	}
 	if (!enemySheet.loadFromFile("res/enemySpritesheet.png")) {
 		cout << "exeption" << endl;
@@ -212,7 +212,7 @@ void MainScene::Load() {
 
 	resumeButton = makeEntity();
 	resumeButton->addTag("resume");
-	resumeButton->setPosition({ -(windowWidth/2) , -(windowHeight / 2) - 100});
+	resumeButton->setPosition({ -(windowWidth / 2) , -(windowHeight / 2) - 100 });
 	resumeButton->addComponent<MenuItemComponent>("resume");
 
 	restartButton = makeEntity();
@@ -255,11 +255,11 @@ void MainScene::Update(const double& dt) {
 	// catch the resize events
 	// catch the resize events
 	sf::Event event;
-	RenderWindow &window = Engine::GetWindow();
-    while (window.pollEvent(event)) {
-	  if (event.type == Event::Closed) {
-	    window.close();
-	  }
+	RenderWindow& window = Engine::GetWindow();
+	while (window.pollEvent(event)) {
+		if (event.type == Event::Closed) {
+			window.close();
+		}
 	}
 
 	_keyboardCooldown -= dt;
@@ -316,7 +316,7 @@ void MainScene::Update(const double& dt) {
 		str.resize(str.size() - 7);
 		scoreTextComponent->SetText(str);
 
-		if (_wavetimer < 0 || _enemyNum <=0)//SPAWNING WAVES
+		if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
 		{
 			healthMultiplier = healthMultiplier + 0.2;
 			score.setScore(1000);
@@ -340,7 +340,7 @@ void MainScene::Update(const double& dt) {
 			string wavenum = to_string(_wavenumber);
 			wavenum = "Wave " + wavenum;
 			waveTextComponent->SetText(wavenum);
-			
+
 			for (int i = 0; i < enemySpawns; i++) {
 				int enemyType = rand() % 3 + 1;
 				switch (enemyType) {
@@ -350,7 +350,7 @@ void MainScene::Update(const double& dt) {
 				case 2:
 					createEnemyOrb();
 					break;
-				case 3: 
+				case 3:
 					createEnemySpike();
 					break;
 				}
@@ -365,8 +365,8 @@ void MainScene::Update(const double& dt) {
 		restartButton->update(dt);
 		exitButton->update(dt);
 
-		sf::View pauseView = Engine::GetWindow().getView();
-		pauseView.setCenter({ -(windowWidth / 2), -(windowHeight/2) });
+		sf::View pauseView = Engine::GetWindow().getDefaultView();
+		pauseView.setCenter({ -(windowWidth / 2), -(windowHeight / 2) });
 		Engine::GetWindow().setView(pauseView);
 	}
 }
@@ -384,29 +384,29 @@ void MainScene::Render() {
 void MainScene::createEnemyOrb() {
 	_enemyNum++;
 	enemySprite.setTexture(enemySheet);
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	int xVal = xDist(generator);
 
-	random_device dev;
-	default_random_engine engine(dev());
-	uniform_real_distribution<float> x_dist(0.0f,
-		gameHeight * scale - 100);
-	uniform_real_distribution<float> y_dist(0.0f,
-		gameWidth * scale - 100);
-
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	int yVal = yDist(generator);
+	cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
 
-	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(800, 800);
 	e->getSprite().setScale({ 0.05, 0.05 });
-	
+
 	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
-	
-	
+
+
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2 * healthMultiplier);
 
@@ -418,19 +418,19 @@ void MainScene::createEnemyOrb() {
 void MainScene::createEnemyHarpoon() {
 	_enemyNum++;
 	enemySprite.setTexture(enemySheet);
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth*scale) - 100);
+	int xVal = xDist(generator);
 
-	random_device dev;
-	default_random_engine engine(dev());
-	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x * scale);
-	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y* scale);
-
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale)- 100);
+	int yVal = yDist(generator);
+	cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
 
-	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(800, 800);
@@ -448,22 +448,22 @@ void MainScene::createEnemyHarpoon() {
 }
 
 void MainScene::createEnemySpike() {
-
-	enemySprite.setTexture(enemySheet);
 	_enemyNum++;
 
-	random_device dev;
-	default_random_engine engine(dev());
-	uniform_real_distribution<float> x_dist(0.0f,
-		Engine::GetWindow().getSize().x * scale);
-	uniform_real_distribution<float> y_dist(0.0f,
-		Engine::GetWindow().getSize().y* scale);
+	enemySprite.setTexture(enemySheet);
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	int xVal = xDist(generator);
 
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	int yVal = yDist(generator);
+	cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
 
-	enemy->setPosition(Vector2f(x_dist(engine), y_dist(engine)));
+	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(800, 800);
@@ -477,4 +477,14 @@ void MainScene::createEnemySpike() {
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 
+}
+
+void MainScene::reset() {
+	_paused = false;
+	score.resetScore();
+	_wavetimer = 0;
+	_wavenumber = 0;
+	healthMultiplier = 1;
+	baseWaveNum = 20;
+	enemySpawns = 1;
 }

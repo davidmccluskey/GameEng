@@ -40,7 +40,7 @@ void MenuItemComponent::update(double dt) {
 		if ((parentTag == "resume" || parentTag == "home" || parentTag == "restart") && _paused == true) {
 			auto sprite = _parent->get_components<SpriteComponent>()[0];
 			FloatRect rect = sprite->getSprite().getLocalBounds();
-			if ((mouse_pos.x - windowWidth) > (sprite->getSprite().getPosition().x - (rect.width / 2) - 50) && (mouse_pos.x - windowWidth) < (sprite->getSprite().getPosition().x + (rect.width / 2)) && (mouse_pos.y - windowHeight) > (sprite->getSprite().getPosition().y - (rect.height / 2)) && (mouse_pos.y - windowHeight) < (sprite->getSprite().getPosition().y + (rect.height / 2))) {
+			if ((mouse_pos.x - windowWidth) > (sprite->getSprite().getPosition().x - (rect.width / 2) - 50) && (mouse_pos.x - windowWidth) < (sprite->getSprite().getPosition().x + (rect.width / 2)) && (mouse_pos.y - windowHeight) > (sprite->getSprite().getPosition().y - 50) && (mouse_pos.y - windowHeight) < (sprite->getSprite().getPosition().y + 50)) {
 				auto text = _parent->get_components<TextComponent>()[0];
 				text->SetColour(sf::Color::White);
 				sprite->getSprite().setColor(sf::Color::Red);
