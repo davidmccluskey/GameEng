@@ -9,15 +9,11 @@
 #include <SFML\Audio\SoundBuffer.hpp>
 #include <SFML\Audio\Sound.hpp>
 #include "../options.h"
+#include "../sounds.h"
 using namespace std;
 using namespace sf;
 
 using namespace Physics;
-sf::SoundBuffer playerhitbuffer;
-sf::Sound playerhitsound;
-
-sf::SoundBuffer enemyhitbuffer;
-sf::Sound enemyhitsound;
 void PhysicsComponent::update(double dt) {
 	_parent->setPosition(bv2_to_sv2(_body->GetPosition()));
 
@@ -27,14 +23,6 @@ void PhysicsComponent::update(double dt) {
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
 	const Vector2f& size, short cBits, short mBits, void* userdata)
 	: Component(p), _dynamic(dyn) {
-	//if (playerhitbuffer.loadFromFile("res/soundFX/enemyhit.wav"))
-	//{
-	//	//cout << "player hit sound loaded" << endl;
-	//}
-	//if (enemyhitbuffer.loadFromFile("res/soundFX/playerhit.wav"))
-	//{
-	//	//cout << "enemy hit sound loaded" << endl;
-	//}
 
 	b2BodyDef BodyDef;
 	// Is Dynamic(moving), or static(Stationary)
@@ -112,9 +100,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 	}
 	if ((parentTag == "bullet" && childTag == "enemy")) {
 		if (Options::instance()->effectsOn == true) {
-			enemyhitsound.setBuffer(enemyhitbuffer);
-			enemyhitsound.setVolume(Options::instance()->volume / 5);
-			enemyhitsound.play();
+			Sounds::instance()->playEnemyHit();
 		}
 		score.setScore(50);
 		auto bullet = _parent->get_components<BulletComponent>()[0];
@@ -169,9 +155,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 	if (parentTag == "enemyBullet" && childTag == "player") {
 		_parent->setForDelete();
 		if (Options::instance()->effectsOn == true) {
-			playerhitsound.setBuffer(playerhitbuffer);
-			playerhitsound.setVolume(Options::instance()->volume / 5);
-			playerhitsound.play();
+			Sounds::instance()->playPlayerHit();
 		}
 		auto p = child->get_components<PlayerMovementComponent>()[0];
 		if (p->getInvuln() == false) {

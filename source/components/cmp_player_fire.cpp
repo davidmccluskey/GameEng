@@ -13,6 +13,7 @@
 #include <SFML\Audio\SoundBuffer.hpp>
 #include <SFML\Audio\Sound.hpp>
 #include "../options.h"
+#include "../sounds.h"
 
 using namespace sf;
 using namespace std;
@@ -20,18 +21,12 @@ sf::Texture sprite;
 sf::Sprite bulletSprite;
 Texture beamSprite;
 Sprite beam;
-sf::SoundBuffer buffer;
-sf::Sound sound;
 
 unsigned seed;
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
 	seed = std::chrono::system_clock::now().time_since_epoch().count();
-	if (buffer.loadFromFile("res/soundFX/blaster.wav"))
-	{
-		cout << "blaster sound loaded" << endl;
-	}
 	sprite.loadFromFile("res/bullet.png");
 	beamSprite.loadFromFile("res/brimstone.png");
 }
@@ -47,9 +42,7 @@ void PlayerFireComponent::update(double dt)
 		_burstTime -= dt;
 		if (_burstTime <= 0) {
 			if (Options::instance()->effectsOn == true) {
-				sound.setBuffer(buffer);
-				sound.setVolume(Options::instance()->volume / 5);
-				sound.play();
+				Sounds::instance()->playBlaster();
 			}
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
 			//playerPhysics->setFriction(0.1f);
@@ -69,9 +62,7 @@ void PlayerFireComponent::update(double dt)
 	if (Keyboard::isKeyPressed(Keyboard::Key(Options::instance()->shootKey)) || sf::Joystick::isButtonPressed(0, 1)) {
 		if (_firetime <= 0.f) {
 			if (Options::instance()->effectsOn == true) {
-				sound.setBuffer(buffer);
-				sound.setVolume(Options::instance()->volume / 5);
-				sound.play();
+				Sounds::instance()->playBlaster();
 			}
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];

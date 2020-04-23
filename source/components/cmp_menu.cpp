@@ -126,6 +126,7 @@ void MenuItemComponent::resolveClick() {
 			string output = str + " " + name + "\n";
 			outfile.open("scores.txt", std::ios_base::app); // append instead of overwrite
 			outfile << output;
+			Engine::ChangeScene(&menu);
 		}
 		else { cout << "please enter a name" << endl; }
 	}

@@ -206,7 +206,7 @@ void MainScene::Load() {
 	scoreTextComponent = timerText->addComponent<TextComponent>("0");
 
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
-	view.zoom(10.f); //sets zoom for camera allowing animation
+	view.zoom(3.f); //sets zoom for camera allowing animation
 	Engine::GetWindow().setView(view); //sets window view to created view
 	//prevView.setCenter(view.getCenter());
 
