@@ -5,6 +5,7 @@
 #include "cmp_bullet.h"
 #include "cmp_base_enemy.h"
 #include "../game.h"
+#include "cmp_base_enemy.h"
 using namespace std;
 using namespace sf;
 //sf::Texture sprite;
@@ -12,9 +13,21 @@ using namespace sf;
 
 void FarState::execute(Entity *owner, double dt) noexcept {
     auto s = owner->get_components<SpriteComponent>()[0];
-	//s->getSprite().setColor(sf::Color::Red);
 	auto e = owner->get_components<EnemyComponent>()[0];
 	float max = e->getMax();
+	IntRect rect = s->getSprite().getTextureRect();
+
+	_animationFrames -= dt;
+	if (_animationFrames < 0) {
+		rect.left = e->getTextureWidth() * currentFrame;
+		currentFrame++;
+		if (currentFrame == 5) {
+			currentFrame = 0;
+		}
+		_animationFrames = 0.05;
+	}
+
+	s->getSprite().setTextureRect(rect);
 	//Change to idle if the player is closer than 450 units away
     if (length(owner->getPosition() - _player->getPosition()) < max - 50){
         auto sm = owner->get_components<StateMachineComponent>()[0];
@@ -25,10 +38,14 @@ void FarState::execute(Entity *owner, double dt) noexcept {
 
 void NearState::execute(Entity *owner, double dt) noexcept {
 	auto s = owner->get_components<SpriteComponent>()[0];
-	//s->getSprite().setColor(sf::Color::Yellow);
 	auto e = owner->get_components<EnemyComponent>()[0];
 	float max = e->getMax();
 	float min = e->getMin();
+	IntRect rect = s->getSprite().getTextureRect();
+	rect.left = e->getTextureWidth() * 6;
+
+	s->getSprite().setTextureRect(rect);
+
 	//Change to idle if the player is between 200 - 450 units away
     if (length(owner->getPosition() - _player->getPosition()) < max && length(owner->getPosition() - _player->getPosition()) >min + 50){
 		auto sm = owner->get_components<StateMachineComponent>()[0];
@@ -40,6 +57,11 @@ void NearState::execute(Entity *owner, double dt) noexcept {
 void IdleState::execute(Entity *owner, double dt) noexcept {
 	auto s = owner->get_components<SpriteComponent>()[0];
 	//s->getSprite().setColor(sf::Color::Blue);
+	
+	IntRect rect = s->getSprite().getTextureRect();
+	rect.left = e->getTextureWidth() * 6;
+
+	s->getSprite().setTextureRect(rect);
 	
 	auto e = owner->get_components<EnemyComponent>()[0];
 	float min = e->getMin();

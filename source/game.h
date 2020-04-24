@@ -7,6 +7,8 @@
 #include "scenes/scene_highscores.h"
 #include "scenes/scene_settings.h"
 #include "scenes/scene_controls.h"
+#include "scenes/scene_credits.h"
+
 #include <SFML\Audio\Music.hpp>
 #include "score.h"
 extern MenuScene menu;
@@ -15,6 +17,9 @@ extern HighScoreScene scene_highscores;
 extern SettingsScreen scene_settings;
 extern EnterScoreScreen scene_enter_highscore;
 extern ControlsScreen scene_controls;
+extern ControlsScreen scene_controls;
+extern CreditsScene scene_credits;
+
 extern Score score;
 extern string name;
 
