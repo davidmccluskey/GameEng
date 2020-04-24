@@ -14,18 +14,14 @@
 #include <SFML\Audio\Sound.hpp>
 #include "../options.h"
 #include "../sounds.h"
-#include "../texture.cpp"
+#include "../texture.h"
 
 using namespace sf;
 using namespace std;
 sf::Sprite bulletSprite;
-Sprite beam;
-
-unsigned seed;
 
 PlayerFireComponent::PlayerFireComponent(Entity* p) : Component(p)
 {
-	seed = std::chrono::system_clock::now().time_since_epoch().count();
 }
 // Update
 void PlayerFireComponent::update(double dt)
@@ -119,14 +115,13 @@ void PlayerFireComponent::fireBurst(float rotation) {
 void PlayerFireComponent::fireShotgun(float rotation) {
 
 	for (int i = 0; i < 5; i++) {
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 		std::default_random_engine generator(seed);
-		std::uniform_int_distribution<int> xDist(-10, 10);
-		int spacing = xDist(generator);
-		//auto bullet = _parent->scene->makeEntity();
-		//float spacing = rand() % 20 + (-10);
+		std::uniform_int_distribution<int> spacingGen(-5, 5);
+		std::uniform_real_distribution<float> speedGen(1, 2);
 
-		float speed = rand() % (30 - 5 + 1) + 5;
-
+		int spacing = spacingGen(generator);
+		float speed = speedGen(generator);
 		auto playerSprite = _parent->get_components<SpriteComponent>()[0];
 		auto bullet = _parent->scene->makeEntity();
 		bullet->addTag("bullet");
@@ -144,10 +139,10 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 		p->setRestitution(.4f);
 		p->setFriction(.005f);
 		Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -playerSprite->getSprite().getRotation());
-		impulse = Vector2f(-impulse.x + speed, -impulse.y + speed);
-		p->impulse(impulse);
+		impulse = Vector2f(-impulse.x + spacing, -impulse.y + spacing);
+		p->impulse(impulse * speed);
 
-		bullet->setRotation(inverse + spacing);
+		bullet->setRotation(-spacing);
 
 	}
 }
@@ -283,7 +278,7 @@ void PlayerFireComponent::setAsQuick()
 void PlayerFireComponent::setAsShotgun()
 {
 	_bulletType = 'S';
-	_fireRate = 0.3;
+	_fireRate = 0.7;
 	_impulse = 4;
 	_damage = 1;
 	_size = 1;
