@@ -58,14 +58,16 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 	auto s = owner->get_components<SpriteComponent>()[0];
 	//s->getSprite().setColor(sf::Color::Blue);
 	
+	auto e = owner->get_components<EnemyComponent>()[0];
+	float min = e->getMin();
+	float max = e->getMax();
+
 	IntRect rect = s->getSprite().getTextureRect();
 	rect.left = e->getTextureWidth() * 6;
 
 	s->getSprite().setTextureRect(rect);
 	
-	auto e = owner->get_components<EnemyComponent>()[0];
-	float min = e->getMin();
-	float max = e->getMax();
+
 
 	auto tags = owner->getTags();
 

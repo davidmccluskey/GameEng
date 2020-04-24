@@ -230,10 +230,10 @@ void MainScene::Load() {
 			}
 		}
 	}
-	createEnemyOrb();
-	createEnemyHarpoon();
-	createEnemySmall();
-	createEnemySpike();
+	//createEnemyOrb();
+	//createEnemyHarpoon();
+	//createEnemySmall();
+	//createEnemySpike();
 	setLoaded(true);
 
 }
@@ -335,7 +335,7 @@ void MainScene::Update(const double& dt) {
 			wavenum = "Wave " + wavenum;
 			waveTextComponent->SetText(wavenum);
 
-			/*for (int i = 0; i < enemySpawns; i++) {
+			for (int i = 0; i < enemySpawns; i++) {
 				int enemyType = rand() % 3 + 1;
 				switch (enemyType) {
 				case 1:
@@ -348,7 +348,7 @@ void MainScene::Update(const double& dt) {
 					createEnemySpike();
 					break;
 				}
-			}*/
+			}
 			cout << "spawned " << enemySpawns << endl;
 		}
 		Scene::Update(dt);
@@ -468,7 +468,6 @@ void MainScene::createEnemySpike() {
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
-	enemy->addTag("spike");
 
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
@@ -480,16 +479,17 @@ void MainScene::createEnemySpike() {
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4 * healthMultiplier);
+	enemyComponent->setTextureSize(200, 285, 2);
+
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
+	
+		enemy->addTag("spike");
 
-	float min = gameHeight * 0.15;
-	float max = min + 200;
-	enemyComponent->setMinMax(min, max);
-
+		float min = gameHeight * 0.15;
+		float max = min + 200;
+		enemyComponent->setMinMax(min, max);
 }
 void MainScene::createEnemySmall() {
-	_enemyNum++;
-	enemyComponent->setTextureSize(200, 285, 2);
 
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -509,19 +509,19 @@ void MainScene::createEnemySmall() {
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(85, 142);
 	e->getSprite().setScale({ 0.4, 0.4 });
-	auto rect = IntRect(0, 800, 200, 300);
+	auto rect = IntRect(0, 900, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4 * healthMultiplier);
-	enemyComponent->setMinMax(100.0f, 300.0f);
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 	float min = gameHeight * 0.1;
 	float max = min + 100;
 	enemyComponent->setMinMax(min, max);
 
-
+	_enemyNum++;
+	enemyComponent->setTextureSize(200, 300, 2);
 
 }
 
