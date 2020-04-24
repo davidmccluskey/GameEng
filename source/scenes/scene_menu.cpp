@@ -27,8 +27,8 @@ void MenuScene::Load() {
 	//}
 	_paused = false;
 
-	float scaleWidth = windowWidth/1600;
-	float scaleHeight = windowHeight/900;
+	float scaleWidth = windowWidth / 1600;
+	float scaleHeight = windowHeight / 900;
 	//view.setCenter({windowWidth / 2, windowHeight / 2 });
 	Engine::GetWindow().setView(view);
 
@@ -65,16 +65,21 @@ void MenuScene::Load() {
 		auto exit = makeEntity();
 		exit->addTag("exit");
 
+		auto credits = makeEntity();
+		credits->addTag("credits");
+
 		start->setPosition({ 250, gameHeight * 0.40 });
 		highscore->setPosition({ 250, gameHeight * 0.55 });
 		options->setPosition({ 250, gameHeight * 0.70 });
 		exit->setPosition({ 250, gameHeight * 0.85 });
+		credits->setPosition(Vector2f(windowWidth * 0.8, gameHeight * 0.85));
 
 		auto s = start->addComponent<MenuItemComponent>("Start");
 		auto h = highscore->addComponent<MenuItemComponent>("High Scores");
 		auto o = options->addComponent<MenuItemComponent>("Options");
 		auto e = exit->addComponent<MenuItemComponent>("Exit");
-
+		auto c = credits->addComponent<MenuItemComponent>("Credits");
+		
 
 
 	}

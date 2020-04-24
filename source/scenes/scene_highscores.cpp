@@ -17,6 +17,7 @@ void HighScoreScene::Load() {
 
 	back->setPosition(Vector2f(windowWidth * 0.15, windowHeight * 0.9));
 	auto s = back->addComponent<MenuItemComponent>("Back");
+	s->setSize(30, 0.7);
 
 	ifstream inFile;
 	inFile.open("scores.txt");
