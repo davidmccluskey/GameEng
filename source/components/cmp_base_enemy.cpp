@@ -108,7 +108,26 @@ EnemyComponent::EnemyComponent(Entity* p, float speed, float damage, float healt
 
 }
 
+int EnemyComponent::getTextureWidth()
+{
+	return textureWidth;
+}
 
+int EnemyComponent::getTextureHeight()
+{
+	return textureHeight;
+}
+
+int EnemyComponent::getTexturePos()
+{
+	return texturePos;
+}
+void EnemyComponent::setTextureSize(int width, int height, int pos)
+{
+	textureWidth = width;
+	textureHeight = height;
+	texturePos = pos;
+}
 float EnemyComponent::getHealth()
 {
 	return _health;

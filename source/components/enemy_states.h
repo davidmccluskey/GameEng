@@ -7,6 +7,8 @@ class FarState : public State
 {
 private:
     std::shared_ptr<Entity> _player;
+	float _animationFrames = 0.2;
+	int currentFrame = 0;
 public:
     FarState(std::shared_ptr<Entity> player) : _player(player) { }
     void execute(Entity*, double) noexcept override;

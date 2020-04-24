@@ -391,16 +391,17 @@ void MainScene::createEnemyOrb() {
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
+	e->getSprite().setOrigin(85, 142);
+	e->getSprite().setScale({ 0.4, 0.4 });
 
-	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+	auto rect = IntRect(0, 0, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 
 
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2 * healthMultiplier);
+	enemyComponent->setTextureSize(200, 285, 0);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -425,13 +426,16 @@ void MainScene::createEnemyHarpoon() {
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
-	auto rect = IntRect(1600, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setOrigin(85, 142);
+	e->getSprite().setScale({ 0.4, 0.4 });
+
+	auto rect = IntRect(0, 300, 200, 300);
+
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(5 * healthMultiplier);
+	enemyComponent->setTextureSize(200, 285, 1);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
@@ -458,13 +462,14 @@ void MainScene::createEnemySpike() {
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
-	auto rect = IntRect(3200, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setOrigin(85, 142);
+	e->getSprite().setScale({ 0.4, 0.4 });
+	auto rect = IntRect(0, 600, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4 * healthMultiplier);
+	enemyComponent->setTextureSize(200, 285, 2);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
