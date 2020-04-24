@@ -30,3 +30,14 @@ public:
 	IdleState(std::shared_ptr<Entity> player) : _player(player) { }
 	void execute(Entity*, double) noexcept override;
 };
+
+class RushState : public State
+{
+private:
+	float _rushDelay = 2;
+	float _timer = 2;
+	std::shared_ptr<Entity> _player;
+public:
+	RushState(std::shared_ptr<Entity> player) : _player(player) { }
+	void execute(Entity*, double) noexcept override;
+};

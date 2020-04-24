@@ -104,6 +104,7 @@ EnemyComponent::EnemyComponent(Entity* p, float speed, float damage, float healt
 	sm->addState("idle", make_shared<IdleState>(player[0]));
 	sm->addState("flee", make_shared<NearState>(player[0]));
 	sm->addState("seek", make_shared<FarState>(player[0]));
+	sm->addState("rush", make_shared<RushState>(player[0]));
 	sm->changeState("idle");
 
 }
@@ -122,4 +123,17 @@ void EnemyComponent::setHealth(float health)
 void EnemyComponent::setShot(float shotTimer)
 {
 	_shotTimer = shotTimer;
+}
+
+void EnemyComponent::setMinMax(float min, float max) {
+	_min = min;
+	_max = max;
+}
+
+float EnemyComponent::getMin() {
+	return _min;
+}
+
+float EnemyComponent::getMax() {
+	return _max;
 }

@@ -21,5 +21,8 @@ public:
   void createEnemyHarpoon();
 
   void createEnemySpike();
+
+  void createEnemySmall();
+
   void reset();
 };

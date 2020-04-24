@@ -160,7 +160,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 		auto p = child->get_components<PlayerMovementComponent>()[0];
 		if (p->getInvuln() == false) {
 			p->setShot(1);
-			p->removeHealth();
+			//p->removeHealth();
 			p->switchSprite();
 		}
 		/*if (p->getHealth() <= 0) {

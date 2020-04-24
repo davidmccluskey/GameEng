@@ -231,7 +231,9 @@ void MainScene::Load() {
 		}
 	}
 	createEnemyOrb();
-
+	createEnemyHarpoon();
+	createEnemySmall();
+	createEnemySpike();
 	setLoaded(true);
 
 }
@@ -333,7 +335,7 @@ void MainScene::Update(const double& dt) {
 			wavenum = "Wave " + wavenum;
 			waveTextComponent->SetText(wavenum);
 
-			for (int i = 0; i < enemySpawns; i++) {
+			/*for (int i = 0; i < enemySpawns; i++) {
 				int enemyType = rand() % 3 + 1;
 				switch (enemyType) {
 				case 1:
@@ -346,7 +348,7 @@ void MainScene::Update(const double& dt) {
 					createEnemySpike();
 					break;
 				}
-			}
+			}*/
 			cout << "spawned " << enemySpawns << endl;
 		}
 		Scene::Update(dt);
@@ -387,24 +389,28 @@ void MainScene::createEnemyOrb() {
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
+	enemy->addTag("orb");
 
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
+	e->getSprite().setOrigin(85, 142.5);
+	e->getSprite().setScale({0.4, 0.4});
 
-	auto rect = IntRect(0, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health states
+	auto rect = IntRect(1020, 0, 168, 175); //One player ship is 1600, 1600. Spritesheet contains 4 health states
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
-
+	
 
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2 * healthMultiplier);
 
+	float min = gameHeight * 0.15;
+	float max = min + 200;
+	enemyComponent->setMinMax(min, max);
+
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-
-
+	
 }
 
 void MainScene::createEnemyHarpoon() {
@@ -421,20 +427,23 @@ void MainScene::createEnemyHarpoon() {
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
-
+	enemy->addTag("harpoon");
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
-	auto rect = IntRect(1600, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setOrigin(85, 142.5);
+	e->getSprite().setScale({ 0.4, 0.4 });
+	auto rect = IntRect(1020, 285, 170, 285); //One player ship is 1600, 1600. Spritesheet contains 4 health state
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(5 * healthMultiplier);
-
+	enemyComponent->setMinMax(500.0f, 700.0f);
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-
+	
+	float min = gameHeight * 0.3;
+	float max = min + 200;
+	enemyComponent->setMinMax(min, max);
 
 
 }
@@ -454,20 +463,57 @@ void MainScene::createEnemySpike() {
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
+	enemy->addTag("spike");
 
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(800, 800);
-	e->getSprite().setScale({ 0.05, 0.05 });
-	auto rect = IntRect(3200, 0, 1600, 1600); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setOrigin(85, 142.5);
+	e->getSprite().setScale({ 0.4, 0.4 });
+	auto rect = IntRect(1020, 570, 170, 285); //One player ship is 1600, 1600. Spritesheet contains 4 health state
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4 * healthMultiplier);
-
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
+	float min = gameHeight * 0.15;
+	float max = min + 200;
+	enemyComponent->setMinMax(min, max);
+
+}
+void MainScene::createEnemySmall() {
+	_enemyNum++;
+
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	int xVal = xDist(generator);
+
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	int yVal = yDist(generator);
+	cout << xVal << ", " << yVal << endl;
+
+	auto enemy = makeEntity();
+	enemy->addTag("enemy");
+	enemy->addTag("small");
+	enemy->setPosition(Vector2f(xVal, yVal));
+	auto e = enemy->addComponent<SpriteComponent>();
+	e->setSprite<Sprite>(enemySprite);
+	e->getSprite().setOrigin(85, 142.5);
+	e->getSprite().setScale({ 0.3, 0.3 });
+	auto rect = IntRect(1020, 855, 170, 285); //One player ship is 1600, 1600. Spritesheet contains 4 health state
+	e->getSprite().setTextureRect(rect);
+	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
+	auto enemyComponent = enemy->addComponent<EnemyComponent>();
+	enemyComponent->setHealth(4 * healthMultiplier);
+	enemyComponent->setMinMax(100.0f, 300.0f);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
+
+	float min = gameHeight * 0.1;
+	float max = min + 100;
+	enemyComponent->setMinMax(min, max);
 
 }
 

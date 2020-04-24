@@ -10,7 +10,8 @@ protected:
     float _shotTimer;
     float _flickerTimer = 0.1;
     bool _flicker = true;
-
+	float _min;
+	float _max;
 public:
     void update(double dt) override;
     void render() override {}
@@ -20,4 +21,7 @@ public:
     float getHealth();
     void setHealth(float health);
     void setShot(float shotTimer);
+	void setMinMax(float min, float max);
+	float getMin();
+	float getMax();
 };
