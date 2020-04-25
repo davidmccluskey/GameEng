@@ -424,7 +424,7 @@ void MainScene::createEnemyOrb() {
 	enemyComponent->setMinMax(min, max);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-
+	enemyComponent->setFireDelay(3.0f);
 }
 
 void MainScene::createEnemyHarpoon() {
@@ -462,7 +462,7 @@ void MainScene::createEnemyHarpoon() {
 	float min = gameHeight * 0.3;
 	float max = min + 200;
 	enemyComponent->setMinMax(min, max);
-
+	enemyComponent->setFireDelay(3.0f);
 
 }
 
@@ -481,6 +481,7 @@ void MainScene::createEnemySpike() {
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
+	enemy->addTag("spike");
 
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
@@ -535,7 +536,7 @@ void MainScene::createEnemySmall() {
 
 	_enemyNum++;
 	enemyComponent->setTextureSize(200, 300, 2);
-
+	enemyComponent->setFireDelay(2.0f);
 }
 
 void MainScene::reset() {
