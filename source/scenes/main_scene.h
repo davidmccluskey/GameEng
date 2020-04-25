@@ -25,4 +25,6 @@ public:
   void createEnemySmall();
 
   void reset();
+  void DeathResolution(float dt);
+  void spawnDeadPlayer();
 };

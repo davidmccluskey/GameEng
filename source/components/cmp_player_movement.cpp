@@ -49,14 +49,10 @@ void PlayerMovementComponent::update(double dt)
 		_invuln = false;
 	}
 	if (_health <= 0) {
-		//cout << "DEAD" << endl;
-		//_parent->setVisible(false);
-		_endTimer -= dt;
-		if (_endTimer <= 0) {
-			Engine::ChangeScene(&scene_enter_highscore);
-			return;
-			
-		}
+		cout << "DEAD" << endl;
+		_parent->setForDelete();
+		_isDead = true;
+		
 		
 	}
 	else {

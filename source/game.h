@@ -27,6 +27,7 @@ extern float clickCooldown;
 extern sf::Music music;
 
 extern bool _paused;
+extern bool _isDead;
 
 extern int _enemyNum;
 

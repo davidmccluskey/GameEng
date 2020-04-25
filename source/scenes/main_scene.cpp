@@ -58,9 +58,11 @@ static shared_ptr<Entity> resumeButton; //Player Entity
 static shared_ptr<Entity> restartButton; //Player Entity
 static shared_ptr<Entity> exitButton; //Player Entity
 
+bool playerDeadSpawned = false;
+double endTimer = 3;
 double baseWaveNum = 20;
 int enemySpawns = 1;
-
+bool _isDead = false;
 int viewX;
 int viewY;
 void MainScene::Load() {
@@ -312,59 +314,67 @@ void MainScene::Update(const double& dt) {
 			healthTextComponent->SetPosition(bottomRight);
 		}
 
-		_wavetimer -= dt;
-		string str = to_string(_wavetimer);
-		str.resize(str.size() - 5);
-		timerTextComponent->SetText(str);
+		if (_isDead != true) {
+			_wavetimer -= dt;
+			string str = to_string(_wavetimer);
+			str.resize(str.size() - 5);
+			timerTextComponent->SetText(str);
 
-		str = (to_string(score.getScore()));
-		str.resize(str.size() - 7);
-		scoreTextComponent->SetText(str);
+			str = (to_string(score.getScore()));
+			str.resize(str.size() - 7);
+			scoreTextComponent->SetText(str);
 
-		if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
-		{
-			healthMultiplier = healthMultiplier + 0.2;
-			score.setScore(1000);
+			if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
+			{
+				healthMultiplier = healthMultiplier + 0.2;
+				score.setScore(1000);
 
-			if (baseWaveNum - 1 != 5) {
-				_wavetimer = baseWaveNum;
-				baseWaveNum -= 0.5;
-			}
-			else {
-				_wavetimer = 5;
-			}
-			int enemyCheck = enemySpawns;
-			_wavenumber++;
-
-			if (enemySpawns + 1 != 10) {
-				if (_wavenumber % 2 == 0) {
-					enemySpawns++;
+				if (baseWaveNum - 1 != 5) {
+					_wavetimer = baseWaveNum;
+					baseWaveNum -= 0.5;
 				}
-			}
-
-			string wavenum = to_string(_wavenumber);
-			wavenum = "Wave " + wavenum;
-			waveTextComponent->SetText(wavenum);
-
-			for (int i = 0; i < enemySpawns; i++) {
-				int enemyType = rand() % 4 + 1;
-				switch (enemyType) {
-				case 1:
-					createEnemyHarpoon();
-					break;
-				case 2:
-					createEnemyOrb();
-					break;
-				case 3:
-					createEnemySpike();
-					break;
-				case 4:
-					createEnemySmall();
-					break;
+				else {
+					_wavetimer = 5;
 				}
+				int enemyCheck = enemySpawns;
+				_wavenumber++;
+
+				if (enemySpawns + 1 != 10) {
+					if (_wavenumber % 2 == 0) {
+						enemySpawns++;
+					}
+				}
+
+				string wavenum = to_string(_wavenumber);
+				wavenum = "Wave " + wavenum;
+				waveTextComponent->SetText(wavenum);
+
+				for (int i = 0; i < enemySpawns; i++) {
+					int enemyType = rand() % 4 + 1;
+					switch (enemyType) {
+					case 1:
+						createEnemyHarpoon();
+						break;
+					case 2:
+						createEnemyOrb();
+						break;
+					case 3:
+						createEnemySpike();
+						break;
+					case 4:
+						createEnemySmall();
+						break;
+					}
+				}
+				cout << "spawned " << enemySpawns << endl;
 			}
-			cout << "spawned " << enemySpawns << endl;
 		}
+		else {
+			DeathResolution(dt);
+			spawnDeadPlayer();
+		}
+
+
 		Scene::Update(dt);
 	}
 	else if (_paused) {
@@ -547,4 +557,27 @@ void MainScene::reset() {
 	healthMultiplier = 1;
 	baseWaveNum = 20;
 	enemySpawns = 1;
+	_isDead = false;
+	endTimer = 3;
+	playerDeadSpawned = false;
+}
+
+void MainScene::DeathResolution(float dt) {
+	endTimer -= dt;
+	if (endTimer <= 0) {
+		Engine::ChangeScene(&scene_enter_highscore);
+		return;
+
+	}
+}
+
+void MainScene::spawnDeadPlayer() {
+	if (playerDeadSpawned == false) {
+
+		//DO STUFF
+
+		cout << "dead player spawned" << endl;
+
+		playerDeadSpawned = true;
+	}
 }
