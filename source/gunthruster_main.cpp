@@ -3,6 +3,10 @@
 #include "score.h"
 #include "options.h"
 #include <fstream>
+#include <windows.h>
+#include <iostream>
+//#define _WIN32_WINNT 0x0500
+
 using namespace std;
 
 MenuScene menu;
@@ -23,6 +27,8 @@ float windowWidth;
 float windowHeight;
 
 int main() {
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_SHOW);
 	ifstream inFile;
 	inFile.open("options.txt");
 	srand(time(0));
@@ -58,11 +64,11 @@ int main() {
 		Options::instance()->moveRight = input[7];
 		Options::instance()->shootKey = input[8];
 		Options::instance()->pauseKey = input[9];
+		Options::instance()->altHealthIndicator = input[10];
 	}
 
 
 	inFile.close();
-
 	windowWidth = Options::instance()->launchWidth;
 	windowHeight = Options::instance()->launchHeight;
 	Engine::Start(Options::instance()->width, Options::instance()->height, "GUN THRUSTERS", &menu, Options::instance()->windowMode);  //Starts engine in user specified resolution

@@ -169,9 +169,8 @@ void Engine::ChangeScene(Scene* s) {
   _activeScene = s;
 
   if (old != nullptr) {
-    old->UnLoad(); // todo: Unload Async
+      old->UnLoad(); // todo: Unload Async
   }
-
   if (!s->isLoaded()) {
     cout << "Eng: Entering Loading Screen\n";
     loadingTime =0;

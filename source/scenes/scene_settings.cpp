@@ -20,6 +20,8 @@ static shared_ptr<OptionsItemComponent> resFourComponent;
 static shared_ptr<OptionsItemComponent> fullscreenComponent;
 static shared_ptr<OptionsItemComponent> windowedComponent;
 
+static shared_ptr<OptionsItemComponent> healthOptionsComponentOn;
+static shared_ptr<OptionsItemComponent> healthOptionComponentOff;
 
 void SettingsScreen::Load() {
 	{
@@ -137,14 +139,32 @@ void SettingsScreen::Load() {
 				{
 					auto onBtn = makeEntity();
 					fullscreenComponent = onBtn->addComponent<OptionsItemComponent>("Fullscreen", Vector2f(250, 50));
+					fullscreenComponent->setTextSize(30);
 					fullscreenComponent->setPosition({ gameWidth * 0.55, 300 });
 					onBtn->addTag("fullscreen");
 				}
 				{
 					auto onBtn = makeEntity();
 					windowedComponent = onBtn->addComponent<OptionsItemComponent>("Windowed", Vector2f(250, 50));
+					windowedComponent->setTextSize(30);
 					windowedComponent->setPosition({ gameWidth * 0.8, 300 });
 					onBtn->addTag("windowed");
+
+				}
+				{
+					auto onBtn = makeEntity();
+					healthOptionsComponentOn = onBtn->addComponent<OptionsItemComponent>("On", Vector2f(100, 50));
+					healthOptionsComponentOn->setTextSize(30);
+					healthOptionsComponentOn->setPosition({ gameWidth * 0.3, 450 });
+					onBtn->addTag("altHealthOn");
+
+				}
+				{
+					auto onBtn = makeEntity();
+					healthOptionComponentOff = onBtn->addComponent<OptionsItemComponent>("Off", Vector2f(100, 50));
+					healthOptionComponentOff->setTextSize(30);
+					healthOptionComponentOff->setPosition({ gameWidth * 0.4, 450 });
+					onBtn->addTag("altHealthOff");
 
 				}
 			}
@@ -165,9 +185,15 @@ void SettingsScreen::Load() {
 	}
 	{
 		auto txt = makeEntity();
+		auto t = txt->addComponent<TextComponent>("Alternate\nHealth Indicator");
+		t->SetSize(30);
+		t->SetPosition({ gameWidth * 0.05, 450 });
+	}
+	{
+		auto txt = makeEntity();
 		auto t = txt->addComponent<TextComponent>("Note, any resolution changes\nrequire restart.");
 		t->SetSize(30);
-		t->SetPosition({ gameWidth * 0.55, gameHeight * 0.55 });
+		t->SetPosition({ gameWidth * 0.55, gameHeight * 0.75 });
 	}
 	setLoaded(true);
 }
@@ -188,6 +214,8 @@ void SettingsScreen::Update(const double& dt) {
 		effectsOnComponent->setBorderColour(Color(105, 105, 105));
 		effectsOffComponent->setBorderColour(Color::White);
 	}
+
+
 	if (Options::instance()->musicOn == true) {
 		musicOffComponent->setTextColour(Color(105, 105, 105));
 		musicOnComponent->setTextColour(Color::White);
@@ -203,6 +231,8 @@ void SettingsScreen::Update(const double& dt) {
 		musicOnComponent->setBorderColour(Color(105, 105, 105));
 		musicOffComponent->setBorderColour(Color::White);
 	}
+
+
 	if (Options::instance()->windowMode == true) {
 		windowedComponent->setTextColour(Color(105, 105, 105));
 		fullscreenComponent->setTextColour(Color::White);
@@ -218,6 +248,8 @@ void SettingsScreen::Update(const double& dt) {
 		fullscreenComponent->setBorderColour(Color(105, 105, 105));
 		windowedComponent->setBorderColour(Color::White);
 	}
+
+
 	if (Options::instance()->width == 1920) {
 		resOneComponent->setTextColour(Color::White);
 		resOneComponent->setBorderColour(Color::White);
@@ -261,6 +293,22 @@ void SettingsScreen::Update(const double& dt) {
 		resThreeComponent->setBorderColour(Color(105, 105, 105));
 		resOneComponent->setBorderColour(Color(105, 105, 105));
 		resOneComponent->setTextColour(Color(105, 105, 105));
+	}
+
+
+	if (Options::instance()->altHealthIndicator == 1) {
+		healthOptionsComponentOn->setTextColour(Color::White);
+		healthOptionsComponentOn->setBorderColour(Color::White);
+
+		healthOptionComponentOff->setTextColour(Color(105, 105, 105));
+		healthOptionComponentOff->setBorderColour(Color(105, 105, 105));
+	}
+	else {
+		healthOptionComponentOff->setTextColour(Color::White);
+		healthOptionComponentOff->setBorderColour(Color::White);
+
+		healthOptionsComponentOn->setTextColour(Color(105, 105, 105));
+		healthOptionsComponentOn->setBorderColour(Color(105, 105, 105));
 	}
 	string volumeStr = to_string(Options::instance()->volume);
 	volumeTextComponent->SetText(volumeStr);

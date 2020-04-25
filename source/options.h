@@ -29,6 +29,8 @@ public:
 
 	int launchWidth;
 	int launchHeight;
+
+	bool altHealthIndicator;
 };
 
 // Allocating and initializing GlobalClass's

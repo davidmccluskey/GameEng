@@ -45,6 +45,9 @@ static shared_ptr<TextComponent> waveTextComponent;
 static shared_ptr<Entity> scoreText;
 static shared_ptr<TextComponent> scoreTextComponent;
 
+static shared_ptr<Entity> healthText;
+static shared_ptr<TextComponent> healthTextComponent;
+
 float healthMultiplier = 1;
 
 MyContactListener listenerInstance;
@@ -133,7 +136,6 @@ void MainScene::Load() {
 
 	}
 
-
 	{
 		//Loads in player spritesheet and background sprite
 		player = makeEntity();				//create player entity
@@ -190,6 +192,11 @@ void MainScene::Load() {
 
 	scoreText = makeEntity();
 	scoreTextComponent = timerText->addComponent<TextComponent>("0");
+
+	if (Options::instance()->altHealthIndicator == 1) {
+		healthText = makeEntity();
+		healthTextComponent = timerText->addComponent<TextComponent>("Health 4");
+	}
 
 	view.setSize(gameWidth / 3, gameHeight / 3); //sets size of camera
 	view.zoom(3.f); //sets zoom for camera allowing animation
@@ -291,9 +298,19 @@ void MainScene::Update(const double& dt) {
 		Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 50), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
 		Vector2f topRight = { (currentView.getCenter().x + (currentView.getSize().x / 2) - 150), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
 		Vector2f topMiddle = { (currentView.getCenter().x), (currentView.getCenter().y) - (currentView.getSize().y / 2) + 20 };
+		Vector2f bottomRight = { (currentView.getCenter().x + (currentView.getSize().x / 2) - 200), (currentView.getCenter().y + (currentView.getSize().y / 2) - 50) };
+
 		timerTextComponent->SetPosition(topLeft);
 		waveTextComponent->SetPosition(topRight);
 		scoreTextComponent->SetPosition(topMiddle);
+
+		if (Options::instance()->altHealthIndicator == 1) {
+			auto mvmt = player->get_components<PlayerMovementComponent>()[0];
+			int health = mvmt->getHealth();
+			string str = "health: " + to_string(health);
+			healthTextComponent->SetText(str);
+			healthTextComponent->SetPosition(bottomRight);
+		}
 
 		_wavetimer -= dt;
 		string str = to_string(_wavetimer);

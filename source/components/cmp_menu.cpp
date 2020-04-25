@@ -88,34 +88,44 @@ void MenuItemComponent::resolveClick() {
 	if (parentTag == "start") {
 		music.stop();
 		Engine::ChangeScene(&scene_main);
+		return;
 	}
 	else if (parentTag == "exit") {
 		exit(EXIT_SUCCESS);
 	}
 	else if (parentTag == "options" || parentTag == "ctrlBack") {
 		Engine::ChangeScene(&scene_settings);
+		return;
 	}
 	else if (parentTag == "highscore") {
 		Engine::ChangeScene(&scene_highscores);
+		return;
 	}
 	else if (parentTag == "back") {
 		Engine::ChangeScene(&menu);
+		return;
 	}
 	else if (parentTag == "save") {
 		Options::instance()->save();
 		Engine::ChangeScene(&menu);
+		return;
 	}
 	else if (parentTag == "resume") {
 		_paused = false;
+		return;
 	}
 	else if (parentTag == "restart") {
 		Engine::ChangeScene(&scene_main);
+		return;
 	}
 	else if (parentTag == "home") {
 		Engine::ChangeScene(&menu);
+		return;
+		
 	}
 	else if (parentTag == "controls") {
 		Engine::ChangeScene(&scene_controls);
+		return;
 	}
 	else if (parentTag == "enter score") {
 		if (name != "") {
@@ -130,9 +140,11 @@ void MenuItemComponent::resolveClick() {
 			Engine::ChangeScene(&scene_highscores);
 		}
 		else { cout << "please enter a name" << endl; }
+		return;
 	}
 	else if (parentTag == "credits") {
 		Engine::ChangeScene(&scene_credits);
+		return;
 	}
 
 }
