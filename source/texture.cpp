@@ -16,7 +16,7 @@ Textures::Textures(int v) : m_value(v)
 	if (!background.loadFromFile("res/background.jpeg")) {
 		std::cout << "error loading background" << endl;
 	}
-	if (!bulletsheet.loadFromFile("res/bullet.png")) {
+	if (!bulletsheet.loadFromFile("res/bulletsheet.png")) {
 		std::cout << "error loading player sprites sheet" << endl;
 	}
 	if (!enemyanimations.loadFromFile("res/enemyanimationsheet.png")) {

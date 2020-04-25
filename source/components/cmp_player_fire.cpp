@@ -197,8 +197,9 @@ void PlayerFireComponent::fireNormal(float rotation) {
 	b->setDamage(_damage);
 	auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
 	bulletSprite.setTexture(Textures::instance()->getBulletSheet());
-	bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-	bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
+	bulletSprite.setTextureRect(IntRect(600, 0, 200, 200));
+	bulletSprite.setOrigin(100, 100);
+	bulletSprite.setScale({ 0.3f * _size, 0.3f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 	bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 	s->setSprite<Sprite>(bulletSprite);
 	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constBULLET, (short)(constENEMY | constWALL), &bullet);

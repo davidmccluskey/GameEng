@@ -6,9 +6,10 @@
 #include "cmp_base_enemy.h"
 #include "../game.h"
 #include "cmp_base_enemy.h"
+#include "../texture.h"
 using namespace std;
 using namespace sf;
-//sf::Texture sprite;
+sf::Sprite enemyBulletSprite;
 //sf::Sprite bulletSprite;
 
 void FarState::execute(Entity *owner, double dt) noexcept {
@@ -92,20 +93,40 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 				bullet->setPosition(owner->getPosition());
 				auto b = bullet->addComponent<BulletComponent>();
 				b->setDamage(1);
-				auto s = bullet->addComponent<ShapeComponent>(); //Adds sprite component
-				s->setShape<sf::CircleShape>(8.f);
-				s->getShape().setFillColor(Color::Red);
-				s->getShape().setOrigin(8.f, 8.f);
-				//bulletSprite.setTexture(sprite);
-				//bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-				//bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
-				//bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
-				//s->setSprite<Sprite>(bulletSprite);
+				auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
+				enemyBulletSprite.setTexture(Textures::instance()->getBulletSheet());
+				s->setSprite<Sprite>(enemyBulletSprite);
+				auto ownerSprite = owner->get_components<SpriteComponent>()[0];
+
+				auto tags = owner->getTags();
+
+				std::set<std::string>::iterator tag = tags.begin();
+				std::advance(tag, 1);
+				if (*tag == "harpoon") {
+					s->getSprite().setTextureRect(IntRect(200,0,200,200));
+					s->getSprite().setOrigin(100,100);
+					s->getSprite().setScale(0.3, 0.3);
+				}
+				else if (*tag == "orb") {
+					s->getSprite().setTextureRect(IntRect(0,0, 200, 200));
+					s->getSprite().setOrigin(100, 100);
+					s->getSprite().setScale(0.2, 0.2);
+
+				}
+				else if (*tag == "small") {
+					s->getSprite().setTextureRect(IntRect(400,0,200,200));
+					s->getSprite().setScale(0.15, 0.15);
+				}
+				s->getSprite().setOrigin(100, 100);
+				s->getSprite().setRotation(ownerSprite->getSprite().getRotation());
+				//s->setShape<sf::CircleShape>(8.f);
+				//s->getShape().setFillColor(Color::Red);
+				//s->getShape().setOrigin(8.f, 8.f);
 				auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constENEMYBULLET, (short)(constPLAYER | constWALL), &bullet);
 				p->setRestitution(.4f);
 				p->setFriction(.005f);
 				Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -owner->get_components<SpriteComponent>()[0]->getSprite().getRotation());
-				impulse = Vector2f(impulse.x , impulse.y);
+				impulse = Vector2f(impulse.x * 0.5, impulse.y * 0.5);
 				p->impulse(impulse);
 			}
 		}
