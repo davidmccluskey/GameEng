@@ -67,6 +67,14 @@ void OptionsItemComponent::setTextColour(sf::Color color)
 	text->SetColour(color);
 }
 
+
+void OptionsItemComponent::setTextSize(int size)
+{
+	auto text = _parent->get_components<TextComponent>()[0];
+	text->SetSize(size);
+}
+
+
 void OptionsItemComponent::setBorderColour(sf::Color color)
 {
 	auto shape = _parent->get_components<ShapeComponent>()[0];
@@ -87,7 +95,8 @@ void OptionsItemComponent::resolveClick() {
 		Options::instance()->volume = volume;
 		//cout << "volume up" << endl;
 		//cout << Options::instance()->volume << endl;
-	}else if(parentTag == "volumeDown") {
+	}
+	else if (parentTag == "volumeDown") {
 		int volume = Options::instance()->volume;
 		volume = volume - 25;
 		music.setVolume(volume);
@@ -146,5 +155,15 @@ void OptionsItemComponent::resolveClick() {
 	else if (parentTag == "windowed") {
 		Options::instance()->windowMode = 0;
 		cout << "window mode " << Options::instance()->windowMode << endl;
+	}
+	else if (parentTag == "windowed") {
+		Options::instance()->windowMode = 0;
+		cout << "window mode " << Options::instance()->windowMode << endl;
+	}
+	else if (parentTag == "altHealthOn") {
+		Options::instance()->altHealthIndicator = 1;
+	}
+	else if (parentTag == "altHealthOff") {
+		Options::instance()->altHealthIndicator = 0;
 	}
 }

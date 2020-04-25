@@ -128,6 +128,5 @@ void MenuScene::Render()
 
 void MenuScene::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
-	//player.reset();
 	Scene::UnLoad();
 }

@@ -13,6 +13,7 @@ public:
     void setPosition(sf::Vector2f position);
     void render() override;
 	void setTextColour(sf::Color color);
+    void setTextSize(int size);
     void setBorderColour(sf::Color color);
 
 	void resolveClick();

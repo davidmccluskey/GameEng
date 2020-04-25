@@ -18,7 +18,7 @@ Options::Options(int v) : m_value(v)
 	shootKey = 22;
 	pauseKey = 36;
 
-	
+	altHealthIndicator = 0;
 }
 
 int Options::get_value()
@@ -50,8 +50,9 @@ void Options::save() {
 	string ctrlRight = to_string(moveRight);
 	string ctrlShoot = to_string(shootKey);
 	string ctrlPause = to_string(pauseKey);
+	string althealth = to_string(altHealthIndicator);
 
-	string output = volumeStr + "\n" + windowModeStr + "\n" + musicOnStr + "\n" + effectsOnStr + "\n" + widthStr + "\n" + heightStr + "\n" + ctrlLeft + "\n" + ctrlRight + "\n" + ctrlShoot + "\n" + ctrlPause;
+	string output = volumeStr + "\n" + windowModeStr + "\n" + musicOnStr + "\n" + effectsOnStr + "\n" + widthStr + "\n" + heightStr + "\n" + ctrlLeft + "\n" + ctrlRight + "\n" + ctrlShoot + "\n" + ctrlPause + "\n" + althealth;
 	std::ofstream ofs("options.txt", std::ofstream::trunc);
 	ofs << output;
 	ofs.close();
