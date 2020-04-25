@@ -336,7 +336,7 @@ void MainScene::Update(const double& dt) {
 			waveTextComponent->SetText(wavenum);
 
 			for (int i = 0; i < enemySpawns; i++) {
-				int enemyType = rand() % 3 + 1;
+				int enemyType = rand() % 4 + 1;
 				switch (enemyType) {
 				case 1:
 					createEnemyHarpoon();
@@ -346,6 +346,9 @@ void MainScene::Update(const double& dt) {
 					break;
 				case 3:
 					createEnemySpike();
+					break;
+				case 4:
+					createEnemySmall();
 					break;
 				}
 			}
@@ -396,11 +399,10 @@ void MainScene::createEnemyOrb() {
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(85, 142);
 	e->getSprite().setScale({ 0.4, 0.4 });
-
 	auto rect = IntRect(0, 0, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
-	
+
 
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(2 * healthMultiplier);
@@ -411,7 +413,7 @@ void MainScene::createEnemyOrb() {
 	enemyComponent->setMinMax(min, max);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-	
+
 }
 
 void MainScene::createEnemyHarpoon() {
@@ -445,7 +447,7 @@ void MainScene::createEnemyHarpoon() {
 	enemyComponent->setTextureSize(200, 285, 1);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-	
+
 	float min = gameHeight * 0.3;
 	float max = min + 200;
 	enemyComponent->setMinMax(min, max);
@@ -482,12 +484,12 @@ void MainScene::createEnemySpike() {
 	enemyComponent->setTextureSize(200, 285, 2);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-	
-		enemy->addTag("spike");
 
-		float min = gameHeight * 0.15;
-		float max = min + 200;
-		enemyComponent->setMinMax(min, max);
+	enemy->addTag("spike");
+
+	float min = gameHeight * 0.15;
+	float max = min + 200;
+	enemyComponent->setMinMax(min, max);
 }
 void MainScene::createEnemySmall() {
 
