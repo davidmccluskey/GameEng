@@ -10,9 +10,6 @@ Textures::Textures(int v) : m_value(v)
 	if (!playerstates.loadFromFile("res/SpriteSheet.png")) {
 		std::cout << "error loading player sprites sheet" << endl;
 	}
-	if (!asteroid.loadFromFile("res/asteroid_sheet.png")) {
-		std::cout << "error loading asteroid sprites sheet" << endl;
-	}
 	if (!background.loadFromFile("res/background.jpeg")) {
 		std::cout << "error loading background" << endl;
 	}

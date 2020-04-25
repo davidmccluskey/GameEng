@@ -49,8 +49,15 @@ void PlayerMovementComponent::update(double dt)
 		_invuln = false;
 	}
 	if (_health <= 0) {
-		Engine::ChangeScene(&scene_enter_highscore);
-		return;
+		//cout << "DEAD" << endl;
+		//_parent->setVisible(false);
+		_endTimer -= dt;
+		if (_endTimer <= 0) {
+			Engine::ChangeScene(&scene_enter_highscore);
+			return;
+			
+		}
+		
 	}
 	else {
 		auto p = _parent->get_components<PhysicsComponent>()[0];
