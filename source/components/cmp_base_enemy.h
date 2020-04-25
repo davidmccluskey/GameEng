@@ -15,6 +15,7 @@ protected:
     int textureWidth;
     int textureHeight; 
     int texturePos;
+	float _fireDelay;
 
 public:
     void update(double dt) override;
@@ -35,4 +36,6 @@ public:
 	void setMinMax(float min, float max);
 	float getMin();
 	float getMax();
+	void setFireDelay(float value);
+	float getFireDelay();
 };

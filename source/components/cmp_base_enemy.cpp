@@ -156,3 +156,11 @@ float EnemyComponent::getMin() {
 float EnemyComponent::getMax() {
 	return _max;
 }
+
+void EnemyComponent::setFireDelay(float value) {
+	_fireDelay = value;
+}
+
+float EnemyComponent::getFireDelay() {
+	return _fireDelay;
+}

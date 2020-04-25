@@ -86,7 +86,7 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 			if (random == 100) {
 				//FIRE
 				cout << "FIRE BULLET" << endl;
-				_fireDelay = 4;
+				_fireDelay = e->getFireDelay();
 				auto bullet = owner->scene->makeEntity();
 				bullet->addTag("enemyBullet");
 				bullet->setPosition(owner->getPosition());
