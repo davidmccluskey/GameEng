@@ -168,25 +168,19 @@ void MainScene::Load() {
 
 
 	{
-		asteroidSprite.setTexture(Textures::instance()->getAstroid());
-		auto asteroid = makeEntity();
-		asteroid->setPosition({ 800,800 });
-		asteroid->addTag("asteroid");
-		auto s = asteroid->addComponent<SpriteComponent>();
-		s->setSprite<Sprite>(asteroidSprite);
-		auto rect = IntRect(0, 0, 850, 700);
-		s->getSprite().setOrigin(400, 350);
-		s->getSprite().setTextureRect(rect);
-		s->getSprite().setScale({ 0.5, 0.5 });
+		//asteroidSprite.setTexture(Textures::instance()->getAstroid());
+		//auto asteroid = makeEntity();
+		//asteroid->setPosition({ 800,800 });
+		//asteroid->addTag("asteroid");
+		//auto s = asteroid->addComponent<SpriteComponent>();
+		//s->setSprite<Sprite>(asteroidSprite);
+		//auto rect = IntRect(0, 0, 850, 700);
+		//s->getSprite().setOrigin(400, 350);
+		//s->getSprite().setTextureRect(rect);
+		//s->getSprite().setScale({ 0.5, 0.5 });
 
-		auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 160.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
+		//auto i = asteroid->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 160.0f), constENEMY, (short)(constBULLET | constWALL | constPLAYER), &asteroid);
 	}
-
-	//i->impulse({ 10,10 });
-	//i->setRestitution(1);
-	//Simulate long loading times UNCOMMENT FOR RELEASE
-	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	//cout << " Main scene Load Done" << endl;
 
 	timerText = makeEntity();
 	timerTextComponent = timerText->addComponent<TextComponent>("Wave timer");
