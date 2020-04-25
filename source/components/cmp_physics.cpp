@@ -86,15 +86,10 @@ void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r); }
 void PhysicsComponent::collisionResponse(void* collider) {
 	PhysicsComponent* c = static_cast<PhysicsComponent*>(collider);
 	auto child = c->_parent;
-	//cout << "A " << _parent << endl;
-	//cout << "B " << c->_parent << endl;
 	auto tagSet = _parent->getTags();
 	string parentTag = tagSet.begin()->c_str();
-	// cout << "parent " << parentTag << endl;
-
 	tagSet = child->getTags();
 	string childTag = tagSet.begin()->c_str();
-	// cout << "child " << childTag << endl;
 	if (parentTag == "enemy" && childTag == "enemy") {
 		return;
 	}
@@ -106,8 +101,6 @@ void PhysicsComponent::collisionResponse(void* collider) {
 		auto bullet = _parent->get_components<BulletComponent>()[0];
 		auto enemy = child->get_components<EnemyComponent>()[0];
 		float damage = bullet->getDamage();
-		//cout << "damage " << damage << endl;
-		//cout << "enemy health " << enemy->getHealth() << endl;
 		enemy->setShot(1);
 		enemy->setHealth(enemy->getHealth() - damage);
 		_parent->setForDelete();
@@ -147,10 +140,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 		score.setScore(100);
 		auto p = child->get_components<PlayerMovementComponent>()[0];
 		p->addHealth();
-		p->switchSprite();
-		
-		//      cout << "health up" << endl;
-			  //cout << p->getHealth() << endl;
+		p->switchSprite();		
 	}
 	if (parentTag == "enemyBullet" && childTag == "player") {
 		_parent->setForDelete();
@@ -160,13 +150,38 @@ void PhysicsComponent::collisionResponse(void* collider) {
 		auto p = child->get_components<PlayerMovementComponent>()[0];
 		if (p->getInvuln() == false) {
 			p->setShot(1);
-			//p->removeHealth();
+			p->removeHealth();
 			p->switchSprite();
 		}
-		/*if (p->getHealth() <= 0) {
-			Engine::ChangeScene(&scene_enter_highscore);
-			return;
-		}*/
+	}
+	if (parentTag == "enemy" && childTag == "player") {
+		if (Options::instance()->effectsOn == true) {
+			Sounds::instance()->playEnemyHit();
+		}
+		score.setScore(50);
+		auto enemy = _parent->get_components<EnemyComponent>()[0];
+		enemy->setShot(1);
+
+		auto tags = _parent->getTags();
+
+		std::set<std::string>::iterator tag = tags.begin();
+		std::advance(tag, 1);
+		if (*tag != "spike") {
+			float collisionDamage = length(getVelocity()) * 0.03;
+			cout << "Collison Damage: " << collisionDamage << endl;
+			enemy->setHealth(enemy->getHealth() - collisionDamage);
+		}
+		
+		if (Options::instance()->effectsOn == true) {
+			Sounds::instance()->playPlayerHit();
+		}
+		auto p = child->get_components<PlayerMovementComponent>()[0];
+		if (p->getInvuln() == false) {
+			p->setShot(1);
+			p->removeHealth();
+			p->switchSprite();
+		}
+		
 	}
 }
 
