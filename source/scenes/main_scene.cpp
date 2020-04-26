@@ -246,9 +246,9 @@ void MainScene::UnLoad() {
 	partThree.reset();
 	partFour.reset();
 	partFive.reset();
-	exitButton.reset();
-	restartButton.reset();
-	resumeButton.reset();
+	//exitButton.reset();
+	//restartButton.reset();
+	//resumeButton.reset();
 	timerText.reset();
 	waveText.reset();
 	healthText.reset();
