@@ -385,24 +385,23 @@ void MainScene::Update(const double& dt) {
 				string wavenum = to_string(_wavenumber);
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
-				createEnemyHarpoon();
-				//for (int i = 0; i < enemySpawns; i++) {
-				//	int enemyType = rand() % 4 + 1;
-				//	switch (enemyType) {
-				//	case 1:
-				//		createEnemyHarpoon();
-				//		break;
-				//	case 2:
-				//		createEnemyOrb();
-				//		break;
-				//	case 3:
-				//		createEnemySpike();
-				//		break;
-				//	case 4:
-				//		createEnemySmall();
-				//		break;
-				//	}
-				//}
+				for (int i = 0; i < enemySpawns; i++) {
+					int enemyType = rand() % 4 + 1;
+					switch (enemyType) {
+					case 1:
+						createEnemyHarpoon();
+						break;
+					case 2:
+						createEnemyOrb();
+						break;
+					case 3:
+						createEnemySpike();
+						break;
+					case 4:
+						createEnemySmall();
+						break;
+					}
+				}
 				//cout << "spawned " << enemySpawns << endl;
 			}
 		}
