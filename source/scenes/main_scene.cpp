@@ -318,7 +318,7 @@ void MainScene::Update(const double& dt) {
 			sf::View currentView = Engine::GetWindow().getView();
 			float x = rand() % 10 + (-5);
 			float y = rand() % 10 + (-5);
-			currentView.setCenter(currentView.getCenter().x + x, playerSprite->getSprite().getPosition().y + y);
+			currentView.setCenter(currentView.getCenter().x + x, currentView.getCenter().y + y);
 			Engine::GetWindow().setView(currentView);
 			if (shakeTimer < 0) {
 				screenshake = false;

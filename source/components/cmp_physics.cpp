@@ -16,9 +16,6 @@ using namespace sf;
 using namespace Physics;
 void PhysicsComponent::update(double dt) {
 	_parent->setPosition(bv2_to_sv2(_body->GetPosition()));
-	//_parentbody.setTransform(object.body.getWorldCenter(), angle);
-	_body->SetTransform(sv2_to_bv2(_parent->getPosition()), _parent->getRotation());
-	//_body->SetAngularVelocity(40);
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
@@ -181,7 +178,7 @@ void PhysicsComponent::collisionResponse(void* collider) {
 		auto p = child->get_components<PlayerMovementComponent>()[0];
 		if (p->getInvuln() == false) {
 			p->setShot(1);
-			//p->removeHealth();
+			p->removeHealth();
 			p->switchSprite();
 		}
 		
