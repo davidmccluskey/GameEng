@@ -50,7 +50,6 @@ void PlayerMovementComponent::update(double dt)
 	}
 	if (_health <= 0) {
 		cout << "DEAD" << endl;
-		_parent->setForDelete();
 		_isDead = true;
 		
 		
@@ -80,7 +79,7 @@ void PlayerMovementComponent::update(double dt)
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Space)) {
 			removeHealth();
-			cout << _health << endl;
+			//cout << _health << endl;
 		}
 	}
 }

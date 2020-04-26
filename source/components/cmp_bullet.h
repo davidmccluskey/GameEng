@@ -14,7 +14,7 @@ public:
   void update(double dt) override;
   void render() override {}
   void setDamage(float damage);
-  explicit BulletComponent(Entity* p, float lifetime = 1.0f, float size = 1.f, float impulse = 1.f, float speed = 1.f, float damage = 1.f);
+  explicit BulletComponent(Entity* p, float lifetime = 2.0f, float size = 1.f, float impulse = 1.f, float speed = 1.f, float damage = 1.f);
   BulletComponent() = delete;
 
   float getDamage();

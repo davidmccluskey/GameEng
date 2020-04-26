@@ -72,7 +72,7 @@ void MenuScene::Load() {
 		highscore->setPosition({ 250, gameHeight * 0.55 });
 		options->setPosition({ 250, gameHeight * 0.70 });
 		exit->setPosition({ 250, gameHeight * 0.85 });
-		credits->setPosition(Vector2f(windowWidth * 0.8, gameHeight * 0.85));
+		credits->setPosition(Vector2f(windowWidth * 0.8, windowHeight * 0.85));
 
 		auto s = start->addComponent<MenuItemComponent>("Start");
 		auto h = highscore->addComponent<MenuItemComponent>("High Scores");

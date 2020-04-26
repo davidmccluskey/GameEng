@@ -15,6 +15,7 @@ void EnemyComponent::update(double dt)
 	if (_health <= 0) {
 		if (pickupTex.loadFromFile("res/pickups.png")) {
 			float dropChance = rand() % 10 + 1;
+			dropChance = 10;
 			if (dropChance == 10) {
 				int drop = rand() % 6 + 1;
 				auto pickup = _parent->scene->makeEntity();
@@ -36,27 +37,27 @@ void EnemyComponent::update(double dt)
 					pickup->addTag("triple");
 					break;
 				case 2:
-					rect = sf::IntRect(210, 0, 200, 200);
+					rect = sf::IntRect(200, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("heavy");
 					break;
 				case 3:
-					rect = sf::IntRect(420, 0, 200, 200);
+					rect = sf::IntRect(400, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("quick");
 					break;
 				case 4:
-					rect = sf::IntRect(630, 0, 200, 200);
+					rect = sf::IntRect(600, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("burst");
 					break;
 				case 5:
-					rect = sf::IntRect(840, 0, 200, 200);
+					rect = sf::IntRect(800, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("shotgun");
 					break;
 				case 6:
-					rect = sf::IntRect(1040, 0, 200, 200);
+					rect = sf::IntRect(1000, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("health");
 					break;

@@ -48,6 +48,18 @@ static shared_ptr<TextComponent> scoreTextComponent;
 static shared_ptr<Entity> healthText;
 static shared_ptr<TextComponent> healthTextComponent;
 
+static shared_ptr<Entity> partOne;
+static shared_ptr<Entity> partTwo;
+static shared_ptr<Entity> partThree;
+static shared_ptr<Entity> partFour;
+static shared_ptr<Entity> partFive;
+
+Sprite spriteOne;
+Sprite spriteTwo;
+Sprite spriteThree;
+Sprite spriteFour;
+Sprite spriteFive;
+
 float healthMultiplier = 1;
 
 MyContactListener listenerInstance;
@@ -326,7 +338,10 @@ void MainScene::Update(const double& dt) {
 
 			if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
 			{
-				healthMultiplier = healthMultiplier + 0.2;
+				cout << healthMultiplier << endl;
+				if (_wavenumber > 20) { //Health multiplier only increases after level 20
+					healthMultiplier = healthMultiplier + 0.2;
+				}
 				score.setScore(1000);
 
 				if (baseWaveNum - 1 != 5) {
@@ -574,10 +589,108 @@ void MainScene::DeathResolution(float dt) {
 void MainScene::spawnDeadPlayer() {
 	if (playerDeadSpawned == false) {
 
-		//DO STUFF
+		auto playerSprite = player->get_components<SpriteComponent>()[0];
+
+		spriteOne.setTexture(Textures::instance()->getplayerdead());
+		spriteTwo.setTexture(Textures::instance()->getplayerdead());
+		spriteThree.setTexture(Textures::instance()->getplayerdead());
+		spriteFour.setTexture(Textures::instance()->getplayerdead());
+		spriteFive.setTexture(Textures::instance()->getplayerdead());
+
+		partOne = makeEntity();
+		partOne->setPosition(player->getPosition());
+
+		partTwo = makeEntity();
+		partTwo->setPosition(player->getPosition());
+
+		partThree = makeEntity();
+		partThree->setPosition(player->getPosition());
+
+		partFour = makeEntity();
+		partFour->setPosition(player->getPosition());
+
+		partFive = makeEntity();
+		partFive->setPosition(player->getPosition());
+
+
+		{
+			auto s = partOne->addComponent<SpriteComponent>();
+			auto p = partOne->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partOne);
+			s->setSprite<Sprite>(spriteOne);
+			s->getSprite().setScale(0.4, 0.4);
+			s->getSprite().setOrigin(100, 100);
+			s->getSprite().setTextureRect(IntRect(0, 0, 200, 200));
+			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
+
+			Vector2f impulse = sf::rotate(Vector2f(0, 10.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(-impulse.x * 0.1, impulse.y * 0.1 );
+			p->impulse(Vector2f(impulse));
+			partOne->addTag("part");
+		}
+		{
+			auto s = partTwo->addComponent<SpriteComponent>();
+			auto p = partTwo->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partTwo);
+			s->setSprite<Sprite>(spriteTwo);
+			s->getSprite().setScale(0.4, 0.4);
+			s->getSprite().setOrigin(100, 100);
+			s->getSprite().setTextureRect(IntRect(200, 0, 200, 200));
+			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
+			partTwo->addTag("part");
+
+			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(-impulse.x * 0.1, 0);
+			p->impulse(Vector2f(impulse));
+
+		}
+		{
+			auto s = partThree->addComponent<SpriteComponent>();
+			auto p = partThree->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partThree);
+			s->setSprite<Sprite>(spriteThree);
+			s->getSprite().setScale(0.4, 0.4);
+			s->getSprite().setOrigin(100, 100);
+			s->getSprite().setTextureRect(IntRect(400, 0, 200, 200));
+			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
+			partThree->addTag("part");
+
+			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(0, 0);
+			p->impulse(Vector2f(impulse));
+		}
+		{
+			auto s = partFour->addComponent<SpriteComponent>();
+			auto p = partFour->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFour);
+			s->setSprite<Sprite>(spriteFour);
+			s->getSprite().setScale(0.4, 0.4);
+			s->getSprite().setOrigin(100, 100);
+			s->getSprite().setTextureRect(IntRect(600, 0, 200, 200));
+			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
+			partFour->addTag("part");
+
+			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(impulse.x * 0.1, 0);
+			p->impulse(Vector2f(impulse));
+
+		}
+		{
+			auto s = partFive->addComponent<SpriteComponent>();
+			auto p = partFive->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFive);
+			s->setSprite<Sprite>(spriteFive);
+			s->getSprite().setScale(0.4, 0.4);
+			s->getSprite().setOrigin(100, 100);
+			s->getSprite().setTextureRect(IntRect(800, 0, 200, 200));
+			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
+			partFive->addTag("part");
+
+			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
+			impulse = Vector2f(impulse.x * 0.1, impulse.y * 0.1);
+			p->impulse(Vector2f(-impulse));
+
+		}
 
 		cout << "dead player spawned" << endl;
-
+		player->setForDelete();
 		playerDeadSpawned = true;
 	}
 }
+
+
