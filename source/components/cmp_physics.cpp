@@ -15,8 +15,19 @@ using namespace sf;
 
 using namespace Physics;
 void PhysicsComponent::update(double dt) {
+	
 	_parent->setPosition(bv2_to_sv2(_body->GetPosition()));
 
+	auto tagSet = _parent->getTags();
+		string parentTag = tagSet.begin()->c_str();
+	if (parentTag == "enemy" || parentTag == "player") {
+		double deg = (double)(3.14159265359 / 180);
+		auto s = _parent->get_components<SpriteComponent>()[0];
+		_body->SetTransform(sv2_to_bv2(_parent->getPosition()), s->getSprite().getRotation()*deg);
+	}
+
+	
+	
 
 }
 
