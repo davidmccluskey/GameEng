@@ -38,8 +38,6 @@ void PlayerFireComponent::update(double dt)
 				Sounds::instance()->playBlaster();
 			}
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
-			//playerPhysics->setFriction(0.1f);
-			//playerPhysics->setTimer();
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
 			playerPhysics->impulse(impulse);
@@ -59,16 +57,11 @@ void PlayerFireComponent::update(double dt)
 			}
 			//Firetime reduces everytime update is called, once  it is 0 the player can fire another bullet
 			auto playerPhysics = _parent->get_components<PhysicsComponent>()[0];
-			//playerPhysics->setFriction(0.1f);
-			//playerPhysics->setTimer();
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * _impulse, impulse.y * _impulse);
 			playerPhysics->impulse(impulse);
 
 			switch (_bulletType) {
-			case 'B':
-				fireBeam(rotation);
-				break;
 			case 'S':
 				fireShotgun(rotation);
 				break;
@@ -92,18 +85,15 @@ void PlayerFireComponent::update(double dt)
 		setAsHeavy();
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Num3)) {
-		setAsBeam();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num4)) {
 		setAsTriple();
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num5)) {
+	if (Keyboard::isKeyPressed(Keyboard::Num4)) {
 		setAsBurst();
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num6)) {
+	if (Keyboard::isKeyPressed(Keyboard::Num5)) {
 		setAsShotgun();
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num7)) {
+	if (Keyboard::isKeyPressed(Keyboard::Num6)) {
 		setAsQuick();
 	}
 }
@@ -131,7 +121,7 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 		b->setDamage(_damage);
 		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
 		bulletSprite.setTexture(Textures::instance()->getBulletSheet());
-		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		bulletSprite.setScale({ 0.3f * _size, 0.3f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 		s->setSprite<Sprite>(bulletSprite);
@@ -147,22 +137,6 @@ void PlayerFireComponent::fireShotgun(float rotation) {
 	}
 }
 
-void PlayerFireComponent::fireBeam(float rotation) {
-	//auto bullet = _parent->scene->makeEntity();
-	//bullet->setPosition(_parent->getPosition());    //Sets bullet position to player position
-	//auto b = bullet->addComponent<BaseBulletComponent>(); //Adds bullet component which determines bullet pickup
-	//auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
-	//b->setSpeed(1000 * _speed);
-	//b->setType('B');
-	//beam.setTexture(beamSprite);
-	//beam.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
-	//beam.setOrigin({ 200, 880 });   //sets center of bullet
-	//beam.setPosition(_parent->getPosition());
-	//float inverse = fmod((rotation + 180.f), 360);  //Sets rotation of bullet to be inverse of ship rotation, using fancy maths.
-	//bullet->setRotation(inverse);
-	//beam.setRotation(inverse);
-	//s->setSprite<Sprite>(beam); 
-}
 void PlayerFireComponent::fireTriple(float rotation) {
 	int angle = -10;
 	for (int i = 0; i < 3; i++) {
@@ -174,7 +148,7 @@ void PlayerFireComponent::fireTriple(float rotation) {
 		b->setDamage(_damage);
 		auto s = bullet->addComponent<SpriteComponent>(); //Adds sprite component
 		bulletSprite.setTexture(Textures::instance()->getBulletSheet());
-		bulletSprite.setScale({ 0.1f * _size, 0.1f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
+		bulletSprite.setScale({ 0.3f * _size, 0.3f * _size });  //Sets scale of bullet CHANGE TO VARIABLE FOR LATER USE
 		bulletSprite.setOrigin({ 200, 200 });   //sets center of bullet
 		bulletSprite.setPosition(_parent->getPosition());   //sets position of sprite to be same as object
 		s->setSprite<Sprite>(bulletSprite);
@@ -212,56 +186,47 @@ void PlayerFireComponent::fireNormal(float rotation) {
 
 void PlayerFireComponent::render() {} //empty required method
 
-void PlayerFireComponent::setAsTriple()
-{
-	_bulletType = 'T';
-	_fireRate = 1;
-	_impulse = 2;
-	_damage = 1;
-	_size = 1.5;
-	_bulletSpeed = 0.5;
-
-	_firetime = 0;
-}
-
-void PlayerFireComponent::setAsHeavy()
-{
-	_bulletType = 'H';
-	_impulse = 5;
-	_fireRate = 1;
-	_damage = 5;
-	_size = 3;
-	_bulletSpeed = 0.5;
-
-	_firetime = 0;
-
-}
-
-void PlayerFireComponent::setAsBeam()
-{
-	_bulletType = 'B';
-	_fireRate = 3.5;
-	_impulse = 1;
-	_damage = 1;
-	_size = 3;
-	_bulletSpeed = 1;
-
-	_firetime = 0;
-
-}
 
 void PlayerFireComponent::setAsNormal()
 {
 	_bulletType = 'D';
-	_fireRate = 0.3;
-	_impulse = 1;
+	_fireRate = 0.6;
+	_impulse = 2;
 	_damage = 1;
 	_size = 1;
-	_bulletSpeed = 1;
+	_bulletSpeed = 0.9;
 
 	_firetime = 0;
 
 }
+void PlayerFireComponent::setAsHeavy()
+{
+	_bulletType = 'H';
+	_impulse = 6;
+	_fireRate = 1.2;
+	_damage = 6;
+	_size = 2.5;
+	_bulletSpeed = 0.4;
+
+	_firetime = 0;
+
+}
+
+void PlayerFireComponent::setAsTriple()
+{
+	_bulletType = 'T';
+	_fireRate = 0.6;
+	_impulse = 2;
+	_damage = 3;
+	_size = 1.2;
+	_bulletSpeed = 0.9;
+
+	_firetime = 0;
+}
+
+
+
+
 
 void PlayerFireComponent::setAsQuick()
 {

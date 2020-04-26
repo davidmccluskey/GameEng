@@ -23,6 +23,7 @@
 #include "../score.h"
 #include "../options.h"
 #include "../texture.h"
+#include "../sounds.h"
 
 using namespace std;
 using namespace sf;
@@ -358,11 +359,6 @@ void MainScene::Update(const double& dt) {
 				}
 				if (_wavenumber % 1 == 0) {
 					createEnemyBoss();
-					createEnemyBoss();
-					createEnemyBoss();
-					createEnemyBoss();
-					createEnemyBoss();
-					createEnemyBoss();
 					enemySpawns++;
 				}
 
@@ -571,7 +567,7 @@ void MainScene::createEnemySmall() {
 }
 
 void MainScene::createEnemyBoss() {
-
+	Sounds::instance()->playBoss();
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
@@ -590,11 +586,11 @@ void MainScene::createEnemyBoss() {
 	e->setSprite<Sprite>(enemySprite);
 	e->getSprite().setOrigin(85, 142);
 	e->getSprite().setScale({ 1.5, 1.5 });
-	auto rect = IntRect(0, 900, 200, 300);
+	auto rect = IntRect(0, 1200, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(4 * healthMultiplier);
+	enemyComponent->setHealth(20 * healthMultiplier);
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 150.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
 	float min = gameHeight * 0.4;
