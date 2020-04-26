@@ -46,7 +46,6 @@ void Loading_render() {
   Renderer::queue(&t);
   Renderer::queue(&loadingSprite);
 }
-
 float frametimes[256] = {};
 uint8_t ftc = 0;
 
@@ -79,8 +78,10 @@ void Engine::Render(RenderWindow& window) {
   if (loading) {
     Loading_render();
   } else if (_activeScene != nullptr) {
+	  Physics::GetWorld()->DrawDebugData();
     _activeScene->Render();
   }
+
 
   Renderer::render();
 }
@@ -107,7 +108,7 @@ void Engine::Start(unsigned int width, unsigned int height,
             }
 
             window.clear();
-            Update();
+            Update();			
             Render(window);
             window.display();
         }
