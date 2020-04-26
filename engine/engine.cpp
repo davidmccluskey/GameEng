@@ -148,8 +148,8 @@ void Engine::Start(unsigned int width, unsigned int height,
             _activeScene = nullptr;
         }
         Physics::shutdown();
-        window.close();
         Renderer::shutdown();
+        window.close();
     }
 
 

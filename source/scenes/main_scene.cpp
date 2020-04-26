@@ -256,6 +256,17 @@ void MainScene::Load() {
 void MainScene::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
 	player.reset();
+	partOne.reset();
+	partTwo.reset();
+	partThree.reset();
+	partFour.reset();
+	partFive.reset();
+	exitButton.reset();
+	restartButton.reset();
+	resumeButton.reset();
+	timerText.reset();
+	waveText.reset();
+	healthText.reset();
 	Scene::UnLoad();
 }
 
@@ -263,13 +274,6 @@ void MainScene::Update(const double& dt) {
 	//cout << "on scren " << _enemyNum << endl;
 	// catch the resize events
 	// catch the resize events
-	sf::Event event;
-	RenderWindow& window = Engine::GetWindow();
-	while (window.pollEvent(event)) {
-		if (event.type == Event::Closed) {
-			window.close();
-		}
-	}
 
 	_keyboardCooldown -= dt;
 	if (_keyboardCooldown < 0) {
@@ -388,9 +392,14 @@ void MainScene::Update(const double& dt) {
 			DeathResolution(dt);
 			spawnDeadPlayer();
 		}
-
-
 		Scene::Update(dt);
+		sf::Event event;
+		RenderWindow& window = Engine::GetWindow();
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed) {
+				window.close();
+			}
+		}
 	}
 	else if (_paused) {
 		music.setVolume(Options::instance()->volume / 2);
@@ -581,8 +590,6 @@ void MainScene::DeathResolution(float dt) {
 	endTimer -= dt;
 	if (endTimer <= 0) {
 		Engine::ChangeScene(&scene_enter_highscore);
-		return;
-
 	}
 }
 
@@ -615,7 +622,6 @@ void MainScene::spawnDeadPlayer() {
 
 		{
 			auto s = partOne->addComponent<SpriteComponent>();
-			auto p = partOne->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partOne);
 			s->setSprite<Sprite>(spriteOne);
 			s->getSprite().setScale(0.4, 0.4);
 			s->getSprite().setOrigin(100, 100);
@@ -624,12 +630,12 @@ void MainScene::spawnDeadPlayer() {
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 10.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * 0.1, impulse.y * 0.1 );
+			auto p = partOne->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partOne);
 			p->impulse(Vector2f(impulse));
 			partOne->addTag("part");
 		}
 		{
 			auto s = partTwo->addComponent<SpriteComponent>();
-			auto p = partTwo->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partTwo);
 			s->setSprite<Sprite>(spriteTwo);
 			s->getSprite().setScale(0.4, 0.4);
 			s->getSprite().setOrigin(100, 100);
@@ -639,12 +645,12 @@ void MainScene::spawnDeadPlayer() {
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(-impulse.x * 0.1, 0);
+			auto p = partTwo->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partTwo);
 			p->impulse(Vector2f(impulse));
 
 		}
 		{
 			auto s = partThree->addComponent<SpriteComponent>();
-			auto p = partThree->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partThree);
 			s->setSprite<Sprite>(spriteThree);
 			s->getSprite().setScale(0.4, 0.4);
 			s->getSprite().setOrigin(100, 100);
@@ -654,11 +660,11 @@ void MainScene::spawnDeadPlayer() {
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(0, 0);
+			auto p = partThree->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partThree);
 			p->impulse(Vector2f(impulse));
 		}
 		{
 			auto s = partFour->addComponent<SpriteComponent>();
-			auto p = partFour->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFour);
 			s->setSprite<Sprite>(spriteFour);
 			s->getSprite().setScale(0.4, 0.4);
 			s->getSprite().setOrigin(100, 100);
@@ -668,12 +674,12 @@ void MainScene::spawnDeadPlayer() {
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(impulse.x * 0.1, 0);
+			auto p = partFour->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFour);
 			p->impulse(Vector2f(impulse));
 
 		}
 		{
 			auto s = partFive->addComponent<SpriteComponent>();
-			auto p = partFive->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFive);
 			s->setSprite<Sprite>(spriteFive);
 			s->getSprite().setScale(0.4, 0.4);
 			s->getSprite().setOrigin(100, 100);
@@ -683,8 +689,8 @@ void MainScene::spawnDeadPlayer() {
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 5.f), playerSprite->getSprite().getRotation());
 			impulse = Vector2f(impulse.x * 0.1, impulse.y * 0.1);
-			p->impulse(Vector2f(-impulse));
-
+			auto p = partFive->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partFive);
+			p->impulse(Vector2f(impulse));
 		}
 
 		cout << "dead player spawned" << endl;
