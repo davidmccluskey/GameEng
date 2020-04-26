@@ -15,7 +15,7 @@ void EnemyComponent::update(double dt)
 	if (_health <= 0) {
 		if (pickupTex.loadFromFile("res/pickups.png")) {
 			float dropChance = rand() % 10 + 1;
-			dropChance = 10;
+			//dropChance = 10;
 			if (dropChance == 10) {
 				int drop = rand() % 6 + 1;
 				auto pickup = _parent->scene->makeEntity();

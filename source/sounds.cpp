@@ -22,7 +22,10 @@ Sounds::Sounds(int v) : m_value(v)
 	{
 		errorsound.setBuffer(errorbuffer);
 	}
-
+	if (bossBuffer.loadFromFile("res/soundFX/bossSound.wav"))
+	{
+		bossSound.setBuffer(bossBuffer);
+	}
 }
 
 int Sounds::get_value()
@@ -59,6 +62,11 @@ void Sounds::playError()
 {
 	errorsound.setVolume(Options::instance()->volume);
 	errorsound.play();
+}
+void Sounds::playBoss()
+{
+	bossSound.setVolume(Options::instance()->volume);
+	bossSound.play();
 }
 Sounds* Sounds::s_instance = 0;
 
