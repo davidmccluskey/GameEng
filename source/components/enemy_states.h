@@ -31,6 +31,10 @@ private:
 public:
 	IdleState(std::shared_ptr<Entity> player) : _player(player) { }
 	void execute(Entity*, double) noexcept override;
+	void Fire(Entity* owner, double dt);
+	void BossAttackOne(Entity* owner, double dt);
+	void BossAttackTwo(Entity* owner, double dt);
+	void BossAttackThree(Entity* owner, double dt);
 };
 
 class RushState : public State

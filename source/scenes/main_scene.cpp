@@ -341,6 +341,10 @@ void MainScene::Update(const double& dt) {
 
 			if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
 			{
+				createEnemyHarpoon();
+				createEnemyOrb();
+				createEnemySmall();
+
 				cout << healthMultiplier << endl;
 				if (_wavenumber > 20) { //Health multiplier only increases after level 20
 					healthMultiplier = healthMultiplier + 0.2;
@@ -610,7 +614,7 @@ void MainScene::createEnemyBoss() {
 
 	_enemyNum++;
 	enemyComponent->setTextureSize(200, 300, 2);
-	enemyComponent->setFireDelay(9999990.35f);
+	enemyComponent->setFireDelay(0.35);
 
 }
 

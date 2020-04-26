@@ -45,7 +45,6 @@ void MenuScene::Load() {
 			}
 		}
 	}
-	cout << "Menu Load \n";
 	if (background.loadFromFile("res/background.jpeg")) {
 		spriteBackground.setTexture(background);
 		spriteBackground.setPosition(0, 0);
@@ -91,6 +90,7 @@ void MenuScene::Load() {
 		t->SetColour(sf::Color::White);
 
 	}
+	cout << "Menu Load \n";
 	setLoaded(true);
 }
 
