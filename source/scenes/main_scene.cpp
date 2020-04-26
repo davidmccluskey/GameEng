@@ -458,7 +458,6 @@ void MainScene::createEnemyOrb() {
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(36.0f, 36.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 	enemyComponent->setFireDelay(1.5f);
-	enemy->setPosition(Vector2f(player->getPosition().x - 400, player->getPosition().y - 200));
 }
 
 void MainScene::createEnemyHarpoon() {
@@ -498,7 +497,6 @@ void MainScene::createEnemyHarpoon() {
 	enemyComponent->setMinMax(min, max);
 	enemyComponent->setFireDelay(2.0f);
 
-	enemy->setPosition(Vector2f(player->getPosition().x + 200, player->getPosition().y - 200));
 }
 
 void MainScene::createEnemySpike() {
@@ -538,7 +536,6 @@ void MainScene::createEnemySpike() {
 	float max = min + 200;
 	enemyComponent->setMinMax(min, max);
 
-	enemy->setPosition(Vector2f(player->getPosition().x - 200, player->getPosition().y - 200));
 }
 void MainScene::createEnemySmall() {
 
@@ -576,7 +573,6 @@ void MainScene::createEnemySmall() {
 	enemyComponent->setTextureSize(200, 300, 2);
 	enemyComponent->setFireDelay(0.6f);
 
-	enemy->setPosition(Vector2f(player->getPosition().x, player->getPosition().y - 200));
 }
 
 void MainScene::createEnemyBoss() {
@@ -613,8 +609,6 @@ void MainScene::createEnemyBoss() {
 	_enemyNum++;
 	enemyComponent->setTextureSize(200, 300, 2);
 	enemyComponent->setFireDelay(0.35);
-
-	enemy->setPosition(Vector2f(player->getPosition().x + 400, player->getPosition().y - 200));
 }
 
 
