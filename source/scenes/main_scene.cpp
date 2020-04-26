@@ -34,7 +34,7 @@ static shared_ptr<Entity> player;
 
 //Sprites
 sf::Sprite enemySprite;
-Sprite backgroundSprite;	
+Sprite backgroundSprite;
 static shared_ptr<Entity> walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
 
@@ -367,7 +367,6 @@ void MainScene::Update(const double& dt) {
 				string wavenum = to_string(_wavenumber);
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
-			
 				for (int i = 0; i < enemySpawns; i++) {
 					int enemyType = rand() % 4 + 1;
 					switch (enemyType) {
@@ -464,6 +463,7 @@ void MainScene::createEnemyOrb() {
 
 void MainScene::createEnemyHarpoon() {
 	_enemyNum++;
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
@@ -675,7 +675,7 @@ void MainScene::spawnDeadPlayer() {
 			s->getSprite().setRotation(playerSprite->getSprite().getRotation());
 
 			Vector2f impulse = sf::rotate(Vector2f(0, 10.f), playerSprite->getSprite().getRotation());
-			impulse = Vector2f(-impulse.x * 0.1, impulse.y * 0.1 );
+			impulse = Vector2f(-impulse.x * 0.1, impulse.y * 0.1);
 			auto p = partOne->addComponent<PhysicsComponent>(true, Vector2f(10.0f, 10.0f), constPLAYER, (short)(constWALL | constENEMY | constENEMYBULLET | constPICKUP), &partOne);
 			p->impulse(Vector2f(impulse));
 			partOne->addTag("part");
