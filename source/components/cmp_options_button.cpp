@@ -98,7 +98,9 @@ void OptionsItemComponent::resolveClick() {
 	}
 	else if (parentTag == "volumeDown") {
 		int volume = Options::instance()->volume;
-		volume = volume - 25;
+		if (volume > 0) {
+			volume = volume - 25;
+		}
 		music.setVolume(volume);
 		Options::instance()->volume = volume;
 		//cout << "volume down" << endl;
