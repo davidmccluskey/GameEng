@@ -127,13 +127,13 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 				p->setRestitution(.4f);
 				p->setFriction(.005f);
 				Vector2f impulse = sf::rotate(Vector2f(0, 50.f), -owner->get_components<SpriteComponent>()[0]->getSprite().getRotation());
-				impulse = Vector2f(impulse.x * 0.5, impulse.y * 0.5);
+				impulse = Vector2f(impulse.x * 0.3, impulse.y * 0.3);
 				p->impulse(impulse);
 			}
 		}
 	}
 	//Change to far if the player is more than 450 units away
-	if (length(owner->getPosition() - _player->getPosition()) > max) {
+	if (length(owner->getPosition() - _player->getPosition()) > max + (max - min / 2)) {
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("seek");
 		//cout << "change to far from idle" << endl;

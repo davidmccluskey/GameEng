@@ -25,7 +25,6 @@ public:
 
 	void setAsTriple();
 	void setAsHeavy();
-	void setAsBeam();
 	void setAsNormal();
 
 	void setAsQuick();
@@ -35,8 +34,6 @@ public:
 	void fireBurst(float rotation);
 
 	void fireShotgun(float rotation);
-
-	void fireBeam(float rotation);
 
 	void fireTriple(float rotation);
 

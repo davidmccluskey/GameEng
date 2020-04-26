@@ -26,7 +26,7 @@ public:
 class IdleState : public State
 {
 private:
-	float _fireDelay = 3;
+	float _fireDelay = 1;
 	std::shared_ptr<Entity> _player;
 public:
 	IdleState(std::shared_ptr<Entity> player) : _player(player) { }

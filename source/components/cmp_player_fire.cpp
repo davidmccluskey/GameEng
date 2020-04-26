@@ -192,7 +192,7 @@ void PlayerFireComponent::setAsNormal()
 	_bulletType = 'D';
 	_fireRate = 0.6;
 	_impulse = 2;
-	_damage = 1;
+	_damage = 2;
 	_size = 1;
 	_bulletSpeed = 0.9;
 
@@ -204,7 +204,7 @@ void PlayerFireComponent::setAsHeavy()
 	_bulletType = 'H';
 	_impulse = 6;
 	_fireRate = 1.2;
-	_damage = 6;
+	_damage = 7;
 	_size = 2.5;
 	_bulletSpeed = 0.4;
 
@@ -217,7 +217,7 @@ void PlayerFireComponent::setAsTriple()
 	_bulletType = 'T';
 	_fireRate = 0.6;
 	_impulse = 2;
-	_damage = 3;
+	_damage = 2;
 	_size = 1.2;
 	_bulletSpeed = 0.9;
 
@@ -233,7 +233,7 @@ void PlayerFireComponent::setAsQuick()
 	_bulletType = 'Q';
 	_fireRate = 0.1;
 	_impulse = 0.5;
-	_damage = 1;
+	_damage = 0.5;
 	_size = 0.5;
 	_bulletSpeed = 1.5;
 
@@ -244,9 +244,9 @@ void PlayerFireComponent::setAsQuick()
 void PlayerFireComponent::setAsShotgun()
 {
 	_bulletType = 'S';
-	_fireRate = 0.7;
+	_fireRate = 0.8;
 	_impulse = 4;
-	_damage = 1;
+	_damage = 2;
 	_size = 1;
 
 	_firetime = 0;
@@ -256,9 +256,9 @@ void PlayerFireComponent::setAsShotgun()
 void PlayerFireComponent::setAsBurst()
 {
 	_bulletType = 'U';
-	_fireRate = 0.7;
-	_impulse = 1;
-	_damage = 1;
+	_fireRate = 0.8;
+	_impulse = 0.8;
+	_damage = 2;
 	_size = 1;
 	_bulletSpeed = 1.5;
 

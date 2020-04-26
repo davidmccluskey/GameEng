@@ -156,6 +156,7 @@ void MainScene::Load() {
 		auto s = player->addComponent<SpriteComponent>(); //Adds sprite component for sprite and animation handling
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement
+		f->setAsNormal();
 		player->addTag("player");
 		sf::Sprite playerSprite;
 		playerSprite.setTexture(Textures::instance()->getPlayerStates());
@@ -352,12 +353,12 @@ void MainScene::Update(const double& dt) {
 				int enemyCheck = enemySpawns;
 				_wavenumber++;
 
-				if (enemySpawns + 1 != 10) {
+				if (enemyCheck + 1 <= 10) {
 					if (_wavenumber % 2 == 0) {
 						enemySpawns++;
 					}
 				}
-				if (_wavenumber % 1 == 0) {
+				if (_wavenumber % 10 == 0) {	//Boss every 10 waves
 					createEnemyBoss();
 					enemySpawns++;
 				}
@@ -366,6 +367,7 @@ void MainScene::Update(const double& dt) {
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
 
+				createEnemyBoss();
 				/*for (int i = 0; i < enemySpawns; i++) {
 					int enemyType = rand() % 4 + 1;
 					switch (enemyType) {
@@ -381,8 +383,8 @@ void MainScene::Update(const double& dt) {
 					case 4:
 						createEnemySmall();
 						break;
-					}
-				}*/
+					}*/
+				/*}*/
 				cout << "spawned " << enemySpawns << endl;
 			}
 		}
@@ -443,7 +445,7 @@ void MainScene::createEnemyOrb() {
 
 
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(2 * healthMultiplier);
+	enemyComponent->setHealth(3 * healthMultiplier);
 	enemyComponent->setTextureSize(200, 285, 0);
 
 	float min = gameHeight * 0.15;
@@ -451,7 +453,7 @@ void MainScene::createEnemyOrb() {
 	enemyComponent->setMinMax(min, max);
 
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
-	enemyComponent->setFireDelay(3.0f);
+	enemyComponent->setFireDelay(1.5f);
 }
 
 void MainScene::createEnemyHarpoon() {
@@ -480,7 +482,7 @@ void MainScene::createEnemyHarpoon() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(5 * healthMultiplier);
+	enemyComponent->setHealth(10 * healthMultiplier);
 	enemyComponent->setMinMax(500.0f, 700.0f);
 	enemyComponent->setTextureSize(200, 285, 1);
 
@@ -489,7 +491,7 @@ void MainScene::createEnemyHarpoon() {
 	float min = gameHeight * 0.3;
 	float max = min + 200;
 	enemyComponent->setMinMax(min, max);
-	enemyComponent->setFireDelay(3.0f);
+	enemyComponent->setFireDelay(2.0f);
 
 }
 
@@ -552,18 +554,18 @@ void MainScene::createEnemySmall() {
 	e->getSprite().setScale({ 0.4, 0.4 });
 	auto rect = IntRect(0, 900, 200, 300);
 	e->getSprite().setTextureRect(rect);
-	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
+	enemy->addComponent<SteeringComponent>(player.get(), 400.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
 	enemyComponent->setHealth(4 * healthMultiplier);
 	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(40.0f, 40.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
-	float min = gameHeight * 0.1;
+	float min = gameHeight * 0.15;
 	float max = min + 100;
 	enemyComponent->setMinMax(min, max);
 
 	_enemyNum++;
 	enemyComponent->setTextureSize(200, 300, 2);
-	enemyComponent->setFireDelay(2.0f);
+	enemyComponent->setFireDelay(0.6f);
 }
 
 void MainScene::createEnemyBoss() {
@@ -584,22 +586,23 @@ void MainScene::createEnemyBoss() {
 	enemy->setPosition(Vector2f(xVal, yVal));
 	auto e = enemy->addComponent<SpriteComponent>();
 	e->setSprite<Sprite>(enemySprite);
-	e->getSprite().setOrigin(85, 142);
+	e->getSprite().setOrigin(100, 50);
 	e->getSprite().setScale({ 1.5, 1.5 });
 	auto rect = IntRect(0, 1200, 200, 300);
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(20 * healthMultiplier);
-	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 150.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
+	enemyComponent->setHealth(40 * healthMultiplier);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 100.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
 
-	float min = gameHeight * 0.4;
-	float max = min + 200;
+	float min = gameHeight * 0.35;
+	float max = min + 300;
 	enemyComponent->setMinMax(min, max);
 
 	_enemyNum++;
 	enemyComponent->setTextureSize(200, 300, 2);
-	enemyComponent->setFireDelay(2.0f);
+	enemyComponent->setFireDelay(9999990.35f);
+
 }
 
 
