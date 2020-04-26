@@ -17,7 +17,7 @@ void HighScoreScene::Load() {
 	auto txt = makeEntity();
 	auto t = txt->addComponent<TextComponent>("High Scores");
 	t->SetSize(50);
-	t->SetPosition({ gameWidth * 0.35, 20 });
+	t->SetPosition(Vector2f(windowWidth * 0.35, 20));
 	//rectangle.setSize(sf::Vector2f(windowWidth * 0.8, windowHeight * 0.8));
 	//rectangle.setOutlineColor(sf::Color::Green);
 	//rectangle.setFillColor(sf::Color::Blue);
@@ -48,7 +48,14 @@ void HighScoreScene::Load() {
 	//Simple bubble sort (because you need to sort the names based on the scores being sorted)
 	int tempi;
 	string temp;
-	for (int i = 0; i < scores.size(); i++) {
+	int numTimes = 0;
+	if (names.size() > 20) {
+		numTimes = 20;
+	}
+	else {
+		numTimes = names.size();
+	}
+	for (size_t i = 0; i < numTimes; i++){
 		for (int j = i + 1; j < scores.size(); j++)
 		{
 			if (scores[j] > scores[i]) {
