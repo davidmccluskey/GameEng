@@ -20,6 +20,9 @@ extern ControlsScreen scene_controls;
 extern ControlsScreen scene_controls;
 extern CreditsScene scene_credits;
 
+extern bool screenshake;
+extern float shakeTimer;
+
 extern Score score;
 extern string name;
 

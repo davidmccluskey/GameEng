@@ -28,8 +28,8 @@ void PlayerMovementComponent::update(double dt)
 		if (_flicker == true) {
 			if (_flickerTimer < 0) {
 				auto enemySprite = _parent->get_components<SpriteComponent>()[0];
-				enemySprite->getSprite().setColor(sf::Color::Red);
-				_flickerTimer = 0.1;
+				enemySprite->getSprite().setColor(sf::Color::Transparent);
+				_flickerTimer = 0.05;
 				_flicker = false;
 			}
 		}
@@ -37,7 +37,7 @@ void PlayerMovementComponent::update(double dt)
 			if (_flickerTimer < 0) {
 				auto enemySprite = _parent->get_components<SpriteComponent>()[0];
 				enemySprite->getSprite().setColor(sf::Color::White);
-				_flickerTimer = 0.1;
+				_flickerTimer = 0.05;
 				_flicker = true;
 			}
 		}
@@ -77,10 +77,10 @@ void PlayerMovementComponent::update(double dt)
 		{
 			rotate(dt * 400); //Rotates ship right at speed of 300
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Space)) {
-			removeHealth();
-			//cout << _health << endl;
-		}
+		//if (Keyboard::isKeyPressed(Keyboard::Space)) {
+		//	removeHealth();
+		//	//cout << _health << endl;
+		//}
 	}
 }
 

@@ -62,6 +62,8 @@ float healthMultiplier = 1;
 
 MyContactListener listenerInstance;
 
+bool screenshake = false;
+float shakeTimer = 0;
 sf::Sprite pauseMenu;
 
 static shared_ptr<Entity> resumeButton; //Player Entity
@@ -76,6 +78,8 @@ bool _isDead = false;
 int viewX;
 int viewY;
 void MainScene::Load() {
+	screenshake = false;
+	shakeTimer = 0;
 	windowWidth = Options::instance()->launchWidth;
 	windowHeight = Options::instance()->launchHeight;
 	reset();
@@ -84,15 +88,15 @@ void MainScene::Load() {
 	float scaleHeight = windowHeight / 900;
 
 	Physics::GetWorld()->SetContactListener(&listenerInstance);
-	cout << "" << endl;
-	cout << "Controls: 1 for normal" << endl;
-	cout << "Controls: 2 for heavy" << endl;
-	cout << "Controls: 3 for beam (TODO)" << endl;
-	cout << "Controls: 4 for triple shot" << endl;
-	cout << "Controls: 5 for burst fire" << endl;
-	cout << "Controls: 6 for shotgun" << endl;
-	cout << "Controls: 7 for quick" << endl;
-	cout << "" << endl;
+	//cout << "" << endl;
+	//cout << "Controls: 1 for normal" << endl;
+	//cout << "Controls: 2 for heavy" << endl;
+	//cout << "Controls: 3 for beam (TODO)" << endl;
+	//cout << "Controls: 4 for triple shot" << endl;
+	//cout << "Controls: 5 for burst fire" << endl;
+	//cout << "Controls: 6 for shotgun" << endl;
+	//cout << "Controls: 7 for quick" << endl;
+	//cout << "" << endl;
 
 	Vector2f walls[] = {
 		// Top
@@ -304,13 +308,23 @@ void MainScene::Update(const double& dt) {
 		if (topCheck >= 0 && bottomCheck <= (gameHeight * scale)) {
 			currentView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
 			viewY = currentView.getCenter().y;
-			//prevView.setCenter(currentView.getCenter().x, playerSprite->getSprite().getPosition().y);
 		}
 		else {
 			currentView.setCenter(viewX, viewY);
 		}
-
 		Engine::GetWindow().setView(currentView);
+		if (screenshake == true) {
+			shakeTimer -= dt;
+			sf::View currentView = Engine::GetWindow().getView();
+			float x = rand() % 10 + (-5);
+			float y = rand() % 10 + (-5);
+			currentView.setCenter(currentView.getCenter().x + x, playerSprite->getSprite().getPosition().y + y);
+			Engine::GetWindow().setView(currentView);
+			if (shakeTimer < 0) {
+				screenshake = false;
+			}
+		}
+
 
 		Vector2f topLeft = { (currentView.getCenter().x - (currentView.getSize().x / 2) + 50), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
 		Vector2f topRight = { (currentView.getCenter().x + (currentView.getSize().x / 2) - 150), (currentView.getCenter().y - (currentView.getSize().y / 2) + 20) };
@@ -330,7 +344,7 @@ void MainScene::Update(const double& dt) {
 		}
 
 		if (_isDead != true) {
-			//_wavetimer -= dt;
+			_wavetimer -= dt;
 			string str = to_string(_wavetimer);
 			str.resize(str.size() - 5);
 			timerTextComponent->SetText(str);
@@ -341,11 +355,8 @@ void MainScene::Update(const double& dt) {
 
 			if (_wavetimer < 0 || _enemyNum <= 0)//SPAWNING WAVES
 			{
-				createEnemyHarpoon();
-				createEnemyOrb();
-				createEnemySmall();
 
-				cout << healthMultiplier << endl;
+				//cout << healthMultiplier << endl;
 				if (_wavenumber > 20) { //Health multiplier only increases after level 20
 					healthMultiplier = healthMultiplier + 0.2;
 				}
@@ -374,9 +385,8 @@ void MainScene::Update(const double& dt) {
 				string wavenum = to_string(_wavenumber);
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
-				createEnemyBoss();
 			
-				/*for (int i = 0; i < enemySpawns; i++) {
+				for (int i = 0; i < enemySpawns; i++) {
 					int enemyType = rand() % 4 + 1;
 					switch (enemyType) {
 					case 1:
@@ -391,9 +401,9 @@ void MainScene::Update(const double& dt) {
 					case 4:
 						createEnemySmall();
 						break;
-					}*/
-				/*}*/
-				cout << "spawned " << enemySpawns << endl;
+					}
+				}
+				//cout << "spawned " << enemySpawns << endl;
 			}
 		}
 		else {
@@ -436,12 +446,12 @@ void MainScene::createEnemyOrb() {
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	std::uniform_int_distribution<int> yDist(100, (gameHeight * scale) - 200);
 	int yVal = yDist(generator);
-	cout << xVal << ", " << yVal << endl;
+	//cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
@@ -471,15 +481,14 @@ void MainScene::createEnemyOrb() {
 
 void MainScene::createEnemyHarpoon() {
 	_enemyNum++;
-	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	std::uniform_int_distribution<int> yDist(100, (gameHeight * scale) - 200);
 	int yVal = yDist(generator);
-	cout << xVal << ", " << yVal << endl;
+	//cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
@@ -514,12 +523,12 @@ void MainScene::createEnemySpike() {
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	std::uniform_int_distribution<int> yDist(100, (gameHeight * scale) - 200);
 	int yVal = yDist(generator);
-	cout << xVal << ", " << yVal << endl;
+	//cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
@@ -550,12 +559,12 @@ void MainScene::createEnemySmall() {
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	std::uniform_int_distribution<int> yDist(100, (gameHeight * scale) - 200);
 	int yVal = yDist(generator);
-	cout << xVal << ", " << yVal << endl;
+	//cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
@@ -586,12 +595,12 @@ void MainScene::createEnemyBoss() {
 	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	std::uniform_int_distribution<int> xDist(100, (gameWidth * scale) - 200);
 	int xVal = xDist(generator);
 
-	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	std::uniform_int_distribution<int> yDist(100, (gameHeight * scale) - 200);
 	int yVal = yDist(generator);
-	cout << xVal << ", " << yVal << endl;
+	//cout << xVal << ", " << yVal << endl;
 
 	auto enemy = makeEntity();
 	enemy->addTag("enemy");
@@ -740,9 +749,10 @@ void MainScene::spawnDeadPlayer() {
 			p->impulse(Vector2f(impulse));
 		}
 
-		cout << "dead player spawned" << endl;
+		//cout << "dead player spawned" << endl;
 		player->setForDelete();
 		playerDeadSpawned = true;
+		screenshake = true;
 	}
 }
 

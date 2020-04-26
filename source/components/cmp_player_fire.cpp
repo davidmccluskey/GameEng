@@ -78,24 +78,6 @@ void PlayerFireComponent::update(double dt)
 			_firetime = _fireRate;
 		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num1)) {
-		setAsNormal();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num2)) {
-		setAsHeavy();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num3)) {
-		setAsTriple();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num4)) {
-		setAsBurst();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num5)) {
-		setAsShotgun();
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num6)) {
-		setAsQuick();
-	}
 }
 
 void PlayerFireComponent::fireBurst(float rotation) {

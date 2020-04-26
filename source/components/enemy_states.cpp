@@ -124,7 +124,7 @@ void IdleState::execute(Entity* owner, double dt) noexcept {
 void IdleState::Fire(Entity* owner, double dt) {
 	//FIRE
 	auto e = owner->get_components<EnemyComponent>()[0];
-	cout << "FIRE BULLET" << endl;
+	//cout << "FIRE BULLET" << endl;
 	_fireDelay = e->getFireDelay();
 	auto bullet = owner->scene->makeEntity();
 	bullet->addTag("enemyBullet");
@@ -169,7 +169,7 @@ void IdleState::Fire(Entity* owner, double dt) {
 void IdleState::BossAttackOne(Entity* owner, double dt) {
 	int angle = -20;
 	auto e = owner->get_components<EnemyComponent>()[0];
-	cout << "FIRE BULLET" << endl;
+	//cout << "FIRE BULLET" << endl;
 	_fireDelay = 1.5;
 	for (int i = 0; i < 3; i++) {
 		auto bullet = owner->scene->makeEntity();
@@ -209,7 +209,7 @@ void IdleState::BossAttackTwo(Entity* owner, double dt) {
 		int spacing = spacingGen(generator);
 		//float speed = speedGen(generator);
 		auto e = owner->get_components<EnemyComponent>()[0];
-		cout << "FIRE BULLET" << endl;
+		//cout << "FIRE BULLET" << endl;
 		_fireDelay = 1.5;
 		auto bullet = owner->scene->makeEntity();
 		bullet->addTag("enemyBullet");
@@ -248,7 +248,7 @@ void IdleState::BossAttackThree(Entity* owner, double dt) {
 		int spacing = spacingGen(generator);
 		//float speed = speedGen(generator);
 		auto e = owner->get_components<EnemyComponent>()[0];
-		cout << "FIRE BULLET" << endl;
+		//cout << "FIRE BULLET" << endl;
 		_fireDelay = 1.5;
 		auto bullet = owner->scene->makeEntity();
 		bullet->addTag("enemyBullet");
