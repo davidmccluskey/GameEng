@@ -5,7 +5,7 @@
 #include <iostream>
 #include "../components/cmp_menu.h"
 #include <fstream>
-
+#include "system_renderer.h"
 using namespace std;
 using namespace sf;
 
@@ -14,6 +14,15 @@ void HighScoreScene::Load() {
 	auto back = makeEntity();
 	back->addTag("back");
 
+	auto txt = makeEntity();
+	auto t = txt->addComponent<TextComponent>("High Scores");
+	t->SetSize(50);
+	t->SetPosition(Vector2f(windowWidth * 0.35, 20));
+	//rectangle.setSize(sf::Vector2f(windowWidth * 0.8, windowHeight * 0.8));
+	//rectangle.setOutlineColor(sf::Color::Green);
+	//rectangle.setFillColor(sf::Color::Blue);
+	//rectangle.setOutlineThickness(3);
+	//rectangle.setPosition(10, 10);
 
 	back->setPosition(Vector2f(windowWidth * 0.15, windowHeight * 0.9));
 	auto s = back->addComponent<MenuItemComponent>("Back");
@@ -22,7 +31,7 @@ void HighScoreScene::Load() {
 	ifstream inFile;
 	inFile.open("scores.txt");
 	if (!inFile) {
-		cerr << "Unable to open file datafile.txt";
+		cerr << "Unable to open file scores.txt";
 		exit(1);   // call system to stop
 	}
 	std::vector<std::string> names;
@@ -39,7 +48,14 @@ void HighScoreScene::Load() {
 	//Simple bubble sort (because you need to sort the names based on the scores being sorted)
 	int tempi;
 	string temp;
-	for (int i = 0; i < scores.size(); i++) {
+	int numTimes = 0;
+	if (names.size() > 20) {
+		numTimes = 20;
+	}
+	else {
+		numTimes = names.size();
+	}
+	for (size_t i = 0; i < numTimes; i++){
 		for (int j = i + 1; j < scores.size(); j++)
 		{
 			if (scores[j] > scores[i]) {
@@ -76,13 +92,13 @@ void HighScoreScene::Load() {
 			nums << i + 1 << "." << endl;
 		}
 		auto numbers = txt->addComponent<TextComponent>(nums.str());
-		numbers->SetPosition(Vector2f(windowWidth * 0.1, windowHeight * 0.1));
+		numbers->SetPosition(Vector2f(windowWidth * 0.3, windowHeight * 0.15));
 
 		auto tScr = txt->addComponent<TextComponent>(scoresoutput.str());
-		tScr->SetPosition(Vector2f(windowWidth * 0.2, windowHeight * 0.1));
+		tScr->SetPosition(Vector2f(windowWidth * 0.4, windowHeight * 0.15));
 
 		auto tName = txt->addComponent<TextComponent>(namesoutput.str());
-		tName->SetPosition(Vector2f(windowWidth * 0.4, windowHeight * 0.1));
+		tName->SetPosition(Vector2f(windowWidth * 0.6, windowHeight * 0.15));
 
 	}
 	setLoaded(true);

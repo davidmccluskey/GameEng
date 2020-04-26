@@ -20,6 +20,9 @@ private:
 
 	SoundBuffer errorbuffer;
 	Sound errorsound;
+
+	SoundBuffer bossBuffer;
+	Sound bossSound;
 public:
 	int get_value();
 	void set_value(int v);
@@ -30,6 +33,8 @@ public:
 	void playEnemyHit();
 
 	void playError();
+
+	void playBoss();
 
 
 
