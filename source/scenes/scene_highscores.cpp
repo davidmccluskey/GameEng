@@ -62,14 +62,19 @@ void HighScoreScene::Load() {
 		ostringstream namesoutput;
 		ostringstream scoresoutput;
 		ostringstream nums;
-		for (size_t i = 0; i < names.size(); i++)
+		int numTimes = 0;
+		if (names.size() > 20) {
+			numTimes = 20;
+		}
+		else {
+			numTimes = names.size();
+		}
+		for (size_t i = 0; i < numTimes; i++)
 		{
 			scoresoutput << scores[i] << endl;
 			namesoutput << names[i] << endl;
 			nums << i + 1 << "." << endl;
-			//cout << output.str() << endl;
 		}
-
 		auto numbers = txt->addComponent<TextComponent>(nums.str());
 		numbers->SetPosition(Vector2f(windowWidth * 0.1, windowHeight * 0.1));
 
