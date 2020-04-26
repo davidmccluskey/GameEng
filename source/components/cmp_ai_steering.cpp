@@ -18,10 +18,12 @@ void SteeringComponent::update(double dt) {
 	float angle = -atan2(a, b) * 180 / 3.14;
 
 	enemySprite->getSprite().setRotation(angle);
+	
 
 	auto enemyPhysics = _parent->get_components<PhysicsComponent>()[0];
 	auto sm = _parent->get_components<StateMachineComponent>()[0];
 
+	//enemyPhysics->getBody()->SetTransform(enemyPhysics->getBody()->GetPosition(), enemySprite->getSprite().getRotation());
 	if (sm->currentState() == "seek") {
 		auto output = _seek.getSteering();
 		enemyPhysics->setVelocity(output.direction);

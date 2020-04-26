@@ -139,11 +139,11 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 		//cout << "change to far from idle" << endl;
 	}
 	//Change to near if the player is closer than 200 units away
-	if (length(owner->getPosition() - _player->getPosition()) < min) {
-		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("flee");
-		//cout << "change to near from idle" << endl;
-	}
+	//if (length(owner->getPosition() - _player->getPosition()) < min) {
+	//	auto sm = owner->get_components<StateMachineComponent>()[0];
+	//	sm->changeState("flee");
+	//	//cout << "change to near from idle" << endl;
+	//}
 }
 
 void RushState::execute(Entity *owner, double dt) noexcept {

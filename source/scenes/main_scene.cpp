@@ -330,7 +330,7 @@ void MainScene::Update(const double& dt) {
 		}
 
 		if (_isDead != true) {
-			_wavetimer -= dt;
+			//_wavetimer -= dt;
 			string str = to_string(_wavetimer);
 			str.resize(str.size() - 5);
 			timerTextComponent->SetText(str);
@@ -370,8 +370,8 @@ void MainScene::Update(const double& dt) {
 				string wavenum = to_string(_wavenumber);
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
-
 				createEnemyBoss();
+			
 				/*for (int i = 0; i < enemySpawns; i++) {
 					int enemyType = rand() % 4 + 1;
 					switch (enemyType) {
