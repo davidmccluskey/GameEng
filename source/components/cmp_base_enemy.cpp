@@ -101,6 +101,7 @@ EnemyComponent::EnemyComponent(Entity* p, float speed, float damage, float healt
 	: Component(p), _speed(speed), _damage(damage), _health(health) {
 
 	auto player = _parent->scene->ents.find("player");
+	_shotTimer = 0;
 	auto sm = _parent->addComponent<StateMachineComponent>();
 	sm->addState("idle", make_shared<IdleState>(player[0]));
 	sm->addState("flee", make_shared<NearState>(player[0]));

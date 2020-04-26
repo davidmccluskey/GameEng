@@ -84,8 +84,6 @@ void MainScene::Load() {
 	shakeTimer = 0;
 	windowWidth = Options::instance()->launchWidth;
 	windowHeight = Options::instance()->launchHeight;
-	reset();
-
 	float scaleWidth = windowWidth / 1600;
 	float scaleHeight = windowHeight / 900;
 
@@ -234,6 +232,7 @@ void MainScene::Load() {
 			}
 		}
 	}
+	reset();
 	setLoaded(true);
 
 }
@@ -249,9 +248,9 @@ void MainScene::UnLoad() {
 	//exitButton.reset();
 	//restartButton.reset();
 	//resumeButton.reset();
-	timerText.reset();
-	waveText.reset();
-	healthText.reset();
+	//timerText.reset();
+	//waveText.reset();
+	//healthText.reset();
 	Scene::UnLoad();
 }
 
@@ -614,6 +613,8 @@ void MainScene::createEnemyBoss() {
 
 
 void MainScene::reset() {
+	auto mvmt = player->get_components<PlayerMovementComponent>()[0];
+	mvmt->setShot(0.01);
 	_paused = false;
 	score.resetScore();
 	_wavetimer = 0;
