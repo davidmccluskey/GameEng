@@ -5,10 +5,6 @@
 using namespace std;
 using namespace sf;
 // Add to top of file
-#include "b2GLDraw.h"
-
-
-b2GLDraw debugDrawInstance;
 // Add inside @interface
 namespace Physics {
 static shared_ptr<b2World> world;
@@ -19,11 +15,6 @@ void initialise() {
   // Construct a world object, which will hold and simulate the rigid
   // bodies.
   world.reset(new b2World(gravity));
-  world->SetDebugDraw(&debugDrawInstance);
-  uint32 flags = 0;
-  flags += b2Draw::e_aabbBit;
-  flags += b2Draw::e_shapeBit;
-  debugDrawInstance.SetFlags(flags);
 }
 
 void shutdown() { world.reset(); }

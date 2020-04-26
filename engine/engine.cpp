@@ -78,7 +78,6 @@ void Engine::Render(RenderWindow& window) {
   if (loading) {
     Loading_render();
   } else if (_activeScene != nullptr) {
-	  Physics::GetWorld()->DrawDebugData();
     _activeScene->Render();
   }
 
