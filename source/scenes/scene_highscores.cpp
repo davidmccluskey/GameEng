@@ -90,7 +90,6 @@ void HighScoreScene::Load() {
 
 void HighScoreScene::Update(const double& dt) {
 	clickCooldown -= dt;
-	// cout << "Menu Update "<<dt<<"\n";
 	sf::Event event;
 	RenderWindow& window = Engine::GetWindow();
 	while (window.pollEvent(event)) {

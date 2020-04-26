@@ -27,14 +27,11 @@
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> player; //Player Entity
-sf::Sprite playerSprite; //Player sprite
+static shared_ptr<Entity> player;
 
+//Sprites
 sf::Sprite enemySprite;
-
-sf::Sprite asteroidSprite;
-
-Sprite backgroundSprite;	//Background sprite
+Sprite backgroundSprite;	
 static shared_ptr<Entity> walls[4];
 sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f)); //View (camera) reference
 
@@ -159,7 +156,7 @@ void MainScene::Load() {
 		auto p = player->addComponent<PlayerMovementComponent>(); //Adds movement component for x rotation
 		auto f = player->addComponent<PlayerFireComponent>();	//Adds fire component for gun movement
 		player->addTag("player");
-
+		sf::Sprite playerSprite;
 		playerSprite.setTexture(Textures::instance()->getPlayerStates());
 		p->setSpeed(100.f);
 		s->setSprite<Sprite>(playerSprite);
@@ -359,12 +356,21 @@ void MainScene::Update(const double& dt) {
 						enemySpawns++;
 					}
 				}
+				if (_wavenumber % 1 == 0) {
+					createEnemyBoss();
+					createEnemyBoss();
+					createEnemyBoss();
+					createEnemyBoss();
+					createEnemyBoss();
+					createEnemyBoss();
+					enemySpawns++;
+				}
 
 				string wavenum = to_string(_wavenumber);
 				wavenum = "Wave " + wavenum;
 				waveTextComponent->SetText(wavenum);
 
-				for (int i = 0; i < enemySpawns; i++) {
+				/*for (int i = 0; i < enemySpawns; i++) {
 					int enemyType = rand() % 4 + 1;
 					switch (enemyType) {
 					case 1:
@@ -380,7 +386,7 @@ void MainScene::Update(const double& dt) {
 						createEnemySmall();
 						break;
 					}
-				}
+				}*/
 				cout << "spawned " << enemySpawns << endl;
 			}
 		}
@@ -563,6 +569,44 @@ void MainScene::createEnemySmall() {
 	enemyComponent->setTextureSize(200, 300, 2);
 	enemyComponent->setFireDelay(2.0f);
 }
+
+void MainScene::createEnemyBoss() {
+
+	enemySprite.setTexture(Textures::instance()->getEnemyAnimations());
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> xDist(1, (gameWidth * scale) - 100);
+	int xVal = xDist(generator);
+
+	std::uniform_int_distribution<int> yDist(1, (gameHeight * scale) - 100);
+	int yVal = yDist(generator);
+	cout << xVal << ", " << yVal << endl;
+
+	auto enemy = makeEntity();
+	enemy->addTag("enemy");
+	enemy->addTag("finalBoss");
+	enemy->setPosition(Vector2f(xVal, yVal));
+	auto e = enemy->addComponent<SpriteComponent>();
+	e->setSprite<Sprite>(enemySprite);
+	e->getSprite().setOrigin(85, 142);
+	e->getSprite().setScale({ 1.5, 1.5 });
+	auto rect = IntRect(0, 900, 200, 300);
+	e->getSprite().setTextureRect(rect);
+	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
+	auto enemyComponent = enemy->addComponent<EnemyComponent>();
+	enemyComponent->setHealth(4 * healthMultiplier);
+	auto phys = enemy->addComponent<PhysicsComponent>(true, Vector2f(200.0f, 150.0f), constENEMY, (short)(constBULLET | constPLAYER | constENEMY | constWALL), &enemy);
+
+	float min = gameHeight * 0.4;
+	float max = min + 200;
+	enemyComponent->setMinMax(min, max);
+
+	_enemyNum++;
+	enemyComponent->setTextureSize(200, 300, 2);
+	enemyComponent->setFireDelay(2.0f);
+}
+
+
 
 void MainScene::reset() {
 	_paused = false;

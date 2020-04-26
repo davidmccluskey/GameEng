@@ -117,11 +117,12 @@ void IdleState::execute(Entity *owner, double dt) noexcept {
 					s->getSprite().setTextureRect(IntRect(400,0,200,200));
 					s->getSprite().setScale(0.15, 0.15);
 				}
+				else if (*tag == "finalBoss") {
+					s->getSprite().setTextureRect(IntRect(400, 0, 200, 200));
+					s->getSprite().setScale(0.5, 0.5);
+				}
 				s->getSprite().setOrigin(100, 100);
 				s->getSprite().setRotation(ownerSprite->getSprite().getRotation());
-				//s->setShape<sf::CircleShape>(8.f);
-				//s->getShape().setFillColor(Color::Red);
-				//s->getShape().setOrigin(8.f, 8.f);
 				auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f), constENEMYBULLET, (short)(constPLAYER | constWALL), &bullet);
 				p->setRestitution(.4f);
 				p->setFriction(.005f);

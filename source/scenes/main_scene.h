@@ -24,6 +24,8 @@ public:
 
   void createEnemySmall();
 
+  void createEnemyBoss();
+
   void reset();
   void DeathResolution(float dt);
   void spawnDeadPlayer();
