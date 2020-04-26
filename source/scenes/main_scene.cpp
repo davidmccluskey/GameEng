@@ -30,6 +30,8 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 
+
+
 //Sprites
 sf::Sprite enemySprite;
 Sprite backgroundSprite;	
@@ -418,7 +420,7 @@ void MainScene::Update(const double& dt) {
 }
 
 void MainScene::Render() {
-	Renderer::queue(&backgroundSprite);
+	//Renderer::queue(&backgroundSprite);
 	if (_paused) {
 		Renderer::queue(&pauseMenu);
 
