@@ -623,8 +623,11 @@ void MainScene::reset() {
 	healthMultiplier = 1;
 	baseWaveNum = 20;
 	enemySpawns = 1;
+	_enemyNum = 0;
 	_isDead = false;
 	endTimer = 3;
+	screenshake = false;
+	shakeTimer = 0;
 	playerDeadSpawned = false;
 }
 
