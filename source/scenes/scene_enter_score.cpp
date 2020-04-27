@@ -13,6 +13,7 @@ static shared_ptr<Entity> nameText;
 static shared_ptr<TextComponent> nameTextComponent;
 
 void EnterScoreScreen::Load() {
+	name = "";
 	View view = Engine::GetWindow().getDefaultView();
 	Engine::GetWindow().setView(view);
 	auto back = makeEntity();

@@ -28,7 +28,7 @@ float windowHeight;
 
 int main() {
 	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
+	ShowWindow(hWnd, SW_SHOW);
 	ifstream inFile;
 	inFile.open("options.txt");
 	srand(time(0));

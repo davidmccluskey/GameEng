@@ -91,7 +91,7 @@ void MenuItemComponent::resolveClick() {
 		return;
 	}
 	else if (parentTag == "exit") {
-		exit(EXIT_SUCCESS);
+		Engine::GetWindow().close();
 	}
 	else if (parentTag == "options" || parentTag == "ctrlBack") {
 		Engine::ChangeScene(&scene_settings);
@@ -138,6 +138,7 @@ void MenuItemComponent::resolveClick() {
 			outfile.open("scores.txt", std::ios_base::app); // append instead of overwrite
 			outfile << output;
 			Engine::ChangeScene(&scene_highscores);
+			outfile.close();
 		}
 		else { cout << "please enter a name" << endl; }
 		return;

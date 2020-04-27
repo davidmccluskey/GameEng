@@ -172,11 +172,11 @@ void PlayerFireComponent::render() {} //empty required method
 void PlayerFireComponent::setAsNormal()
 {
 	_bulletType = 'D';
-	_fireRate = 0.6;
+	_fireRate = 0.4;
 	_impulse = 2;
 	_damage = 2;
 	_size = 1;
-	_bulletSpeed = 0.9;
+	_bulletSpeed = 1;
 
 	_firetime = 0;
 
@@ -215,7 +215,7 @@ void PlayerFireComponent::setAsQuick()
 	_bulletType = 'Q';
 	_fireRate = 0.1;
 	_impulse = 0.5;
-	_damage = 0.5;
+	_damage = 0.8;
 	_size = 0.5;
 	_bulletSpeed = 1.5;
 
