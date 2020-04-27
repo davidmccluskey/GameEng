@@ -9,7 +9,7 @@
 #include "../components/cmp_menu.h"
 #include <SFML\Audio\Music.hpp>
 #include "../options.h"
-
+#include "../texture.h"
 using namespace std;
 using namespace sf;
 
@@ -19,6 +19,7 @@ Sprite spriteBackground;
 
 
 void MenuScene::Load() {
+	setLoaded(false);
 	View view = Engine::GetWindow().getDefaultView();
 	//View view;
 	//view.setSize(gameWidth / 3, gameHeight / 3);
@@ -41,15 +42,15 @@ void MenuScene::Load() {
 			else {
 				music.setVolume(Options::instance()->volume);
 				music.play();
-
 			}
 		}
 	}
-	if (background.loadFromFile("res/background.jpeg")) {
-		spriteBackground.setTexture(background);
+	{
+		spriteBackground.setTexture(Textures::instance()->getBackground());
 		spriteBackground.setPosition(0, 0);
 		spriteBackground.setScale({ scaleWidth, scaleHeight });
 	}
+
 	{
 
 		auto start = makeEntity();
@@ -78,7 +79,7 @@ void MenuScene::Load() {
 		auto o = options->addComponent<MenuItemComponent>("Options");
 		auto e = exit->addComponent<MenuItemComponent>("Exit");
 		auto c = credits->addComponent<MenuItemComponent>("Credits");
-		
+
 
 
 	}
