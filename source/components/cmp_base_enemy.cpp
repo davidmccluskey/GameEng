@@ -14,10 +14,10 @@ void EnemyComponent::update(double dt)
 {
 	if (_health <= 0) {
 		if (pickupTex.loadFromFile("res/pickups.png")) {
-			float dropChance = rand() % 10 + 1;
+			float dropChance = rand() % 100 + 1;
 			//dropChance = 10;
-			if (dropChance == 10) {
-				int drop = rand() % 6 + 1;
+			if (dropChance >= 85) {
+				int drop = rand() % 7 + 1;
 				auto pickup = _parent->scene->makeEntity();
 				pickup->addComponent<PickupComponent>();
 				pickup->setPosition(_parent->getPosition());
@@ -56,7 +56,7 @@ void EnemyComponent::update(double dt)
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("shotgun");
 					break;
-				case 6:
+				default:
 					rect = sf::IntRect(1000, 0, 200, 200);
 					s->getSprite().setTextureRect(rect);
 					pickup->addTag("health");

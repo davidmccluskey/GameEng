@@ -235,7 +235,6 @@ void MainScene::Load() {
 	reset();
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	setLoaded(true);
-
 }
 
 void MainScene::UnLoad() {
@@ -486,7 +485,7 @@ void MainScene::createEnemyHarpoon() {
 	e->getSprite().setTextureRect(rect);
 	enemy->addComponent<SteeringComponent>(player.get(), 300.0f);
 	auto enemyComponent = enemy->addComponent<EnemyComponent>();
-	enemyComponent->setHealth(10 * healthMultiplier);
+	enemyComponent->setHealth(8 * healthMultiplier);
 	enemyComponent->setMinMax(500.0f, 700.0f);
 	enemyComponent->setTextureSize(200, 285, 1);
 
